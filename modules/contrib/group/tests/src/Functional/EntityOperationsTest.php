@@ -61,7 +61,6 @@ class EntityOperationsTest extends GroupBrowserTestBase {
         'group/1/edit' => 'Edit',
         'group/1/members' => 'Members',
         'group/1/delete' => 'Delete',
-        'group/1/revisions' => 'Revisions',
       ],
     ];
 
@@ -69,17 +68,11 @@ class EntityOperationsTest extends GroupBrowserTestBase {
       [
         'group/1/edit' => 'Edit',
         'group/1/delete' => 'Delete',
-        'group/1/revisions' => 'Revisions',
       ],
       [
         'group/1/members' => 'Members',
       ],
-      [
-        'edit group',
-        'delete group',
-        'administer members',
-        'view group revisions',
-      ],
+      ['edit group', 'delete group', 'administer members'],
     ];
 
     $scenarios['withAccessAndViews'] = [
@@ -87,15 +80,9 @@ class EntityOperationsTest extends GroupBrowserTestBase {
         'group/1/edit' => 'Edit',
         'group/1/members' => 'Members',
         'group/1/delete' => 'Delete',
-        'group/1/revisions' => 'Revisions',
       ],
       [],
-      [
-        'edit group',
-        'delete group',
-        'administer members',
-        'view group revisions',
-      ],
+      ['edit group', 'delete group', 'administer members'],
       ['views'],
     ];
 

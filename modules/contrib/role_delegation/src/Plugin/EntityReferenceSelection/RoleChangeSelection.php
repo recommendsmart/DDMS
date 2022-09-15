@@ -6,7 +6,7 @@ use Drupal\Core\Entity\Plugin\EntityReferenceSelection\DefaultSelection;
 use Drupal\role_delegation\DelegatableRoles;
 
 /**
- * Entity reference implementation for the role_change field.
+ * Class RoleChangeSelection.
  *
  * @EntityReferenceSelection(
  *   id = "role_change:user_role",
@@ -21,7 +21,7 @@ class RoleChangeSelection extends DefaultSelection {
   /**
    * {@inheritdoc}
    */
-  public function validateReferenceableEntities(array $ids): array {
+  public function validateReferenceableEntities(array $ids) {
     $result = parent::validateReferenceableEntities($ids);
 
     if ($ids) {

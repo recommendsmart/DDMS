@@ -28,10 +28,7 @@ class OrderFixedAmountOff extends OrderPromotionOfferBase {
     $this->assertEntity($entity);
     /** @var \Drupal\commerce_order\Entity\OrderInterface $order */
     $order = $entity;
-    $subtotal_price = $order->getSubtotalPrice();
-    if (!$subtotal_price || !$subtotal_price->isPositive()) {
-      return;
-    }
+    $subtotal_price = $order->getSubTotalPrice();
     $amount = $this->getAmount();
     if ($subtotal_price->getCurrencyCode() != $amount->getCurrencyCode()) {
       return;

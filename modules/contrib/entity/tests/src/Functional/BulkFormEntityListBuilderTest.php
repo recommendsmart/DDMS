@@ -27,9 +27,11 @@ class BulkFormEntityListBuilderTest extends BrowserTestBase {
   protected $storage;
 
   /**
-   * {@inheritdoc}
+   * Modules to enable.
+   *
+   * @var array
    */
-  protected static $modules = ['entity_module_test', 'user', 'entity', 'block'];
+  public static $modules = ['entity_module_test', 'user', 'entity', 'block'];
 
   /**
    * {@inheritdoc}
@@ -50,7 +52,7 @@ class BulkFormEntityListBuilderTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     /* @var \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager */

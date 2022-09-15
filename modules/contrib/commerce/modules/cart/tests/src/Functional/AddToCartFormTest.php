@@ -21,7 +21,7 @@ class AddToCartFormTest extends CartBrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_test',
   ];
 
@@ -67,7 +67,7 @@ class AddToCartFormTest extends CartBrowserTestBase {
     $this->drupalLogout();
     $this->postAddToCart($this->variation->getProduct());
     // Find the newly created anonymous cart.
-    $query = \Drupal::entityTypeManager()->getStorage('commerce_order')->getQuery()
+    $query = \Drupal::entityQuery('commerce_order')
       ->condition('cart', TRUE)
       ->condition('uid', 0)
       ->accessCheck(FALSE);

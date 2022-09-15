@@ -21,7 +21,7 @@ class ProductTest extends CommerceKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'path',
     'commerce_product',
   ];
@@ -98,7 +98,7 @@ class ProductTest extends CommerceKernelTestBase {
     $this->assertEquals($this->user, $product->getOwner());
     $this->assertEquals($this->user->id(), $product->getOwnerId());
 
-    $this->assertEqualsCanonicalizing([
+    $this->assertEquals([
       'store',
       'url.query_args:v',
     ], $product->getCacheContexts());

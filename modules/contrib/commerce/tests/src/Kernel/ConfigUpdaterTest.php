@@ -14,7 +14,7 @@ class ConfigUpdaterTest extends CommerceKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_update_test',
   ];
 

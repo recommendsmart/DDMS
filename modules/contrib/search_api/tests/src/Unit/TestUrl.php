@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\search_api\Unit;
 
-use Drupal\Core\GeneratedUrl;
 use Drupal\Core\Url;
+use Drupal\Tests\UnitTestCase;
 
 /**
  * Provides a mock URL object.
@@ -24,14 +24,11 @@ class TestUrl extends Url {
    * {@inheritdoc}
    */
   public function toString($collect_bubbleable_metadata = FALSE) {
-    $url = $this->internalPath;
+    UnitTestCase::assertFalse($collect_bubbleable_metadata);
     if (!empty($this->options['absolute'])) {
-      $url = 'http://www.example.com' . $url;
+      return 'http://www.example.com' . $this->internalPath;
     }
-    if ($collect_bubbleable_metadata) {
-      return (new GeneratedUrl())->setGeneratedUrl($url);
-    }
-    return $url;
+    return $this->internalPath;
   }
 
 }

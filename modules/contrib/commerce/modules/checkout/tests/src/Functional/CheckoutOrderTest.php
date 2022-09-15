@@ -36,7 +36,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_product',
     'commerce_order',
     'commerce_cart',
@@ -98,7 +98,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
     $cart_link = $this->getSession()->getPage()->findLink('your cart');
     $cart_link->click();
     $this->submitForm([], 'Checkout');
-    $this->assertSession()->pageTextNotContains('Order summary');
+    $this->assertSession()->pageTextNotContains('Order Summary');
     $this->assertCheckoutProgressStep('Login');
 
     /** @var \Drupal\commerce_order\Entity\OrderInterface $order */
@@ -157,7 +157,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
     $cart_link = $this->getSession()->getPage()->findLink('your cart');
     $cart_link->click();
     $this->submitForm([], 'Checkout');
-    $this->assertSession()->pageTextNotContains('Order summary');
+    $this->assertSession()->pageTextNotContains('Order Summary');
 
     // Check breadcrumbs are links.
     $this->assertSession()->elementsCount('css', '.block-commerce-checkout-progress li.checkout-progress--step > a', 0);
@@ -165,7 +165,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
     // Check breadcrumb link functionality.
     $this->assertSession()->elementsCount('css', '.block-commerce-checkout-progress li.checkout-progress--step > a', 1);
     $this->getSession()->getPage()->findLink('Login')->click();
-    $this->assertSession()->pageTextNotContains('Order summary');
+    $this->assertSession()->pageTextNotContains('Order Summary');
     $this->assertCheckoutProgressStep('Login');
 
     $this->submitForm([], 'Continue as Guest');
@@ -185,7 +185,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
     $this->assertSession()->elementsCount('css', '.block-commerce-checkout-progress li.checkout-progress--step > a', 2);
     $this->assertSession()->pageTextContains('Contact information');
     $this->assertSession()->pageTextContains('Billing information');
-    $this->assertSession()->pageTextContains('Order summary');
+    $this->assertSession()->pageTextContains('Order Summary');
     $this->submitForm([], 'Complete checkout');
     $this->assertSession()->pageTextContains('Your order number is 1. You can view your order on your account page when logged in.');
     $this->assertSession()->pageTextContains('0 items');
@@ -233,13 +233,13 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
 
     $this->submitForm([], 'Continue to review');
     $this->assertSession()->pageTextContains('Billing information');
-    $this->assertSession()->pageTextContains('Order summary');
+    $this->assertSession()->pageTextContains('Order Summary');
     $this->assertSession()->elementsCount('css', '.block-commerce-checkout-progress li.checkout-progress--step > a', 1);
     $this->assertCheckoutProgressStep('Review');
 
     // Go back with the breadcrumb.
     $this->getSession()->getPage()->findLink('Order information')->click();
-    $this->assertSession()->pageTextContains('Order summary');
+    $this->assertSession()->pageTextContains('Order Summary');
     $this->assertCheckoutProgressStep('Order information');
     $this->assertSession()->elementsCount('css', '.block-commerce-checkout-progress li.checkout-progress--step > a', 0);
     $this->submitForm([], 'Continue to review');
@@ -478,7 +478,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
     $this->assertCheckoutProgressStep('Review');
     $this->assertSession()->pageTextContains('Contact information');
     $this->assertSession()->pageTextContains('Billing information');
-    $this->assertSession()->pageTextContains('Order summary');
+    $this->assertSession()->pageTextContains('Order Summary');
     $this->submitForm([], 'Complete checkout');
     $this->assertSession()->pageTextContains('Your order number is 1. You can view your order on your account page when logged in.');
 
@@ -523,7 +523,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
     $this->assertCheckoutProgressStep('Review');
     $this->assertSession()->pageTextContains('Contact information');
     $this->assertSession()->pageTextContains('Billing information');
-    $this->assertSession()->pageTextContains('Order summary');
+    $this->assertSession()->pageTextContains('Order Summary');
     $this->submitForm([], 'Complete checkout');
     $this->assertSession()->pageTextContains('Your order number is 2. You can view your order on your account page when logged in.');
 
@@ -604,7 +604,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
     $this->assertCheckoutProgressStep('Review');
     $this->assertSession()->pageTextContains('Contact information');
     $this->assertSession()->pageTextContains('Billing information');
-    $this->assertSession()->pageTextContains('Order summary');
+    $this->assertSession()->pageTextContains('Order Summary');
     $this->submitForm([], 'Complete checkout');
     $this->assertSession()->pageTextContains('Your order number is 1. You can view your order on your account page when logged in.');
 
@@ -663,7 +663,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
     $this->assertCheckoutProgressStep('Review');
     $this->assertSession()->pageTextContains('Contact information');
     $this->assertSession()->pageTextContains('Billing information');
-    $this->assertSession()->pageTextContains('Order summary');
+    $this->assertSession()->pageTextContains('Order Summary');
     $this->submitForm([], 'Complete checkout');
     $this->assertSession()->pageTextContains('Your order number is 1. You can view your order on your account page when logged in.');
 

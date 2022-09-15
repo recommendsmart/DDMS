@@ -16,7 +16,7 @@ class StateTransitionFormTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'entity_test',
     'state_machine_test',
   ];
@@ -29,7 +29,7 @@ class StateTransitionFormTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $user = $this->drupalCreateUser(['administer entity_test content', 'view test entity']);

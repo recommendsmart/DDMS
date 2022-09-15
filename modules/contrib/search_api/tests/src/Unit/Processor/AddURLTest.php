@@ -22,16 +22,6 @@ class AddURLTest extends UnitTestCase {
   use TestItemsTrait;
 
   /**
-   * The path used for testing.
-   */
-  const TEST_PATH = '/node/example';
-
-  /**
-   * The URL used for testing.
-   */
-  const TEST_URL = 'http://www.example.com' . self::TEST_PATH;
-
-  /**
    * The processor to be tested.
    *
    * @var \Drupal\search_api\Plugin\search_api\processor\AddURL
@@ -58,7 +48,7 @@ class AddURLTest extends UnitTestCase {
     $datasource->expects($this->any())
       ->method('getItemUrl')
       ->withAnyParameters()
-      ->will($this->returnValue(new TestUrl(self::TEST_PATH)));
+      ->will($this->returnValue(new TestUrl('/node/example')));
 
     // Create a mock for the index to return the datasource mock.
     /** @var \Drupal\search_api\IndexInterface $index */
@@ -66,7 +56,7 @@ class AddURLTest extends UnitTestCase {
     $this->index->expects($this->any())
       ->method('getDatasource')
       ->with('entity:node')
-      ->willReturn($datasource);
+      ->will($this->returnValue($datasource));
 
     // Create the tested processor and set the mocked indexer.
     $this->processor = new AddURL([], 'add_url', []);
@@ -110,16 +100,16 @@ class AddURLTest extends UnitTestCase {
 
     // Check the generated URLs.
     $item_1 = $items[$this->itemIds[0]];
-    $this->assertEquals([self::TEST_PATH], $item_1->getField('url')->getValues());
-    $this->assertEquals([self::TEST_URL], $item_1->getField('url_1')->getValues());
+    $this->assertEquals(['/node/example'], $item_1->getField('url')->getValues());
+    $this->assertEquals(['http://www.example.com/node/example'], $item_1->getField('url_1')->getValues());
 
     // Check that no other fields were changed.
     $this->assertEquals($body_value, $item_1->getField('body')->getValues());
 
     // Check the second item to be sure that all are processed.
     $item_2 = $items[$this->itemIds[1]];
-    $this->assertEquals([self::TEST_PATH], $item_2->getField('url')->getValues());
-    $this->assertEquals([self::TEST_URL], $item_2->getField('url_1')->getValues());
+    $this->assertEquals(['/node/example'], $item_2->getField('url')->getValues());
+    $this->assertEquals(['http://www.example.com/node/example'], $item_2->getField('url_1')->getValues());
   }
 
   /**

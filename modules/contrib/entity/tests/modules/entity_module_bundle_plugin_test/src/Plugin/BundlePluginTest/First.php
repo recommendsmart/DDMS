@@ -22,7 +22,7 @@ class First extends PluginBase implements BundlePluginTestInterface {
   public function buildFieldDefinitions() {
     $fields = [];
     $fields['first_mail'] = BundleFieldDefinition::create('email')
-      ->setLabel($this->t('Email'))
+      ->setLabel(t('Email'))
       ->setRequired(TRUE);
 
     return $fields;

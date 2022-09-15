@@ -20,7 +20,7 @@ class ViewsAccessTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'system',
     'node',
     'user',

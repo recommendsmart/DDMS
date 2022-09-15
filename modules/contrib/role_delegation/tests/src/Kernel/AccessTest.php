@@ -19,7 +19,7 @@ class AccessTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'role_delegation', 'user'];
+  public static $modules = ['system', 'role_delegation', 'user'];
 
   /**
    * The Role Delegation access checker.
@@ -31,7 +31,7 @@ class AccessTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installSchema('system', 'sequences');
     $this->installEntitySchema('user');

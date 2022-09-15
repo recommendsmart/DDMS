@@ -7,7 +7,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Symfony\Component\Yaml\Yaml;
-use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\File\FileSystem;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\config_rewrite\Exception\NonexistentInitialConfigException;
 
@@ -47,7 +47,7 @@ class ConfigRewriter implements ConfigRewriterInterface {
   /**
    * The file system.
    *
-   * @var \Drupal\Core\File\FileSystemInterface
+   * @var \Drupal\Core\File\FileSystem
    */
   protected $fileSystem;
 
@@ -60,12 +60,12 @@ class ConfigRewriter implements ConfigRewriterInterface {
    *   The module handler.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   A logger channel.
-   * @param \Drupal\Core\File\FileSystemInterface $file_system
+   * @param \Drupal\Core\File\FileSystem $file_system
    *   The file system.
    * @param \Drupal\language\Config\LanguageConfigFactoryOverrideInterface|NULL $language_config_factory_override
    *   (Optional) The language config factory override service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, LoggerChannelInterface $logger, FileSystemInterface $file_system, $language_config_factory_override) {
+  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, LoggerChannelInterface $logger, FileSystem $file_system, $language_config_factory_override) {
     $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
     $this->logger = $logger;
@@ -177,11 +177,6 @@ class ConfigRewriter implements ConfigRewriterInterface {
    * @throws \Drupal\config_rewrite\Exception\NonexistentInitialConfigException
    */
   public function rewriteConfig($original_config, $rewrite, $config_name, $extensionName) {
-    if (empty($original_config)) {
-      $message = 'Tried to rewrite config @config via @module module without initial config present.';
-      $this->logger->error($message, ['@config' => $config_name, '@module' => $extensionName]);
-      throw new NonexistentInitialConfigException("Tried to rewrite config $config_name by $extensionName module without initial config.");
-    }
 
     if (isset($rewrite['config_rewrite']) && $rewrite['config_rewrite'] == 'replace') {
       $rewritten_config = $rewrite;

@@ -15,7 +15,7 @@ class ResponseTest extends CommerceBrowserTestBase {
   public function testGeneratorStringAndHeader() {
     $this->drupalGet('<front>');
     $this->assertSession()->statusCodeEquals(200);
-    [$version] = explode('.', \Drupal::VERSION, 2);
+    list($version) = explode('.', \Drupal::VERSION, 2);
     $this->assertSession()->responseContains('Drupal ' . $version . ' (https://www.drupal.org); Commerce 2');
     $this->assertEquals('2', $this->drupalGetHeader('X-Commerce-Core'));
   }

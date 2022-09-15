@@ -160,7 +160,6 @@ function search_api_views_plugins_row_alter(array &$plugins) {
   }
 
   $plugins['search_api']['base'] = $bases;
-  $plugins['search_api_data']['base'] = $bases;
 }
 
 /**
@@ -219,8 +218,7 @@ function _search_api_views_get_handlers(FieldInterface $field) {
       $types[] = 'language';
     }
 
-    if ($definition->getSetting('allowed_values')
-        || $definition->getSetting('allowed_values_function')) {
+    if ($definition->getSetting('allowed_values')) {
       $types[] = 'options';
     }
 
@@ -408,7 +406,7 @@ function _search_api_views_handler_mapping() {
 
     $event = new MappingViewsHandlersEvent($mapping);
     \Drupal::getContainer()->get('event_dispatcher')
-      ->dispatch($event, SearchApiEvents::MAPPING_VIEWS_HANDLERS);
+      ->dispatch(SearchApiEvents::MAPPING_VIEWS_HANDLERS, $event);
   }
 
   return $mapping;
@@ -991,7 +989,7 @@ function _search_api_views_get_field_handler_mapping() {
 
     $event = new MappingViewsFieldHandlersEvent($plain_mapping);
     \Drupal::getContainer()->get('event_dispatcher')
-      ->dispatch($event, SearchApiEvents::MAPPING_VIEWS_FIELD_HANDLERS);
+      ->dispatch(SearchApiEvents::MAPPING_VIEWS_FIELD_HANDLERS, $event);
 
     // Then create a new, more practical structure, with the mappings grouped by
     // mapping type.

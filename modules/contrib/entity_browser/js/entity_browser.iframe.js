@@ -4,7 +4,7 @@
  * Defines the behavior of the entity browser's iFrame display.
  */
 
-(function ($, Drupal, drupalSettings, once) {
+(function ($, Drupal, drupalSettings) {
 
   'use strict';
 
@@ -13,8 +13,8 @@
    */
   Drupal.behaviors.entityBrowserIFrame = {
     attach: function (context) {
-      $(once('iframe-click', '.entity-browser-handle.entity-browser-iframe', context)).on('click', Drupal.entityBrowserIFrame.linkClick);
-      $(once('iframe-auto-open', '.entity-browser-handle.entity-browser-iframe', context)).each(function () {
+      $(context).find('.entity-browser-handle.entity-browser-iframe').once('iframe-click').on('click', Drupal.entityBrowserIFrame.linkClick);
+      $(context).find('.entity-browser-handle.entity-browser-iframe').once('iframe-auto-open').each(function () {
         var uuid = $(this).attr('data-uuid');
         if (drupalSettings.entity_browser.iframe[uuid].auto_open) {
           $(this).click();
@@ -57,4 +57,4 @@
     $(this).hide();
   };
 
-}(jQuery, Drupal, drupalSettings, once));
+}(jQuery, Drupal, drupalSettings));

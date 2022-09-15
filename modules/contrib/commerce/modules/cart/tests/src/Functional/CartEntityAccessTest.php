@@ -2,11 +2,10 @@
 
 namespace Drupal\Tests\commerce_cart\Functional;
 
-use Behat\Mink\Driver\BrowserKitDriver;
+use Behat\Mink\Driver\GoutteDriver;
 use Behat\Mink\Session;
 use Drupal\commerce_order\Entity\Order;
 use Drupal\commerce_order\Entity\OrderInterface;
-use Drupal\Tests\DrupalTestBrowser;
 use Drupal\user\RoleInterface;
 
 /**
@@ -19,7 +18,7 @@ class CartEntityAccessTest extends CartBrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_checkout',
   ];
 
@@ -35,10 +34,7 @@ class CartEntityAccessTest extends CartBrowserTestBase {
    * Tests that users with the view permission can view their own carts.
    */
   public function testViewAccess() {
-    $customer = $this->drupalCreateUser([
-      'access checkout',
-      'view own commerce_order',
-    ]);
+    $customer = $this->drupalCreateUser(['access checkout', 'view own commerce_order']);
 
     // Ensure that vaccess checks are respected even if anonymous users have
     // permission to view their own orders.
@@ -232,8 +228,7 @@ class CartEntityAccessTest extends CartBrowserTestBase {
   protected function switchSession($name) {
     $create_session = !$this->mink->hasSession($name);
     if ($create_session) {
-      $client = new DrupalTestBrowser();
-      $this->mink->registerSession($name, new Session(new BrowserKitDriver($client)));
+      $this->mink->registerSession($name, new Session(new GoutteDriver()));
     }
     $this->mink->setDefaultSessionName($name);
 

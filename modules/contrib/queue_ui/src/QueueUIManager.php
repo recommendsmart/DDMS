@@ -5,7 +5,6 @@ namespace Drupal\queue_ui;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
-use Drupal\Core\Queue\QueueFactory;
 
 /**
  * Defines the queue worker manager.
@@ -27,28 +26,21 @@ class QueueUIManager extends DefaultPluginManager {
    *   Cache backend instance to use.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
-   * @param \Drupal\Core\Queue\QueueFactory $queue
-   *   The queue service.
    */
-  public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler, QueueFactory $queue) {
+  public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
     parent::__construct('Plugin/QueueUI', $namespaces, $module_handler, 'Drupal\queue_ui\QueueUIInterface', 'Drupal\queue_ui\Annotation\QueueUI');
 
     $this->setCacheBackend($cache_backend, 'queue_ui_plugins');
     $this->alterInfo('queue_ui_info');
-    $this->queueService = $queue;
   }
 
   /**
-   * Queue name.
-   *
-   * @param string $queueName
-   *   The name of the queue being inspected.
+   * @param $queue_name
    *
    * @return bool|object
-   *   An object of queue class name
    */
-  public function fromQueueName($queueName) {
-    $queue = $this->queueService->get($queueName);
+  public function fromQueueName($queue_name) {
+    $queue = \Drupal::queue($queue_name);
 
     try {
       foreach ($this->getDefinitions() as $definition) {
@@ -57,20 +49,15 @@ class QueueUIManager extends DefaultPluginManager {
         }
       }
     }
-    catch (\Exception $e) {
-    }
+    catch (\Exception $e) {}
 
     return FALSE;
   }
 
   /**
-   * Get the queue class name.
-   *
-   * @var array $queue
-   *   An arrayof queue information.
+   * @param $queue
    *
    * @return mixed
-   *   A mixed value of queue class
    */
   public function queueClassName($queue) {
     $namespace = explode('\\', get_class($queue));

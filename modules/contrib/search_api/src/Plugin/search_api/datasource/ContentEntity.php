@@ -7,8 +7,6 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Database\Connection;
-use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
@@ -57,13 +55,6 @@ class ContentEntity extends DatasourcePluginBase implements PluginFormInterface 
    * @todo Make protected once we depend on PHP 7.1+.
    */
   const TRACKING_PAGE_STATE_KEY = 'search_api.datasource.entity.last_ids';
-
-  /**
-   * The database connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $database;
 
   /**
    * The entity memory cache.
@@ -159,7 +150,6 @@ class ContentEntity extends DatasourcePluginBase implements PluginFormInterface 
     /** @var static $datasource */
     $datasource = parent::create($container, $configuration, $plugin_id, $plugin_definition);
 
-    $datasource->setDatabaseConnection($container->get('database'));
     $datasource->setEntityTypeManager($container->get('entity_type.manager'));
     $datasource->setEntityFieldManager($container->get('entity_field.manager'));
     $datasource->setEntityDisplayRepository($container->get('entity_display.repository'));
@@ -173,29 +163,6 @@ class ContentEntity extends DatasourcePluginBase implements PluginFormInterface 
     $datasource->setLogger($container->get('logger.channel.search_api'));
 
     return $datasource;
-  }
-
-  /**
-   * Retrieves the database connection.
-   *
-   * @return \Drupal\Core\Database\Connection
-   *   The database connection.
-   */
-  public function getDatabaseConnection(): Connection {
-    return $this->database ?: \Drupal::database();
-  }
-
-  /**
-   * Sets the database connection.
-   *
-   * @param \Drupal\Core\Database\Connection $connection
-   *   The new database connection.
-   *
-   * @return $this
-   */
-  public function setDatabaseConnection(Connection $connection): self {
-    $this->database = $connection;
-    return $this;
   }
 
   /**
@@ -491,6 +458,10 @@ class ContentEntity extends DatasourcePluginBase implements PluginFormInterface 
    */
   public function loadMultiple(array $ids) {
     $allowed_languages = $this->getLanguages();
+    // Always allow items with undefined language. (Can be the case when
+    // entities are created programmatically.)
+    $allowed_languages[LanguageInterface::LANGCODE_NOT_SPECIFIED] = TRUE;
+    $allowed_languages[LanguageInterface::LANGCODE_NOT_APPLICABLE] = TRUE;
 
     $entity_ids = [];
     foreach ($ids as $item_id) {
@@ -781,26 +752,12 @@ class ContentEntity extends DatasourcePluginBase implements PluginFormInterface 
       return NULL;
     }
 
-    $entity_type = $this->getEntityType();
-    $entity_id = $entity_type->getKey('id');
+    $select = $this->getEntityTypeManager()
+      ->getStorage($this->getEntityTypeId())
+      ->getQuery();
 
-    // Use a direct database query when an entity has a defined base table. This
-    // should prevent performance issues associated with the use of entity query
-    // on large data sets. This allows for better control over what tables are
-    // included in the query.
-    // If no base table is present, then perform an entity query instead.
-    if ($entity_type->getBaseTable()) {
-      $select = $this->getDatabaseConnection()
-        ->select($entity_type->getBaseTable(), 'base_table')
-        ->fields('base_table', [$entity_id]);
-    }
-    else {
-      $select = $this->getEntityTypeManager()
-        ->getStorage($this->getEntityTypeId())
-        ->getQuery();
-      // When tracking items, we never want access checks.
-      $select->accessCheck(FALSE);
-    }
+    // When tracking items, we never want access checks.
+    $select->accessCheck(FALSE);
 
     // Build up the context for tracking the last ID for this batch page.
     $batch_page_context = [
@@ -820,7 +777,7 @@ class ContentEntity extends DatasourcePluginBase implements PluginFormInterface 
     // translations in $languages and those (matching $bundles) where we want
     // all (enabled) translations.
     if ($this->hasBundles()) {
-      $bundle_property = $entity_type->getKey('bundle');
+      $bundle_property = $this->getEntityType()->getKey('bundle');
       if ($bundles && !$languages) {
         $select->condition($bundle_property, $bundles, 'IN');
       }
@@ -840,6 +797,7 @@ class ContentEntity extends DatasourcePluginBase implements PluginFormInterface 
     if (isset($page)) {
       $page_size = $this->getConfigValue('tracking_page_size');
       assert($page_size, 'Tracking page size is not set.');
+      $entity_id = $this->getEntityType()->getKey('id');
 
       // If known, use a condition on the last tracked ID for paging instead of
       // the offset, for performance reasons on large sites.
@@ -859,20 +817,10 @@ class ContentEntity extends DatasourcePluginBase implements PluginFormInterface 
       $select->range($offset, $page_size);
 
       // For paging to reliably work, a sort should be present.
-      if ($select instanceof SelectInterface) {
-        $select->orderBy($entity_id);
-      }
-      else {
-        $select->sort($entity_id);
-      }
+      $select->sort($entity_id);
     }
 
-    if ($select instanceof SelectInterface) {
-      $entity_ids = $select->execute()->fetchCol();
-    }
-    else {
-      $entity_ids = $select->execute();
-    }
+    $entity_ids = $select->execute();
 
     if (!$entity_ids) {
       if (isset($page)) {
@@ -903,6 +851,9 @@ class ContentEntity extends DatasourcePluginBase implements PluginFormInterface 
     if ($languages) {
       $enabled_languages = array_unique(array_merge($languages, $enabled_languages));
     }
+    // Also, we want to always include entities with unknown language.
+    $enabled_languages[] = LanguageInterface::LANGCODE_NOT_SPECIFIED;
+    $enabled_languages[] = LanguageInterface::LANGCODE_NOT_APPLICABLE;
 
     /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
     foreach ($this->getEntityStorage()->loadMultiple($entity_ids) as $entity_id => $entity) {
@@ -956,15 +907,14 @@ class ContentEntity extends DatasourcePluginBase implements PluginFormInterface 
   }
 
   /**
-   * Retrieves the enabled languages, including "not applicable/specified".
+   * Retrieves the enabled languages.
    *
    * @return \Drupal\Core\Language\LanguageInterface[]
-   *   All languages that should be processed for this datasource, keyed by
-   *   language code.
+   *   All languages that are enabled for this datasource, keyed by language
+   *   code.
    */
   protected function getLanguages() {
-    $all_languages = $this->getLanguageManager()
-      ->getLanguages(LanguageInterface::STATE_ALL);
+    $all_languages = $this->getLanguageManager()->getLanguages();
 
     if ($this->isTranslatable()) {
       $selected_languages = array_flip($this->configuration['languages']['selected']);
@@ -972,15 +922,7 @@ class ContentEntity extends DatasourcePluginBase implements PluginFormInterface 
         return array_diff_key($all_languages, $selected_languages);
       }
       else {
-        $returned_languages = array_intersect_key($all_languages, $selected_languages);
-
-        // We always want to include entities with unknown language.
-        $not_specified = LanguageInterface::LANGCODE_NOT_SPECIFIED;
-        $not_applicable = LanguageInterface::LANGCODE_NOT_APPLICABLE;
-        $returned_languages[$not_specified] = $all_languages[$not_specified];
-        $returned_languages[$not_applicable] = $all_languages[$not_applicable];
-
-        return $returned_languages;
+        return array_intersect_key($all_languages, $selected_languages);
       }
     }
 
@@ -1238,36 +1180,6 @@ class ContentEntity extends DatasourcePluginBase implements PluginFormInterface 
     return \Drupal::getContainer()
       ->get('search_api.entity_datasource.tracking_manager')
       ->getIndexesForEntity($entity);
-  }
-
-  /**
-   * Filters a set of datasource-specific item IDs.
-   *
-   * Returns only those item IDs that are valid for the given datasource and
-   * index. This method only checks the item language, though – whether an
-   * entity with that ID actually exists, or whether it has a bundle included
-   * for that datasource, is not verified.
-   *
-   * @param \Drupal\search_api\IndexInterface $index
-   *   The index for which to validate.
-   * @param string $datasource_id
-   *   The ID of the datasource on the index for which to validate.
-   * @param string[] $item_ids
-   *   The item IDs to be validated.
-   *
-   * @return string[]
-   *   All given item IDs that are valid for that index and datasource.
-   *
-   * @deprecated in search_api:8.x-1.22 and is removed from search_api:2.0.0.
-   *   Use
-   *   \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager::filterValidItemIds()
-   *   instead.
-   *
-   * @see https://www.drupal.org/node/3257943
-   */
-  public static function filterValidItemIds(IndexInterface $index, $datasource_id, array $item_ids) {
-    @trigger_error('\Drupal\search_api\Plugin\search_api\datasource\ContentEntity::filterValidItemIds() is deprecated in search_api:8.x-1.21 and is removed from search_api:2.0.0. Use \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager::filterValidItemIds() instead. See https://www.drupal.org/node/3257943', E_USER_DEPRECATED);
-    return ContentEntityTrackingManager::filterValidItemIds($index, $datasource_id, $item_ids);
   }
 
   /**

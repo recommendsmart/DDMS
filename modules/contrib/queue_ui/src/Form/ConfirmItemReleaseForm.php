@@ -10,29 +10,22 @@ use Drupal\queue_ui\QueueUIManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class ConfirmItemReleaseForm declaration.
- *
+ * Class ConfirmItemReleaseForm
  * @package Drupal\queue_ui\Form
  */
 class ConfirmItemReleaseForm extends ConfirmFormBase {
 
   /**
-   * The queue name.
-   *
    * @var string
    */
-  protected $queueName;
+  protected $queue_name;
 
   /**
-   * The queue item.
-   *
    * @var string
    */
-  protected $queueItem;
+  protected $queue_item;
 
   /**
-   * The QueueUIManager.
-   *
    * @var \Drupal\queue_ui\QueueUIManager
    */
   private $queueUIManager;
@@ -41,9 +34,7 @@ class ConfirmItemReleaseForm extends ConfirmFormBase {
    * ConfirmItemReleaseForm constructor.
    *
    * @param \Drupal\Core\Messenger\Messenger $messenger
-   *   The messenger service.
    * @param \Drupal\queue_ui\QueueUIManager $queueUIManager
-   *   The QueueUIManager object.
    */
   public function __construct(Messenger $messenger, QueueUIManager $queueUIManager) {
     $this->messenger = $messenger;
@@ -51,11 +42,7 @@ class ConfirmItemReleaseForm extends ConfirmFormBase {
   }
 
   /**
-   * {@inheritdoc}
-   *
    * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-   *   The current service container.
-   *
    * @return static
    */
   public static function create(ContainerInterface $container) {
@@ -69,7 +56,7 @@ class ConfirmItemReleaseForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getQuestion() {
-    return $this->t('Are you sure you want to release queue item %queueItem?', ['%queueItem' => $this->queueItem]);
+    return $this->t('Are you sure you want to release queue item %queue_item?', ['%queue_item' => $this->queue_item]);
   }
 
   /**
@@ -83,7 +70,7 @@ class ConfirmItemReleaseForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getCancelUrl() {
-    return Url::fromRoute('queue_ui.inspect', ['queueName' => $this->queueName]);
+    return Url::fromRoute('queue_ui.inspect', ['queue_name' => $this->queue_name]);
   }
 
   /**
@@ -96,36 +83,25 @@ class ConfirmItemReleaseForm extends ConfirmFormBase {
   /**
    * {@inheritdoc}
    *
-   * @param array $form
-   *   The form is where the settings form is being included.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
-   * @param bool $queueName
-   *   The name of the queue being inspected.
-   * @param bool $queueItem
-   *   The queue item.
+   * @param bool $queue_name
+   * @param bool $queue_item
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $queueName = FALSE, $queueItem = FALSE) {
-    $this->queueName = $queueName;
-    $this->queueItem = $queueItem;
+  public function buildForm(array $form, FormStateInterface $form_state, $queue_name = FALSE, $queue_item = FALSE) {
+    $this->queue_name = $queue_name;
+    $this->queue_item = $queue_item;
 
     return parent::buildForm($form, $form_state);
   }
 
   /**
-   * {@inheritdoc}
-   *
    * @param array $form
-   *   The form where the settings form is being included in.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $queue_ui = $this->queueUIManager->fromQueueName($this->queueName);
-    $queue_ui->releaseItem($this->queueItem);
+    $queue_ui = $this->queueUIManager->fromQueueName($this->queue_name);
+    $queue_ui->releaseItem($this->queue_item);
 
-    $this->messenger->addMessage("Released queue item " . $this->queueItem);
-    $form_state->setRedirectUrl(Url::fromRoute('queue_ui.inspect', ['queueName' => $this->queueName]));
+    $this->messenger->addMessage("Released queue item " . $this->queue_item);
+    $form_state->setRedirectUrl(Url::fromRoute('queue_ui.inspect', ['queue_name' => $this->queue_name]));
   }
-
 }

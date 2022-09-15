@@ -12,7 +12,7 @@ class RedirectTest extends CommerceBrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['commerce_test'];
+  public static $modules = ['commerce_test'];
 
   /**
    * Test redirection inside forms (via NeedsRedirectException).

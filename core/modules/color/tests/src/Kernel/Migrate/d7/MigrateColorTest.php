@@ -32,12 +32,6 @@ class MigrateColorTest extends MigrateDrupal7TestBase {
   public function testMigrateColor() {
     // Test Bartik migration.
     $config = $this->config('color.theme.bartik');
-    $files = [
-      'public://color/bartik-e0e23ad7/logo.png',
-      'public://color/bartik-e0e23ad7/colors.css',
-    ];
-    $this->assertSame($files, $config->get('files'));
-    $this->assertSame('public://color/bartik-e0e23ad7/logo.png', $config->get('logo'));
     $palette = [
       'top' => '#d0d0d0',
       'bottom' => '#c2c4c5',
@@ -50,7 +44,6 @@ class MigrateColorTest extends MigrateDrupal7TestBase {
       'link' => '#019dbf',
     ];
     $this->assertSame($palette, $config->get('palette'));
-    $this->assertSame(['public://color/bartik-e0e23ad7/colors.css'], $config->get('stylesheets'));
     // Test that the screenshot was not migrated.
     $this->assertNull($config->get('screenshot'));
 

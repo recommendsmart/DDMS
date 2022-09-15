@@ -37,7 +37,7 @@ class TaxNumberTest extends CommerceWebDriverTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_product',
     'commerce_order',
     'commerce_tax',

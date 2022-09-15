@@ -31,7 +31,7 @@ class PriceCalculatorPass implements CompilerPassInterface {
       }
 
       $processors[$id] = [
-        'priority' => $attribute['priority'] ?? 0,
+        'priority' => isset($attribute['priority']) ? $attribute['priority'] : 0,
         'adjustment_type' => $attribute['adjustment_type'],
       ];
     }

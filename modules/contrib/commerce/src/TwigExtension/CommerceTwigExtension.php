@@ -3,20 +3,18 @@
 namespace Drupal\commerce\TwigExtension;
 
 use Drupal\Core\Entity\ContentEntityInterface;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
 
 /**
  * Provides the Commerce Twig extensions.
  */
-class CommerceTwigExtension extends AbstractExtension {
+class CommerceTwigExtension extends \Twig_Extension {
 
   /**
    * @inheritdoc
    */
   public function getFilters() {
     return [
-      new TwigFilter('commerce_entity_render', [$this, 'renderEntity']),
+      new \Twig_SimpleFilter('commerce_entity_render', [$this, 'renderEntity']),
     ];
   }
 

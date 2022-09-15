@@ -28,7 +28,7 @@ class EntityBrowserTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'system',
     'user',
     'views',
@@ -62,7 +62,7 @@ class EntityBrowserTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     FileCacheFactory::setPrefix($this->randomString(4));
     parent::setUp();
 
@@ -70,7 +70,7 @@ class EntityBrowserTest extends KernelTestBase {
     $this->widgetUUID = $this->container->get('uuid')->generate();
     $this->routeProvider = $this->container->get('router.route_provider');
 
-    $this->installSchema('system', ['sequences']);
+    $this->installSchema('system', ['key_value_expire', 'sequences']);
     View::create(['id' => 'test_view'])->save();
   }
 
@@ -486,7 +486,7 @@ class EntityBrowserTest extends KernelTestBase {
     $role = $this->container->get('entity_type.manager')
       ->getStorage('user_role')
       ->create([
-        'label' => $this->randomString(),
+        'name' => $this->randomString(),
         'id' => $this->randomMachineName(),
       ]);
     $role->grantPermission('access content');

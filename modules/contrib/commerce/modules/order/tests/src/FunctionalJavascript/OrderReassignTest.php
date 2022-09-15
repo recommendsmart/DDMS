@@ -21,7 +21,7 @@ class OrderReassignTest extends OrderWebDriverTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_product',
     'commerce_order',
     'inline_entity_form',

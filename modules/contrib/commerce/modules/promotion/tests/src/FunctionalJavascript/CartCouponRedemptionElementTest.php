@@ -42,7 +42,7 @@ class CartCouponRedemptionElementTest extends CommerceWebDriverTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'block',
     'commerce_cart',
     'commerce_promotion',

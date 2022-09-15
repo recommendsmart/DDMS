@@ -14,7 +14,7 @@ class CountryDefaultFormatterTest extends FormatterTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->createField('address_country', 'address_country_default');

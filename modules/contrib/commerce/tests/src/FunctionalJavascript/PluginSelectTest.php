@@ -25,7 +25,7 @@ class PluginSelectTest extends CommerceWebDriverTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'user',
     'text',
     'filter',

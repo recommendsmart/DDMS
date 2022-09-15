@@ -16,7 +16,7 @@ class FieldWidgetDisplayTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'entity_browser', 'image', 'comment',
   ];
 
@@ -30,7 +30,7 @@ class FieldWidgetDisplayTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->pluginManager = $this->container->get('plugin.manager.entity_browser.field_widget_display');

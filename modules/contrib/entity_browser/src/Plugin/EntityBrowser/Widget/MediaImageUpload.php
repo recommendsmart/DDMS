@@ -23,10 +23,10 @@ class MediaImageUpload extends FileUpload {
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return array_merge(parent::defaultConfiguration(), [
+    return [
       'extensions' => 'jpg jpeg png gif',
       'media_type' => NULL,
-    ]);
+    ] + parent::defaultConfiguration();
   }
 
   /**

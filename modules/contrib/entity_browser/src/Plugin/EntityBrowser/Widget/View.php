@@ -41,10 +41,10 @@ class View extends WidgetBase implements ContainerFactoryPluginInterface {
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return array_merge(parent::defaultConfiguration(), [
+    return [
       'view' => NULL,
       'view_display' => NULL,
-    ]);
+    ] + parent::defaultConfiguration();
   }
 
   /**
@@ -218,6 +218,9 @@ class View extends WidgetBase implements ContainerFactoryPluginInterface {
    * {@inheritdoc}
    */
   protected function prepareEntities(array $form, FormStateInterface $form_state) {
+    if (!isset($form_state->getUserInput()['entity_browser_select'])) {
+      return [];
+    }
     if (is_array($form_state->getUserInput()['entity_browser_select'])) {
       $selected_rows = array_values(array_filter($form_state->getUserInput()['entity_browser_select']));
     }

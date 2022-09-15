@@ -52,7 +52,7 @@ class CountrySortTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->user = $this->drupalCreateUser(['access content']);

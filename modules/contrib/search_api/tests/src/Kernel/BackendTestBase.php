@@ -26,7 +26,7 @@ abstract class BackendTestBase extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'field',
     'search_api',
     'user',

@@ -84,9 +84,8 @@ class ProductVariationContext implements ContextProviderInterface {
         $value = $product_variation_storage->loadFromContext($product);
         if ($value === NULL) {
           $product_type = ProductType::load($product->bundle());
-          $variation_types = $product_type->getVariationTypeIds();
           $value = $product_variation_storage->create([
-            'type' => reset($variation_types),
+            'type' => $product_type->getVariationTypeId(),
           ]);
         }
       }
@@ -100,8 +99,7 @@ class ProductVariationContext implements ContextProviderInterface {
           assert($context instanceof EntityDisplayInterface);
           if ($context->getTargetEntityTypeId() === 'commerce_product') {
             $product_type = ProductType::load($context->getTargetBundle());
-            $variation_types = $product_type->getVariationTypeIds();
-            $value = $this->sampleEntityGenerator->get('commerce_product_variation', reset($variation_types));
+            $value = $this->sampleEntityGenerator->get('commerce_product_variation', $product_type->getVariationTypeId());
           }
         }
         elseif ($section_storage instanceof OverridesSectionStorageInterface) {
@@ -110,8 +108,7 @@ class ProductVariationContext implements ContextProviderInterface {
             $value = $context->getDefaultVariation();
             if ($value === NULL) {
               $product_type = ProductType::load($context->bundle());
-              $variation_types = $product_type->getVariationTypeIds();
-              $value = $this->sampleEntityGenerator->get('commerce_product_variation', reset($variation_types));
+              $value = $this->sampleEntityGenerator->get('commerce_product_variation', $product_type->getVariationTypeId());
             }
           }
         }

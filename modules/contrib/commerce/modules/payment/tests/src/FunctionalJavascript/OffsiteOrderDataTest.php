@@ -27,7 +27,7 @@ class OffsiteOrderDataTest extends CommerceWebDriverTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_product',
     'commerce_cart',
     'commerce_checkout',

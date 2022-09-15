@@ -165,7 +165,7 @@ class TaxZone {
    *   The tax rate, or NULL if none found.
    */
   public function getRate($rate_id) {
-    return $this->rates[$rate_id] ?? NULL;
+    return isset($this->rates[$rate_id]) ? $this->rates[$rate_id] : NULL;
   }
 
   /**

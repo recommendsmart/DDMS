@@ -244,7 +244,6 @@ class PluginsTest extends EntityBrowserWebDriverTestBase {
 
     $results = $entity_type_manager
       ->getStorage('file')->getQuery()
-      ->accessCheck(TRUE)
       ->range(0, 1)
       ->sort('fid', 'DESC')
       ->execute();

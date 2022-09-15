@@ -224,7 +224,6 @@ class ResultSet implements \IteratorAggregate, ResultSetInterface {
   /**
    * {@inheritdoc}
    */
-  #[\ReturnTypeWillChange]
   public function getIterator() {
     return new \ArrayIterator($this->resultItems);
   }

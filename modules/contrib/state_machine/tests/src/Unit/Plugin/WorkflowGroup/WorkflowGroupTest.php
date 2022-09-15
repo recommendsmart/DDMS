@@ -36,7 +36,7 @@ class WorkflowGroupTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->workflowGroup = new WorkflowGroup([], 'order', $this->definition);
   }

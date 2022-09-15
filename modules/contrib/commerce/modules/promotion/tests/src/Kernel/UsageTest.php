@@ -54,7 +54,7 @@ class UsageTest extends OrderKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_promotion',
   ];
 
@@ -96,7 +96,6 @@ class UsageTest extends OrderKernelTestBase {
    * Tests the usage API.
    *
    * @covers ::register
-   * @covers ::unregister
    * @covers ::reassign
    * @covers ::delete
    * @covers ::deleteByCoupon
@@ -124,10 +123,6 @@ class UsageTest extends OrderKernelTestBase {
 
     $this->usage->register($order, $promotion);
     $this->assertEquals(1, $this->usage->load($promotion));
-    $this->usage->unregister($order, $promotion);
-    $this->assertEquals(0, $this->usage->load($promotion));
-    $this->usage->register($order, $promotion);
-
     $this->usage->register($another_order, $promotion);
     $this->assertEquals(2, $this->usage->load($promotion));
     // Test filtering by coupon.

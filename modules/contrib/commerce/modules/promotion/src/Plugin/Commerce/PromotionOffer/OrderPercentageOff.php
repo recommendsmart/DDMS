@@ -29,12 +29,8 @@ class OrderPercentageOff extends OrderPromotionOfferBase {
     /** @var \Drupal\commerce_order\Entity\OrderInterface $order */
     $order = $entity;
     $percentage = $this->getPercentage();
-    $subtotal_price = $order->getSubtotalPrice();
-    if (!$subtotal_price || !$subtotal_price->isPositive()) {
-      return;
-    }
     // Calculate the order-level discount and split it between order items.
-    $amount = $subtotal_price->multiply($percentage);
+    $amount = $order->getSubtotalPrice()->multiply($percentage);
     $amount = $this->rounder->round($amount);
 
     $total_price = $order->getTotalPrice();

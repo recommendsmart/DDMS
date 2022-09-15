@@ -132,13 +132,6 @@ class GroupContentTypeForm extends EntityForm {
 
     // Remove button and internal Form API values from submitted values.
     $form_state->cleanValues();
-    // Invoke all specified builders for copying form values to entity
-    // properties.
-    if (isset($form['#entity_builders'])) {
-      foreach ($form['#entity_builders'] as $function) {
-        call_user_func_array($form_state->prepareCallback($function), [$group_content_type->getEntityTypeId(), $group_content_type, &$form, &$form_state]);
-      }
-    }
 
     // Extract the values as configuration that should be saved.
     $config = $form_state->getValues();
@@ -148,15 +141,7 @@ class GroupContentTypeForm extends EntityForm {
     if ($this->operation == 'add') {
       /** @var \Drupal\group\Entity\Storage\GroupContentTypeStorageInterface $storage */
       $storage = $this->entityTypeManager->getStorage('group_content_type');
-      $group_content_type = $storage->createFromPlugin($group_type, $plugin->getPluginId(), $config);
-      // Invoke all specified builders for copying form values to entity
-      // properties.
-      if (isset($form['#entity_builders'])) {
-        foreach ($form['#entity_builders'] as $function) {
-          call_user_func_array($form_state->prepareCallback($function), [$group_content_type->getEntityTypeId(), $group_content_type, &$form, &$form_state]);
-        }
-      }
-      $group_content_type->save();
+      $storage->createFromPlugin($group_type, $plugin->getPluginId(), $config)->save();
       $this->messenger()->addStatus($this->t('The content plugin was installed on the group type.'));
     }
     // Otherwise, we update the existing group content type's configuration.

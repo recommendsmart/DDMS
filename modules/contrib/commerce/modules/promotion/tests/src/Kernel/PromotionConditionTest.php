@@ -29,7 +29,7 @@ class PromotionConditionTest extends OrderKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_promotion',
     'commerce_promotion_test',
   ];

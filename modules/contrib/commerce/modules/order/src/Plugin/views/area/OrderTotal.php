@@ -76,11 +76,7 @@ class OrderTotal extends AreaPluginBase {
         if (!$argument instanceof NumericArgument) {
           continue;
         }
-        if (!in_array($argument->getField(), [
-          'commerce_order.order_id',
-          'commerce_order_item.order_id',
-          'commerce_payment.order_id',
-        ])) {
+        if (!in_array($argument->getField(), ['commerce_order.order_id', 'commerce_order_item.order_id'])) {
           continue;
         }
         /** @var \Drupal\commerce_order\Entity\OrderInterface $order */

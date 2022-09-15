@@ -3,7 +3,6 @@
 namespace Drupal\role_delegation\Access;
 
 use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Routing\Access\AccessInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\role_delegation\PermissionGenerator;
@@ -39,7 +38,7 @@ class RoleDelegationAccessCheck implements AccessInterface {
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function access(AccountInterface $account): AccessResultInterface {
+  public function access(AccountInterface $account) {
     // If the user has any of the "assign custom role" permissions then we give
     // them access to the form.
     foreach ($this->permissionGenerator->rolePermissions() as $perm => $title) {

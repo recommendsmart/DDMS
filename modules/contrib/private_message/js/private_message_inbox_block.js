@@ -72,6 +72,10 @@ Drupal.PrivateMessageInbox.updateInbox = {};
       map[element.attr('data-thread-id')] = element;
     });
 
+    if (threadIds.length) {
+      $('p.js-inbox-empty', container).remove();
+    }
+
     $.each(threadIds, function (index) {
       var threadId = threadIds[index];
 

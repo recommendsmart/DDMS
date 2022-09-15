@@ -113,7 +113,6 @@ class ProductVariationListBuilder extends EntityListBuilder implements FormInter
     $header['title'] = $this->t('Title');
     $header['price'] = $this->t('Price');
     $header['status'] = $this->t('Status');
-    $header['type'] = $this->t('Type');
     if ($this->hasTableDrag) {
       $header['weight'] = $this->t('Weight');
     }
@@ -141,7 +140,6 @@ class ProductVariationListBuilder extends EntityListBuilder implements FormInter
     $row['title'] = $title;
     $row['price'] = $entity->getPrice();
     $row['status'] = $entity->isPublished() ? $this->t('Published') : $this->t('Unpublished');
-    $row['type'] = $entity->bundle();
     if ($this->hasTableDrag) {
       $row['weight'] = [
         '#type' => 'weight',
@@ -205,7 +203,6 @@ class ProductVariationListBuilder extends EntityListBuilder implements FormInter
         ],
       ];
       $row['status'] = ['#markup' => $row['status']];
-      $row['type'] = ['#markup' => $row['type']];
       if (isset($row['weight'])) {
         $row['weight']['#delta'] = $delta;
       }

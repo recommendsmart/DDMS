@@ -47,6 +47,12 @@
       // @see \Drupal\block\BlockViewBuilder::preRender
       var selectors = 'form[data-bef-auto-submit-full-form], [data-bef-auto-submit-full-form] form, [data-bef-auto-submit]';
 
+      $(selectors, context).addBack(selectors).find('input:text:not(.hasDatepicker), textarea').each(function (index, value) {
+        $(this).focus();
+        var strLength = $(this).val().length * 2;
+        $(this)[0].setSelectionRange(strLength, strLength);
+      });
+
       // The change event bubbles so we only need to bind it to the outer form
       // in case of a full form, or a single element when specified explicitly.
       $(selectors, context).addBack(selectors).each(function (i, e) {
@@ -100,7 +106,7 @@
         var $submit = $target.closest('form').find('[data-bef-auto-submit-click]');
 
         // Don't submit on changes to excluded elements or a submit element.
-        if ($target.is('[data-bef-auto-submit-exclude], :submit') || $target.attr('autocomplete') == 'off') {
+        if ($target.is('[data-bef-auto-submit-exclude], :submit') || ($target.attr('autocomplete') == 'off' && !$target.hasClass('bef-datepicker'))) {
           return true;
         }
 

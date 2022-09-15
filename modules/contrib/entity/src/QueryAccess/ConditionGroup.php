@@ -181,7 +181,7 @@ final class ConditionGroup implements \Countable, RefinableCacheableDependencyIn
   /**
    * {@inheritdoc}
    */
-  public function count(): int {
+  public function count() {
     return count($this->conditions);
   }
 

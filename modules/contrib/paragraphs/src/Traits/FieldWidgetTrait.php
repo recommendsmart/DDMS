@@ -18,7 +18,7 @@ trait FieldWidgetTrait {
    * @param \Drupal\Core\Entity\EntityInterface $host
    *   The host entity.
    *
-   * @see ContetEntityForm::initFormLangcodes()
+   * @see ContentEntityForm::initFormLangcodes()
    */
   protected function initFormLangcodes(FormStateInterface $form_state, EntityInterface $host) {
     /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */

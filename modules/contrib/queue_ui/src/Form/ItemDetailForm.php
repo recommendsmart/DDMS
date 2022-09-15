@@ -5,20 +5,15 @@ namespace Drupal\queue_ui\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\queue_ui\QueueUIManager;
-use Drupal\Core\Render\Renderer;
-use Drupal\Core\Extension\ModuleHandler;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class QueueUIInspectForm declaration.
- *
+ * Class QueueUIInspectForm
  * @package Drupal\queue_ui\Form
  */
 class ItemDetailForm extends FormBase {
 
   /**
-   * The QueueUIManager.
-   *
    * @var \Drupal\queue_ui\QueueUIManager
    */
   private $queueUIManager;
@@ -27,31 +22,18 @@ class ItemDetailForm extends FormBase {
    * InspectForm constructor.
    *
    * @param \Drupal\queue_ui\QueueUIManager $queueUIManager
-   *   The QueueUIManager object.
-   * @param \Drupal\Core\Render\Renderer $renderer
-   *   The Renderer object.
-   * @param \Drupal\Core\Extension\ModuleHandler $moduleHandler
-   *   The ModuleHandler object.
    */
-  public function __construct(QueueUIManager $queueUIManager, Renderer $renderer, ModuleHandler $moduleHandler) {
+  public function __construct(QueueUIManager $queueUIManager) {
     $this->queueUIManager = $queueUIManager;
-    $this->renderer = $renderer;
-    $this->moduleHandler = $moduleHandler;
   }
 
   /**
-   * {@inheritdoc}
-   *
    * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-   *   The current service container.
-   *
    * @return static
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('plugin.manager.queue_ui'),
-      $container->get('renderer'),
-      $container->get('module_handler'),
+      $container->get('plugin.manager.queue_ui')
     );
   }
 
@@ -65,48 +47,49 @@ class ItemDetailForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $queueName = FALSE, $queueItem = FALSE) {
-    if ($queue_ui = $this->queueUIManager->fromQueueName($queueName)) {
-      $queueItem = $queue_ui->loadItem($queueItem);
+  public function buildForm(array $form, FormStateInterface $form_state, $queue_name = FALSE, $queue_item = FALSE) {
+    if ($queue_ui = $this->queueUIManager->fromQueueName($queue_name)) {
+      $queue_item = $queue_ui->loadItem($queue_item);
 
       $data = [
         '#type' => 'html_tag',
         '#tag' => 'pre' ,
-        '#value' => print_r(unserialize($queueItem->data), TRUE),
+        '#value' => print_r(unserialize($queue_item->data), TRUE)
       ];
-      $data = $this->renderer->renderPlain($data);
+      $data = \Drupal::service('renderer')->renderPlain($data);
+      // Use kpr to print the data.
+      if (\Drupal::service('module_handler')->moduleExists('devel')) {
+        $data = kpr(unserialize($queue_item->data), TRUE);
+      }
 
       $rows = [
         'id' => [
           'data' => [
             'header' => $this->t('Item ID'),
-            'data' => $queueItem->item_id,
+            'data' => $queue_item->item_id,
           ],
         ],
-        'queueName' => [
+        'queue_name' => [
           'data' => [
             'header' => $this->t('Queue name'),
-            'data' => $queueItem->name,
+            'data' => $queue_item->name,
           ],
         ],
         'expire' => [
           'data' => [
             'header' => $this->t('Expire'),
-            'data' => ($queueItem->expire ? date(DATE_RSS, $queueItem->expire) : $queueItem->expire),
-          ],
+            'data' => ($queue_item->expire ? date(DATE_RSS, $queue_item->expire) : $queue_item->expire),
+          ]
         ],
         'created' => [
           'data' => [
             'header' => $this->t('Created'),
-            'data' => date(DATE_RSS, $queueItem->created),
+            'data' => date(DATE_RSS, $queue_item->created),
           ],
         ],
         'data' => [
           'data' => [
-            'header' => [
-              'data' => $this->t('Data'),
-              'style' => 'vertical-align:top',
-            ],
+            'header' => ['data' => $this->t('Data'), 'style' => 'vertical-align:top'],
             'data' => $data,
           ],
         ],
@@ -115,19 +98,15 @@ class ItemDetailForm extends FormBase {
       return [
         'table' => [
           '#type' => 'table',
-          '#rows' => $rows,
+          '#rows' => $rows
         ],
       ];
     }
   }
 
   /**
-   * {@inheritdoc}
-   *
    * @param array $form
-   *   The form where the settings form is being included in.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {}
 

@@ -18,7 +18,7 @@ class NumberPatternTest extends CommerceWebDriverTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_number_pattern',
     'commerce_number_pattern_test',
   ];

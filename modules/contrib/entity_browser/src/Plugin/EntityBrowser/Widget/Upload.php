@@ -85,12 +85,12 @@ class Upload extends WidgetBase {
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return array_merge(parent::defaultConfiguration(), [
-      'submit_text' => $this->t('Select files'),
+    return [
       'upload_location' => 'public://',
       'multiple' => TRUE,
+      'submit_text' => $this->t('Select files'),
       'extensions' => 'jpg jpeg gif png txt doc xls pdf ppt pps odt ods odp',
-    ]);
+    ] + parent::defaultConfiguration();
   }
 
   /**

@@ -18,7 +18,7 @@ class PriceEqualsTest extends CommerceKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_price_test',
     'commerce_product',
   ];

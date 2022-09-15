@@ -9,7 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\ctools\Event\WizardEvent;
 use Drupal\Core\TempStore\SharedTempStoreFactory;
-use Drupal\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * The base class for all entity form wizards.
@@ -85,7 +85,7 @@ abstract class EntityFormWizardBase extends FormWizardBase implements EntityForm
       $values[$this->getEntityType()] = $entity;
     }
     $event = new WizardEvent($this, $values);
-    $this->dispatcher->dispatch($event, FormWizardInterface::LOAD_VALUES);
+    $this->dispatcher->dispatch(FormWizardInterface::LOAD_VALUES, $event);
     return $event->getValues();
   }
 

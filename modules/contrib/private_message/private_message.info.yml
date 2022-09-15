@@ -6,10 +6,12 @@ package: Private Message
 
 dependencies:
   - drupal:text
+  - message:message
+  - message_notify:message_notify
 
 configure: private_message.admin_config.config
 
 # Information added by Drupal.org packaging script on 2022-02-21
-version: '3.0.0-beta2'
+version: '8.x-2.0-beta18'
 project: 'private_message'
-datestamp: 1645433299
+datestamp: 1645432592

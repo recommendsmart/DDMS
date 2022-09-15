@@ -18,7 +18,6 @@ use Drupal\search_api\UnsavedConfigurationInterface;
 use Drupal\search_api\Utility\DataTypeHelperInterface;
 use Drupal\search_api\Utility\FieldsHelperInterface;
 use Drupal\Core\TempStore\SharedTempStoreFactory;
-use Drupal\search_api\Utility\Utility;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -257,11 +256,22 @@ class IndexFieldsForm extends EntityForm {
       }
     }
 
-    $additional_factors = [];
-    foreach ($fields as $field) {
-      $additional_factors[] = $field->getBoost();
-    }
-    $boosts = Utility::getBoostFactors($additional_factors);
+    $boost_values = [
+      '0.0',
+      '0.1',
+      '0.2',
+      '0.3',
+      '0.5',
+      '0.8',
+      '1.0',
+      '2.0',
+      '3.0',
+      '5.0',
+      '8.0',
+      '13.0',
+      '21.0',
+    ];
+    $boosts = array_combine($boost_values, $boost_values);
 
     $build = [
       '#type' => 'details',
@@ -323,7 +333,7 @@ class IndexFieldsForm extends EntityForm {
       $build['fields'][$key]['boost'] = [
         '#type' => 'select',
         '#options' => $boosts,
-        '#default_value' => Utility::formatBoostFactor($field->getBoost()),
+        '#default_value' => sprintf('%.1F', $field->getBoost()),
         '#states' => [
           'visible' => [
             ':input[name="fields[' . $key . '][type]"]' => $fulltext_types,

@@ -91,7 +91,7 @@ abstract class RendererBase implements RendererInterface, EntityHandlerInterface
     });
 
     // Allow other modules to alter the generated HTML.
-    $this->dispatcher->dispatch(new PrintHtmlAlterEvent($html, $entities), PrintEvents::POST_RENDER);
+    $this->dispatcher->dispatch(PrintEvents::POST_RENDER, new PrintHtmlAlterEvent($html, $entities));
 
     return $html;
   }

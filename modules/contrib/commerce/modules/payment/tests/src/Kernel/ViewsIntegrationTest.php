@@ -19,7 +19,7 @@ class ViewsIntegrationTest extends OrderKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'address',
     'entity_reference_revisions',
     'profile',

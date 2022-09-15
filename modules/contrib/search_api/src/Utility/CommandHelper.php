@@ -379,7 +379,7 @@ class CommandHelper implements LoggerAwareInterface {
         $this->moduleHandler->invokeAllDeprecated($description, 'search_api_index_reindex', [$index, FALSE]);
         $event_name = SearchApiEvents::REINDEX_SCHEDULED;
         $event = new ReindexScheduledEvent($index, FALSE);
-        $this->eventDispatcher->dispatch($event, $event_name);
+        $this->eventDispatcher->dispatch($event_name, $event);
         $arguments = [
           '!index' => $index->label(),
           '!datasources' => implode(', ', $reindexed_datasources),

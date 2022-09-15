@@ -38,9 +38,7 @@ class ProductVariationSelection extends DefaultSelection {
     }
 
     // Add entity-access tag.
-    $query
-      ->accessCheck(TRUE)
-      ->addTag('commerce_product_variation_access');
+    $query->addTag('commerce_product_variation_access');
 
     // Add the Selection handler for system_query_entity_reference_alter().
     $query->addTag('entity_reference');

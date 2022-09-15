@@ -25,10 +25,9 @@ class OrderBillingAddressTest extends UnitTestCase {
           ['country_code' => 'US', 'administrative_area' => 'CA'],
         ],
       ],
-    ], 'order_billing_address', ['entity_type' => 'commerce_order', 'profile_scope' => 'billing']);
+    ], 'order_billing_address', ['entity_type' => 'commerce_order']);
     $order = $this->prophesize(OrderInterface::class);
     $order->getEntityTypeId()->willReturn('commerce_order');
-    $order->collectProfiles()->willReturn([]);
     $order->getBillingProfile()->willReturn(NULL);
     $order = $order->reveal();
 
@@ -47,7 +46,7 @@ class OrderBillingAddressTest extends UnitTestCase {
     $billing_profile = $billing_profile->reveal();
     $order = $this->prophesize(OrderInterface::class);
     $order->getEntityTypeId()->willReturn('commerce_order');
-    $order->collectProfiles()->willReturn(['billing' => $billing_profile]);
+    $order->getBillingProfile()->willReturn($billing_profile);
     $order = $order->reveal();
 
     $condition = new OrderBillingAddress([
@@ -56,7 +55,7 @@ class OrderBillingAddressTest extends UnitTestCase {
           ['country_code' => 'US', 'administrative_area' => 'CA'],
         ],
       ],
-    ], 'order_billing_address', ['entity_type' => 'commerce_order', 'profile_scope' => 'billing']);
+    ], 'order_billing_address', ['entity_type' => 'commerce_order']);
     $this->assertFalse($condition->evaluate($order));
 
     $condition = new OrderBillingAddress([
@@ -65,7 +64,7 @@ class OrderBillingAddressTest extends UnitTestCase {
           ['country_code' => 'US', 'administrative_area' => 'SC'],
         ],
       ],
-    ], 'order_billing_address', ['entity_type' => 'commerce_order', 'profile_scope' => 'billing']);
+    ], 'order_billing_address', ['entity_type' => 'commerce_order']);
     $this->assertTrue($condition->evaluate($order));
   }
 

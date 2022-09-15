@@ -31,7 +31,7 @@ class StateFilterTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $user = $this->drupalCreateUser(['administer entity_test content']);

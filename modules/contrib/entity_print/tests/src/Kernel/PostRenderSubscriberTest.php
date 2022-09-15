@@ -16,7 +16,7 @@ class PostRenderSubscriberTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['entity_print'];
+  public static $modules = ['entity_print'];
 
   /**
    * Test the event subscriber.

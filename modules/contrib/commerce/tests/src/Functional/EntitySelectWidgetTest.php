@@ -19,7 +19,7 @@ class EntitySelectWidgetTest extends CommerceBrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'datetime',
   ];

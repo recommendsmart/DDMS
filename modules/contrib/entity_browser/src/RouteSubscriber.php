@@ -74,7 +74,6 @@ class RouteSubscriber {
     }
 
     return $this->browserStorage->getQuery()
-      ->accessCheck(TRUE)
       ->condition('status', TRUE)
       ->condition("display", $ids, 'IN')
       ->execute();

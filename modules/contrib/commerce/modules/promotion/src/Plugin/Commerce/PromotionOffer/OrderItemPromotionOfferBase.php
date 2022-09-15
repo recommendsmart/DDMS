@@ -17,7 +17,6 @@ abstract class OrderItemPromotionOfferBase extends PromotionOfferBase implements
     return [
       'display_inclusive' => TRUE,
       'conditions' => [],
-      'operator' => 'OR',
     ] + parent::defaultConfiguration();
   }
 
@@ -36,16 +35,6 @@ abstract class OrderItemPromotionOfferBase extends PromotionOfferBase implements
         FALSE => $this->t('Only show the discount on the order total summary'),
       ],
       '#default_value' => (int) $this->configuration['display_inclusive'],
-    ];
-    $form['operator'] = [
-      '#title' => $this->t('Condition operator'),
-      '#type' => 'radios',
-      '#options' => [
-        'AND' => $this->t('All conditions must pass'),
-        'OR' => $this->t('Only one condition must pass'),
-      ],
-      '#default_value' => $this->configuration['operator'] ?? 'OR',
-      '#weight' => 100,
     ];
     $form['conditions'] = [
       '#type' => 'commerce_conditions',
@@ -69,7 +58,6 @@ abstract class OrderItemPromotionOfferBase extends PromotionOfferBase implements
       $this->configuration = [];
       $this->configuration['display_inclusive'] = !empty($values['display_inclusive']);
       $this->configuration['conditions'] = $values['conditions'];
-      $this->configuration['operator'] = $values['operator'];
     }
   }
 
@@ -105,7 +93,7 @@ abstract class OrderItemPromotionOfferBase extends PromotionOfferBase implements
    * {@inheritdoc}
    */
   public function getConditionOperator() {
-    return $this->configuration['operator'] ?? 'OR';
+    return 'OR';
   }
 
 }

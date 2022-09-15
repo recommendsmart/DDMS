@@ -53,7 +53,7 @@ class OrderReceiptMail implements OrderReceiptMailInterface {
    * {@inheritdoc}
    */
   public function send(OrderInterface $order, $to = NULL, $bcc = NULL) {
-    $to = $to ?? $order->getEmail();
+    $to = isset($to) ? $to : $order->getEmail();
     if (!$to) {
       // The email should not be empty.
       return FALSE;

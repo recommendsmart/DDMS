@@ -18,7 +18,7 @@ class IndexStorageTest extends KernelTestBase {
    *
    * @var string[]
    */
-  protected static $modules = ['search_api', 'user', 'system'];
+  public static $modules = ['search_api', 'user', 'system'];
 
   /**
    * The search index storage.

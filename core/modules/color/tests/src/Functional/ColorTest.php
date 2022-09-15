@@ -90,9 +90,13 @@ class ColorTest extends BrowserTestBase {
    * Tests the Color module functionality.
    */
   public function testColor() {
+    $theme_initializer = $this->container->get('theme.initialization');
+    $themeManager = $this->container->get('theme.manager');
     foreach ($this->themes as $theme => $test_values) {
+      $themeManager->setActiveTheme($theme_initializer->getActiveThemeByName($theme));
       $this->_testColor($theme, $test_values);
     }
+    $themeManager->setActiveTheme($theme_initializer->getActiveThemeByName($this->defaultTheme));
   }
 
   /**
@@ -109,6 +113,7 @@ class ColorTest extends BrowserTestBase {
       ->set('default', $theme)
       ->save();
     $settings_path = 'admin/appearance/settings/' . $theme;
+    $colorThemDecorator = $this->container->get('color.theme_decorator');
 
     $this->drupalLogin($this->bigUser);
     $this->drupalGet($settings_path);
@@ -120,11 +125,11 @@ class ColorTest extends BrowserTestBase {
     $this->submitForm($edit, 'Save configuration');
 
     $this->drupalGet('<front>');
-    $stylesheets = $this->config('color.theme.' . $theme)->get('stylesheets');
+    $themeFiles = $colorThemDecorator->getThemeFiles($theme);
     /** @var \Drupal\Core\File\FileUrlGeneratorInterface $file_url_generator */
     $file_url_generator = \Drupal::service('file_url_generator');
     // Make sure the color stylesheet is included in the content.
-    foreach ($stylesheets as $stylesheet) {
+    foreach ($themeFiles['css'] as $stylesheet) {
       $this->assertSession()->responseMatches('|' . $file_url_generator->generateString($stylesheet) . '|');
       $stylesheet_content = implode("\n", file($stylesheet));
       $this->assertStringContainsString('color: #123456', $stylesheet_content, 'Make sure the color we changed is in the color stylesheet. (' . $theme . ')');
@@ -137,8 +142,8 @@ class ColorTest extends BrowserTestBase {
     $this->submitForm($edit, 'Save configuration');
 
     $this->drupalGet('<front>');
-    $stylesheets = $this->config('color.theme.' . $theme)->get('stylesheets');
-    foreach ($stylesheets as $stylesheet) {
+    $themeFiles = $colorThemDecorator->getThemeFiles($theme);
+    foreach ($themeFiles['css'] as $stylesheet) {
       $stylesheet_content = implode("\n", file($stylesheet));
       $this->assertStringContainsString('color: ' . $test_values['scheme_color'], $stylesheet_content, 'Make sure the color we changed is in the color stylesheet. (' . $theme . ')');
     }
@@ -210,14 +215,8 @@ class ColorTest extends BrowserTestBase {
       ->set('default', 'bartik')
       ->save();
 
-    // Place branding block with site name and slogan into header region.
-    $this->drupalPlaceBlock('system_branding_block', ['region' => 'header']);
-
     $this->drupalGet('');
-    // Make sure the color logo is not being used.
-    $this->assertSession()->responseNotContains('files/color/bartik-');
-    // Make sure the original bartik logo exists.
-    $this->assertSession()->responseContains('bartik/logo.svg');
+    $this->assertSession()->responseNotContains('files/color');
 
     // Log in and set the color scheme to 'slate'.
     $this->drupalLogin($this->bigUser);
@@ -228,10 +227,7 @@ class ColorTest extends BrowserTestBase {
     // Visit the homepage and ensure color changes.
     $this->drupalLogout();
     $this->drupalGet('');
-    // Make sure the color logo is being used.
-    $this->assertSession()->responseContains('files/color/bartik-');
-    // Make sure the original bartik logo does not exist.
-    $this->assertSession()->responseNotContains('bartik/logo.svg');
+    $this->assertSession()->responseContains('files/color');
 
     // Log in and set the color scheme back to default (delete config).
     $this->drupalLogin($this->bigUser);
@@ -242,10 +238,7 @@ class ColorTest extends BrowserTestBase {
     // Log out and ensure there is no color and we have the original logo.
     $this->drupalLogout();
     $this->drupalGet('');
-    // Make sure the color logo is not being used.
-    $this->assertSession()->responseNotContains('files/color/bartik-');
-    // Make sure the original bartik logo exists.
-    $this->assertSession()->responseContains('bartik/logo.svg');
+    $this->assertSession()->responseNotContains('files/color');
   }
 
 }

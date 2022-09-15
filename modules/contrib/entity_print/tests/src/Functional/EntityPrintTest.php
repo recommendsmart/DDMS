@@ -17,7 +17,7 @@ class EntityPrintTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'user',
     'node',
     'entity_print_test',

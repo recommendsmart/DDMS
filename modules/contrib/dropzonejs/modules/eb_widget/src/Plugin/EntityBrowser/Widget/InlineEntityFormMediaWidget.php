@@ -54,9 +54,9 @@ class InlineEntityFormMediaWidget extends MediaEntityDropzoneJsEbWidget {
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return array_merge(parent::defaultConfiguration(), [
+    return [
       'form_mode' => 'default',
-    ]);
+    ] + parent::defaultConfiguration();
   }
 
   /**

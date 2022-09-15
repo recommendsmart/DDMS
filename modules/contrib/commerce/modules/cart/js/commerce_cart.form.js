@@ -3,14 +3,15 @@
  * Defines Javascript behaviors for the cart form.
  */
 
-(function ($, Drupal, drupalSettings, once) {
+(function ($, Drupal, drupalSettings) {
   'use strict';
 
   Drupal.behaviors.commerceCartForm = {
     attach: function (context) {
       // Trigger the "Update" button when Enter is pressed in a quantity field.
-      $(once('commerce-cart-edit-quantity', '.quantity-edit-input', context))
-      .keydown(function (event) {
+      $('.quantity-edit-input', context)
+        .once('commerce-cart-edit-quantity')
+        .keydown(function (event) {
           if (event.keyCode === 13) {
             // Prevent the browser default ("Remove") from being triggered.
             event.preventDefault();
@@ -19,4 +20,4 @@
         });
     }
   };
-})(jQuery, Drupal, drupalSettings, once);
+})(jQuery, Drupal, drupalSettings);

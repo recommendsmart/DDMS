@@ -24,7 +24,7 @@ class BundleEntityAccessControlHandlerTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $module_handler = $this->prophesize(ModuleHandlerInterface::class);

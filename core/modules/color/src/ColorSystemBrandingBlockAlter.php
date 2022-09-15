@@ -23,9 +23,9 @@ class ColorSystemBrandingBlockAlter implements RenderCallbackInterface {
       ->applyTo($build);
 
     // Override logo.
-    $logo = $config->get('logo');
-    if ($logo && $build['content']['site_logo'] && preg_match('!' . $theme_key . '/logo.svg$!', $build['content']['site_logo']['#uri'])) {
-      $build['content']['site_logo']['#uri'] = \Drupal::service('file_url_generator')->generateString($logo);
+    $paths = \Drupal::service('color.theme_decorator')->getThemeFiles($theme_key);
+    if (!empty($paths['logo']) && $build['content']['site_logo'] && preg_match('!' . $theme_key . '/logo.svg$!', $build['content']['site_logo']['#uri'])) {
+      $build['content']['site_logo']['#uri'] = \Drupal::service('file_url_generator')->generateString($paths['logo']);
     }
 
     return $build;

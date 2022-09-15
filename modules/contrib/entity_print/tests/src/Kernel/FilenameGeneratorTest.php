@@ -19,7 +19,7 @@ class FilenameGeneratorTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'user', 'node', 'filter', 'entity_print'];
+  public static $modules = ['system', 'user', 'node', 'filter', 'entity_print'];
 
   /**
    * The filename generator.

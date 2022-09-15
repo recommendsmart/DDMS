@@ -59,7 +59,6 @@ class CronQueueTest extends KernelTestBase {
     $time = $this->prophesize('Drupal\Component\Datetime\TimeInterface');
     $time->getCurrentTime()->willReturn($this->currentTime);
     $time->getRequestTime()->willReturn($this->currentTime);
-    $time->getRequestMicroTime()->willReturn((float) $this->currentTime);
     \Drupal::getContainer()->set('datetime.time', $time->reveal());
     $this->assertEquals($this->currentTime, \Drupal::time()->getCurrentTime());
     $this->assertEquals($this->currentTime, \Drupal::time()->getRequestTime());

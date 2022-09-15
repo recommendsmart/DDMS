@@ -16,7 +16,7 @@ class RemoteIdItemTest extends CommerceKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_test',
   ];
 

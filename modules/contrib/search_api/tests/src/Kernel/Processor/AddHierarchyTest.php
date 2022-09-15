@@ -30,7 +30,7 @@ class AddHierarchyTest extends ProcessorTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'filter',
     'taxonomy',
   ];

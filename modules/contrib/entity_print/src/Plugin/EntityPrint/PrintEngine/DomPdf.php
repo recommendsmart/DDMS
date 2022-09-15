@@ -80,6 +80,7 @@ class DomPdf extends PdfEngineBase implements ContainerFactoryPluginInterface {
     $this->dompdfOptions->setFontDir(\Drupal::service('file_system')->getTempDirectory());
     $this->dompdfOptions->setLogOutputFile(\Drupal::service('file_system')->getTempDirectory() . DIRECTORY_SEPARATOR . self::LOG_FILE_NAME);
     $this->dompdfOptions->setIsRemoteEnabled($this->configuration['enable_remote']);
+    $this->dompdfOptions->setChroot([DRUPAL_ROOT]);
 
     $this->dompdf = new DompdfLib($this->dompdfOptions);
     if ($this->configuration['disable_log']) {
@@ -87,8 +88,8 @@ class DomPdf extends PdfEngineBase implements ContainerFactoryPluginInterface {
     }
 
     $this->dompdf
-      ->setBaseHost($request->getHttpHost())
-      ->setProtocol($request->getScheme() . '://');
+      ->setBasePath(DRUPAL_ROOT)
+      ->setProtocol('file://');
 
     $this->setupHttpContext();
   }

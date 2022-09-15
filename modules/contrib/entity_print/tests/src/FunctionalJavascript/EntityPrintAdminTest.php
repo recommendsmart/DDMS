@@ -16,7 +16,7 @@ class EntityPrintAdminTest extends WebDriverTestBase {
    *
    * @var array
    */
-  protected static $modules = ['node', 'entity_print_test', 'field', 'field_ui'];
+  public static $modules = ['node', 'entity_print_test', 'field', 'field_ui'];
 
   /**
    * {@inheritdoc}
@@ -69,7 +69,7 @@ class EntityPrintAdminTest extends WebDriverTestBase {
     $assert->pageTextContains('Dompdf is not available because it is not configured. Please install with:');
 
     // Ensure saving the form without any PDF engine selected doesn't blow up.
-    $this->submitForm([], 'Save configuration');
+    $this->drupalPostForm(NULL, [], 'Save configuration');
 
     // Assert the intial config values.
     $this->getSession()->getPage()->fillField('pdf', 'testprintengine');
@@ -81,14 +81,14 @@ class EntityPrintAdminTest extends WebDriverTestBase {
     $assert->fieldValueEquals('test_word_print_engine[test_word_setting]', 'my-default');
 
     // Ensure the plugin gets the chance to validate the form.
-    $this->submitForm([
+    $this->drupalPostForm(NULL, [
       'pdf' => 'testprintengine',
       'word_docx' => 'test_word_print_engine',
       'testprintengine[test_engine_setting]' => 'rejected',
     ], 'Save configuration');
     $assert->pageTextContains('Setting has an invalid value');
 
-    $this->submitForm([
+    $this->drupalPostForm(NULL, [
       'default_css' => 0,
       'force_download' => 0,
       'pdf' => 'testprintengine',

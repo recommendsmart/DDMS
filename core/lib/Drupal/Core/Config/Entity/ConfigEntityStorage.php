@@ -250,7 +250,14 @@ class ConfigEntityStorage extends EntityStorageBase implements ConfigEntityStora
       throw new ConfigEntityIdLengthException("Configuration entity ID {$id} exceeds maximum allowed length of " . static::MAX_ID_LENGTH . " characters.");
     }
 
-    return parent::save($entity);
+    try {
+      return parent::save($entity);
+    }
+    // Decorate exceptions with the config entity id for improved
+    // troubleshooting.
+    catch (\Exception $e) {
+      throw new EntityMalformedException("Saving the configuration entity with ID {$this->getPrefix()}{$entity->get($this->idKey)} generated an exception: '{$e->getMessage()}'");
+    }
   }
 
   /**

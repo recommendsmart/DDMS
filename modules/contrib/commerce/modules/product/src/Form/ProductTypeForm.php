@@ -72,10 +72,12 @@ class ProductTypeForm extends CommerceBundleEntityFormBase {
     // @todo Clean up once https://www.drupal.org/node/2318187 is fixed.
     if (in_array($this->operation, ['add', 'duplicate'])) {
       $product = $this->entityTypeManager->getStorage('commerce_product')->create(['type' => $product_type->uuid()]);
+      $products_exist = FALSE;
     }
     else {
       $storage = $this->entityTypeManager->getStorage('commerce_product');
       $product = $storage->create(['type' => $product_type->id()]);
+      $products_exist = $storage->getQuery()->condition('type', $product_type->id())->execute();
     }
     $form_state->set('original_entity', $this->entity->createDuplicate());
 
@@ -101,39 +103,23 @@ class ProductTypeForm extends CommerceBundleEntityFormBase {
       '#description' => $this->t('This text will be displayed on the <em>Add product</em> page.'),
       '#default_value' => $product_type->getDescription(),
     ];
-    $form['variations'] = [
-      '#type' => 'fieldset',
-      '#title' => $this->t('Variations'),
+    $form['variationType'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Product variation type'),
+      '#default_value' => $product_type->getVariationTypeId(),
+      '#options' => EntityHelper::extractLabels($variation_types),
+      '#disabled' => $products_exist,
     ];
     if ($product_type->isNew()) {
-      $form['variations']['variation_type_action'] = [
-        '#type' => 'select',
-        '#title' => $this->t('Product variation type(s)'),
-        '#default_value' => 'create_new',
-        '#options' => [
-          'create_new' => $this->t('- Create new -'),
-          'use_existing' => $this->t('- Use existing -'),
-        ],
-      ];
+      $form['variationType']['#empty_option'] = $this->t('- Create new -');
+      $form['variationType']['#description'] = $this->t('If an existing product variation type is not selected, a new one will be created.');
     }
-    $form['variations']['variationTypes'] = [
-      '#type' => 'checkboxes',
-      '#title' => $this->t('Product variation types'),
-      '#default_value' => $product_type->getVariationTypeIds(),
-      '#options' => EntityHelper::extractLabels($variation_types),
-      '#states' => [
-        'visible' => [
-          ':input[name="variation_type_action"]' => ['value' => 'use_existing'],
-        ],
-      ],
-      '#required' => !$product_type->isNew(),
-    ];
-    $form['variations']['multipleVariations'] = [
+    $form['multipleVariations'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Allow each product to have multiple variations.'),
       '#default_value' => $product_type->allowsMultipleVariations(),
     ];
-    $form['variations']['injectVariationFields'] = [
+    $form['injectVariationFields'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Inject product variation fields into the rendered product.'),
       '#default_value' => $product_type->shouldInjectVariationFields(),
@@ -170,26 +156,22 @@ class ProductTypeForm extends CommerceBundleEntityFormBase {
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     $this->validateTraitForm($form, $form_state);
-    $variation_types = array_filter($form_state->getValue('variationTypes'));
-    $variation_type_action = $form_state->getValue('variation_type_action');
-    if ($variation_type_action === 'create_new') {
+
+    if (empty($form_state->getValue('variationType'))) {
       $id = $form_state->getValue('id');
       if (!empty($this->entityTypeManager->getStorage('commerce_product_variation_type')->load($id))) {
-        $form_state->setError($form['variations']['variationTypes'], $this->t('A product variation type with the machine name @id already exists. Select an existing product variation type or change the machine name for this product type.', [
+        $form_state->setError($form['variationType'], $this->t('A product variation type with the machine name @id already exists. Select an existing product variation type or change the machine name for this product type.', [
           '@id' => $id,
         ]));
       }
+
       if ($this->moduleHandler->moduleExists('commerce_order')) {
         $order_item_type_ids = $this->getOrderItemTypeIds();
         if (empty($order_item_type_ids)) {
-          $form_state->setError($form['variations']['variationTypes'], $this->t('A new product variation type cannot be created, because no order item types were found. Select an existing product variation type or retry after creating a new order item type.'));
+          $form_state->setError($form['variationType'], $this->t('A new product variation type cannot be created, because no order item types were found. Select an existing product variation type or retry after creating a new order item type.'));
         }
       }
     }
-    elseif (empty($variation_types)) {
-      $form_state->setError($form['variations']['variationTypes'], $this->t('Please select one or more variation types.'));
-    }
-    $form_state->setValue('variationTypes', $variation_types);
   }
 
   /**
@@ -201,8 +183,7 @@ class ProductTypeForm extends CommerceBundleEntityFormBase {
     /** @var \Drupal\commerce_product\Entity\ProductTypeInterface $product_type */
     $product_type = $this->entity;
     // Create a new product variation type.
-    if ($form_state->getValue('variation_type_action') === 'create_new') {
-      $form_state->setValue('variation_type_action', NULL);
+    if (empty($form_state->getValue('variationType'))) {
       /** @var \Drupal\commerce_product\Entity\ProductVariationTypeInterface $variation_type */
       $variation_type = $this->entityTypeManager->getStorage('commerce_product_variation_type')->create([
         'id' => $form_state->getValue('id'),
@@ -215,7 +196,6 @@ class ProductTypeForm extends CommerceBundleEntityFormBase {
       }
       $variation_type->save();
       $product_type->setVariationTypeId($form_state->getValue('id'));
-      $product_type->setVariationTypeIds([$form_state->getValue('id')]);
     }
   }
 
@@ -232,7 +212,7 @@ class ProductTypeForm extends CommerceBundleEntityFormBase {
     $this->postSave($product_type, $this->operation);
     $this->submitTraitForm($form, $form_state);
     // Create the needed fields.
-    if ($this->operation === 'add') {
+    if ($this->operation == 'add') {
       commerce_product_add_body_field($product_type);
     }
     // Update the widget for the variations field.

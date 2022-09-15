@@ -58,7 +58,7 @@ class PluginItemDeriver extends DeriverBase implements ContainerDeriverInterface
     // Core has no way to list plugin types, so each referenceable plugin
     // type needs to register itself via the event.
     $event = new ReferenceablePluginTypesEvent($plugin_types);
-    $this->eventDispatcher->dispatch($event, CommerceEvents::REFERENCEABLE_PLUGIN_TYPES);
+    $this->eventDispatcher->dispatch(CommerceEvents::REFERENCEABLE_PLUGIN_TYPES, $event);
     $plugin_types = $event->getPluginTypes();
 
     foreach ($plugin_types as $plugin_type => $label) {

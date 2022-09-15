@@ -100,18 +100,10 @@ class PromotionOrderProcessor implements OrderPreprocessorInterface, OrderProces
     // Remove coupons that are no longer valid (due to availability/conditions.)
     $coupons_field_list = $order->get('coupons');
     $constraints = $coupons_field_list->validate();
-    $coupons_to_remove = [];
     /** @var \Symfony\Component\Validator\ConstraintViolationInterface $constraint */
     foreach ($constraints as $constraint) {
-      [$delta, $property_name] = explode('.', $constraint->getPropertyPath());
-      // Collect the coupon IDS to remove, for use in the item list filter
-      // callback right after.
-      $coupons_to_remove[] = $coupons_field_list->get($delta)->target_id;
-    }
-    if ($coupons_to_remove) {
-      $coupons_field_list->filter(function ($item) use ($coupons_to_remove) {
-        return !in_array($item->target_id, $coupons_to_remove, TRUE);
-      });
+      list($delta, $property_name) = explode('.', $constraint->getPropertyPath());
+      $coupons_field_list->removeItem($delta);
     }
 
     $content_langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();

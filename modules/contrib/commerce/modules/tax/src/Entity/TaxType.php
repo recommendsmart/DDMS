@@ -51,8 +51,7 @@ use Drupal\Core\Config\Entity\ConfigEntityInterface;
  *     "edit-form" = "/admin/commerce/config/tax-types/manage/{commerce_tax_type}",
  *     "delete-form" = "/admin/commerce/config/tax-types/manage/{commerce_tax_type}/delete",
  *     "collection" =  "/admin/commerce/config/tax-types"
- *   },
- *   static_cache = true
+ *   }
  * )
  */
 class TaxType extends ConfigEntityBase implements TaxTypeInterface {

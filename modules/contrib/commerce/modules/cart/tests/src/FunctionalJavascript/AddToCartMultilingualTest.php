@@ -47,7 +47,7 @@ class AddToCartMultilingualTest extends CartWebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'language',
     'content_translation',
   ];

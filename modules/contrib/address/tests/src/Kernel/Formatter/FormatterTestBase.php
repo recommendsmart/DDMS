@@ -16,7 +16,7 @@ abstract class FormatterTestBase extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'system',
     'field',
     'language',
@@ -43,7 +43,7 @@ abstract class FormatterTestBase extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     if (\Drupal::entityTypeManager()->hasDefinition('path_alias')) {

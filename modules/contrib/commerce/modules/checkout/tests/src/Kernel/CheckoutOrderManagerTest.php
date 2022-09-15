@@ -35,9 +35,8 @@ class CheckoutOrderManagerTest extends OrderKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_checkout',
-    'commerce_checkout_test',
   ];
 
   /**
@@ -122,16 +121,6 @@ class CheckoutOrderManagerTest extends OrderKernelTestBase {
     $this->order->state = 'validation';
     $step_id = $this->checkoutOrderManager->getCheckoutStepId($this->order, 'payment');
     $this->assertEquals('complete', $step_id);
-    $step_id = $this->checkoutOrderManager->getCheckoutStepId($this->order, 'review');
-    $this->assertEquals('complete', $step_id);
-
-    // Plugin may allow other steps on non-draft orders.
-    $this->order->state = 'validation';
-    $checkout_flow = $this->checkoutOrderManager->getCheckoutFlow($this->order);
-    $checkout_flow->setPluginId('commerce_checkout_test_post_completion_steps');
-    $step_id = $this->checkoutOrderManager->getCheckoutStepId($this->order, 'review');
-    $this->assertEquals('review', $step_id);
-
   }
 
 }

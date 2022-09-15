@@ -15,7 +15,7 @@ class BundlePluginTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'system',
     'entity',
   ];
@@ -23,7 +23,7 @@ class BundlePluginTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     // Install the modules properly. Putting them into static::$modules doesn't trigger the install

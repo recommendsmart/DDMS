@@ -2,7 +2,6 @@
 
 namespace Drupal\entity_print\EventSubscriber;
 
-use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -10,6 +9,7 @@ use Drupal\Core\Url;
 use Drupal\entity_print\PrintEngineException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -47,11 +47,11 @@ class PrintEngineExceptionSubscriber implements EventSubscriberInterface {
   /**
    * Handles print exceptions.
    *
-   * @param \Symfony\Component\HttpKernel\Event\ExceptionEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent $event
    *   The exception event.
    */
-  public function handleException(ExceptionEvent $event) {
-    $exception = $event->getThrowable();
+  public function handleException(GetResponseForExceptionEvent $event) {
+    $exception = $event->getException();
     if ($exception instanceof PrintEngineException) {
       \Drupal::messenger()->addError(new FormattableMarkup($exception->getPrettyMessage(), []));
 

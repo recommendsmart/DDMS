@@ -21,9 +21,6 @@ group.type.*:
     description:
       type: 'text'
       label: 'Description'
-    new_revision:
-      type: 'boolean'
-      label: 'Whether a new revision should be created by default'
     creator_membership:
       type: 'boolean'
       label: 'The group creator receives a membership'
@@ -119,11 +116,3 @@ entity_reference_selection.group_type:group_role:
     group_type_id:
       type: 'string'
       label: 'The group type to check for available roles.'
-
-condition.plugin.group_type:
-  type: condition.plugin
-  mapping:
-    group_types:
-      type: sequence
-      sequence:
-        type: string

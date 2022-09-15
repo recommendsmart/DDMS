@@ -21,7 +21,7 @@ class StoreDateTimeTest extends CommerceBrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'entity_test',
     'commerce_test',
   ];

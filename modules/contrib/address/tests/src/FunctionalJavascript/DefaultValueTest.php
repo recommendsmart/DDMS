@@ -16,7 +16,7 @@ class DefaultValueTest extends WebDriverTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'address',
     'address_test',

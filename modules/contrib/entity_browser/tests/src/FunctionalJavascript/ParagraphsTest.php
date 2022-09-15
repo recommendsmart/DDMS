@@ -17,7 +17,7 @@ class ParagraphsTest extends EntityBrowserWebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'views',
     'block',
     'node',

@@ -20,7 +20,7 @@ class EntityBrowserUITest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'entity_browser_test',
     'views',
     'block',

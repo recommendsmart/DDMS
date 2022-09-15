@@ -17,7 +17,7 @@ class CustomTest extends CommerceWebDriverTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_tax',
   ];
 

@@ -76,12 +76,7 @@ class RenderedEntity extends FieldWidgetDisplayBase implements ContainerFactoryP
       ->view($entity, $this->configuration['view_mode']);
 
     $build['#entity_browser_suppress_contextual'] = TRUE;
-
-    // If the entity is render cached, add another cache key to differentiate
-    // it from other places using the same view mode.
-    if (!empty($build['#cache']['keys'])) {
-      $build['#cache']['keys'][] = 'entity_browser';
-    }
+    $build['#cache']['keys'][] = 'entity_browser';
 
     return $build;
   }

@@ -54,7 +54,7 @@ class OrderCollectionFilterTest extends OrderKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'serialization',
     'jsonapi',
   ];

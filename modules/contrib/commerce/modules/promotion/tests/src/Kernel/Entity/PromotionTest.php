@@ -25,7 +25,7 @@ class PromotionTest extends OrderKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_promotion',
   ];
 
@@ -83,7 +83,6 @@ class PromotionTest extends OrderKernelTestBase {
    * @covers ::setOwner
    * @covers ::getOwnerId
    * @covers ::setOwnerId
-   * @covers ::requiresCoupon
    */
   public function testPromotion() {
     $order_type = OrderType::load('default');
@@ -187,20 +186,6 @@ class PromotionTest extends OrderKernelTestBase {
     $this->assertEquals(900, $promotion->getOwnerId());
     $promotion->save();
     $this->assertEquals(0, $promotion->getOwnerId());
-
-    $promotion = Promotion::create([
-      'status' => FALSE,
-    ]);
-    $this->assertFalse($promotion->requiresCoupon());
-    $promotion->set('require_coupon', TRUE);
-    $this->assertTrue($promotion->requiresCoupon());
-    $promotion->set('require_coupon', FALSE);
-    $this->assertFalse($promotion->requiresCoupon());
-    // As soon as a promotion requires a coupon, applying a coupon is required
-    // in order for the promotion to apply.
-    $promotion->addCoupon($coupon1);
-    $promotion->save();
-    $this->assertTrue($promotion->requiresCoupon());
   }
 
   /**

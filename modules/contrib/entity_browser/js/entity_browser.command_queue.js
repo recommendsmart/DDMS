@@ -2,7 +2,7 @@
  * @file entity_browser.command_queue.js
  */
 
-(function ($, Drupal, once) {
+(function ($, Drupal) {
 
   'use strict';
 
@@ -30,7 +30,9 @@
    */
   Drupal.behaviors.entityBrowserCommandQueue = {
     attach: function (context) {
-      $(once('register-execute-commands', '[name="ajax_commands_handler"]', context))
+      var handler = $(context).find('[name="ajax_commands_handler"]');
+
+      handler.once('register-execute-commands')
         .bind('execute-commands', Drupal.entityBrowserCommandQueue.executeCommands);
     }
   };
@@ -103,4 +105,4 @@
     return false;
   };
 
-}(jQuery, Drupal, once));
+}(jQuery, Drupal));

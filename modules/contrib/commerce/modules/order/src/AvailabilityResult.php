@@ -19,33 +19,23 @@ final class AvailabilityResult {
   /**
    * The availability result "reason".
    *
-   * @var mixed|null
+   * @var string|null
    */
   protected $reason;
-
-  /**
-   * The availability result "code".
-   *
-   * @var mixed|null
-   */
-  protected $code;
 
   /**
    * Constructs a new AvailabilityResult object.
    *
    * @param bool $result
    *   The availability result, FALSE when unavailable.
-   * @param mixed|null $reason
+   * @param string $reason
    *   (optional) The reason why an order item is unavailable.
-   * @param mixed|null $code
-   *   (optional) The "code" explaining why an order item is unavailable.
    */
-  public function __construct(bool $result, $reason = NULL, $code = NULL) {
+  public function __construct($result, $reason = NULL) {
+    assert(is_bool($result));
     assert(is_string($reason) || is_null($reason) || $reason instanceof MarkupInterface);
-    assert(is_string($code) || is_null($code) || $code instanceof MarkupInterface);
     $this->result = $result;
     $this->reason = $reason;
-    $this->code = $code;
   }
 
   /**
@@ -60,31 +50,19 @@ final class AvailabilityResult {
   /**
    * Creates an availability result that is "unavailable".
    *
-   * @param mixed|null $reason
+   * @param string $reason
    *   (optional) The reason why an order item is unavailable.
-   * @param mixed|null $code
-   *   (optional) The "code" explaining why an order item is unavailable.
    *
    * @return static
    */
-  public static function unavailable($reason = NULL, $code = NULL) : AvailabilityResult {
-    return new static(FALSE, $reason, $code);
-  }
-
-  /**
-   * Gets the "code".
-   *
-   * @return mixed|null
-   *   The "code" for this availability result, NULL when not provided.
-   */
-  public function getCode() {
-    return $this->code;
+  public static function unavailable($reason = NULL) : AvailabilityResult {
+    return new static(FALSE, $reason);
   }
 
   /**
    * Gets the "reason".
    *
-   * @return mixed|null
+   * @return string|null
    *   The "reason" for this availability result, NULL when not provided.
    */
   public function getReason() {

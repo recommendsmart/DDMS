@@ -19,15 +19,12 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\group\Entity\GroupContent;
-use Drupal\group\Fields\GroupGroupReferenceItemList;
 use Drupal\group\QueryAccess\EntityQueryAlter;
 use Drupal\user\RoleInterface;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\Plugin\views\query\Sql;
 use Drupal\views\ViewExecutable;
-use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\Core\Field\FieldStorageDefinitionInterface;
+
 /**
  * Implements hook_help().
  */
@@ -97,11 +94,10 @@ function group_theme_suggestions_group_content(array $variables) {
   /** @var \Drupal\group\Entity\GroupContentInterface $group_content */
   $group_content = $variables['elements']['#group_content'];
   $sanitized_view_mode = strtr($variables['elements']['#view_mode'], '.', '_');
-  $sanitized_bundle = strtr($group_content->bundle(), '-', '_');
 
   $suggestions[] = 'group_content__' . $sanitized_view_mode;
-  $suggestions[] = 'group_content__' . $sanitized_bundle;
-  $suggestions[] = 'group_content__' . $sanitized_bundle . '__' . $sanitized_view_mode;
+  $suggestions[] = 'group_content__' . $group_content->bundle();
+  $suggestions[] = 'group_content__' . $group_content->bundle() . '__' . $sanitized_view_mode;
   $suggestions[] = 'group_content__' . $group_content->id();
   $suggestions[] = 'group_content__' . $group_content->id() . '__' . $sanitized_view_mode;
 
@@ -125,7 +121,7 @@ function template_preprocess_group(&$variables) {
   $variables['group'] = $group;
   $variables['view_mode'] = $variables['elements']['#view_mode'];
   $variables['label'] = $group->label();
-  $variables['url'] = $group->toUrl('canonical');
+  $variables['url'] = $group->toUrl('canonical', ['language' => $group->language()]);
 
   $variables['attributes']['class'][] = 'group';
   $variables['attributes']['class'][] = Html::cleanCssIdentifier('group--' . $variables['view_mode']);
@@ -163,7 +159,7 @@ function template_preprocess_group_content(&$variables) {
   $variables['group_content'] = $group_content;
   $variables['view_mode'] = $variables['elements']['#view_mode'];
   $variables['label'] = $group_content->label();
-  $variables['url'] = $group_content->toUrl('canonical');
+  $variables['url'] = $group_content->toUrl('canonical', ['language' => $group_content->language()]);
 
   $variables['attributes']['class'][] = 'group-content';
   $variables['attributes']['class'][] = Html::cleanCssIdentifier('group-content--' . $variables['view_mode']);
@@ -245,13 +241,6 @@ function group_module_implements_alter(&$implementations, $hook) {
  */
 function group_query_entity_query_alter(SelectInterface $query) {
   $entity_type_id = $query->getMetaData('entity_type');
-
-  // Only do query access checks for non-nodes. Nodes will use grants/access
-  // records as defined in gnode.
-  if (\Drupal::moduleHandler()->moduleExists('gnode') && $entity_type_id == 'node') {
-    return;
-  }
-
   if ($query->hasTag($entity_type_id . '_access')) {
     $entity_type_manager = \Drupal::entityTypeManager();
     $entity_type = $entity_type_manager->getDefinition($entity_type_id);
@@ -306,7 +295,7 @@ function group_entity_access(EntityInterface $entity, $operation, AccountInterfa
   // check for 'view', 'update' or 'delete' access on new entities, even though
   // that makes little sense. We need to account for it to avoid crashes because
   // we would otherwise query the DB with a non-existent node ID.
-  if ($entity->isNew()) {
+  if ($entity->isNew() || $entity->getEntityTypeId() === 'group') {
     return AccessResult::neutral();
   }
 
@@ -332,34 +321,101 @@ function group_entity_access(EntityInterface $entity, $operation, AccountInterfa
     ->loadByEntity($entity);
 
   // If the entity does not belong to any group, we have nothing to say.
-  //
-  // @todo There is a slight performance boost to be had here. If we have a
-  // plugin that adds content without access and one that adds the same content
-  // with access, then this check would fail for content that is only added
-  // using the non-access plugin. The loop over the plugin IDs below would then
-  // not return anything and we would still end up with a neutral result, albeit
-  // with the user.group_permissions context and slightly worse performance. We
-  // can fix this by only loading those group content entities that use the
-  // plugins retrieved above.
   if (empty($group_contents)) {
     return AccessResult::neutral()->addCacheTags($plugin_cache_tags);
   }
 
-  $access = AccessResult::neutral();
+  $check_published = $entity->getEntityType()->entityClassImplements(EntityPublishedInterface::class);
+
+  // Index the group content per plugin ID.
+  $plugin_content = [];
+
+  /** @var \Drupal\group\Entity\GroupContentInterface[] $group_contents */
+  foreach ($group_contents as $group_content) {
+    // @todo Shows the need for a plugin ID base field.
+    $plugin_id = $group_content->getContentPlugin()->getPluginId();
+    $plugin_content[$plugin_id][] = $group_content;
+  }
+
+  // From this point on you need group to allow you to perform the operation. It
+  // suffices for any plugin to allow access.
+  $has_access = FALSE;
+  $owner_access = FALSE;
   foreach ($plugin_ids as $plugin_id) {
-    // For backwards compatibility reasons, if the group content enabler plugin
-    // used by the group content type does not specify an access handler, we do
-    // not check access for that group content type. In 8.2.x all group content
-    // enabler plugins will get a permission handler by default, so this check
-    // can be safely removed then.
-    if (!$plugin_manager->hasHandler($plugin_id, 'access')) {
+    if (empty($plugin_content[$plugin_id])) {
       continue;
     }
 
-    $handler = $plugin_manager->getAccessControlHandler($plugin_id);
-    $access = $access->orIf($handler->entityAccess($entity, $operation, $account, TRUE));
+    // For backwards compatibility reasons, if the group content enabler plugin
+    // used by the group content type does not specify a permission provider, we
+    // do not check access for that group content type. In 8.2.x all group
+    // content enabler plugins will get a permission handler by default, so this
+    // check can be safely removed then.
+    if (!$plugin_manager->hasHandler($plugin_id, 'permission_provider')) {
+      continue;
+    }
+
+    $handler = $plugin_manager->getPermissionProvider($plugin_id);
+    $admin_permission = $handler->getAdminPermission();
+    $any_permission = $handler->getPermission($operation, 'entity', 'any');
+    $own_permission = $handler->getPermission($operation, 'entity', 'own');
+    if ($check_published) {
+      $any_unpublished_permission = $handler->getPermission("$operation unpublished", 'entity', 'any');
+      $own_unpublished_permission = $handler->getPermission("$operation unpublished", 'entity', 'own');
+    }
+
+    foreach ($plugin_content[$plugin_id] as $group_content) {
+      $group = $group_content->getGroup();
+
+      if ($group->hasPermission($admin_permission, $account)) {
+        $has_access = TRUE;
+        break 2;
+      }
+      elseif(!$check_published) {
+        if ($any_permission !== FALSE && $group->hasPermission($any_permission, $account)) {
+          $has_access = TRUE;
+          break 2;
+        }
+        elseif($own_permission !== FALSE && $group->hasPermission($own_permission, $account) && $entity->getOwnerId() === $account->id()) {
+          $has_access = TRUE;
+          $owner_access = TRUE;
+          break 2;
+        }
+      }
+      else {
+        if ($entity->isPublished()) {
+          if ($any_permission !== FALSE && $group->hasPermission($any_permission, $account)) {
+            $has_access = TRUE;
+            break 2;
+          }
+          elseif($own_permission !== FALSE && $group->hasPermission($own_permission, $account) && $entity->getOwnerId() === $account->id()) {
+            $has_access = TRUE;
+            $owner_access = TRUE;
+            break 2;
+          }
+        }
+        else {
+          if ($any_unpublished_permission !== FALSE && $group->hasPermission($any_unpublished_permission, $account)) {
+            $has_access = TRUE;
+            break 2;
+          }
+          elseif($own_unpublished_permission !== FALSE && $group->hasPermission($own_unpublished_permission, $account) && $entity->getOwnerId() === $account->id()) {
+            $has_access = TRUE;
+            $owner_access = TRUE;
+            break 2;
+          }
+        }
+      }
+    }
   }
 
+  $access = $has_access ? AccessResult::allowed() : AccessResult::forbidden();
+  if ($owner_access) {
+    $access->cachePerUser();
+  }
+  if ($owner_access || $check_published) {
+    $access->addCacheableDependency($entity);
+  }
   return $access
     ->addCacheTags($plugin_cache_tags)
     ->addCacheContexts(['user.group_permissions']);
@@ -769,91 +825,4 @@ function group_view_presave(EntityInterface $view) {
   if ($update) {
     $view->set('display', $displays);
   }
-}
-
-/**
- * Implements hook_group_types().
- *
- * We currently only use this for nodes and users since they can be installed
- * as group content.
- */
-function group_group_types() {
-  return array_fill_keys(['node', 'user'], TRUE);
-}
-
-/**
- * Implements hook_entity_base_field_info().
- *
- * Creates computed fields to get the groups related to an entity. There will be
- * a field containing all groups. Each group type will also get a separate
- * field.
- */
-function group_entity_base_field_info(EntityTypeInterface $entity_type) {
-  $fields = [];
-
-  $entity_types = \Drupal::moduleHandler()->invokeAll('group_types');
-  \Drupal::moduleHandler()->alter('group_types', $entity_types);
-
-  if (!isset($entity_types[$entity_type->id()])) {
-    return $fields;
-  }
-
-  $fields['groups'] = BaseFieldDefinition::create('entity_reference')
-    ->setName('groups')
-    ->setTargetEntityTypeId($entity_type->id())
-    ->setSetting('target_type', 'group')
-    ->setLabel(t('Get the related groups for this entity.'))
-    ->setDescription(t('A list of all the groups referencing this entity.'))
-    ->setTranslatable(FALSE)
-    ->setComputed(TRUE)
-    ->setCustomStorage(TRUE)
-    ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
-    ->setClass(GroupGroupReferenceItemList::class)
-    ->setDisplayConfigurable('form', TRUE)
-    ->setDisplayOptions('form', [
-      'label' => 'hidden',
-      'region' => 'hidden',
-      'weight' => 50,
-    ])
-    ->setDisplayConfigurable('view', TRUE)
-    ->setDisplayOptions('view', [
-      'label' => 'hidden',
-      'region' => 'hidden',
-      'weight' => 50,
-    ]);
-
-  if (!$entity_types[$entity_type->id()]) {
-    return $fields;
-  }
-
-  /** @var \Drupal\group\Entity\GroupTypeInterface $group_type */
-  foreach (\Drupal::entityTypeManager()->getStorage('group_type')->loadMultiple() as $group_type) {
-    $field_name = 'groups_type_' . $group_type->id();
-    $fields[$field_name] = BaseFieldDefinition::create('entity_reference')
-      ->setName($field_name)
-      ->setTargetEntityTypeId($entity_type->id())
-      ->setSetting('target_type', 'group')
-      ->setSetting('handler_settings', ['target_bundles' => [$group_type->id() => $group_type->id()]])
-      ->setLabel(t('Get the related @type groups for this entity.', ['@type' => $group_type->label()]))
-      ->setDescription(t('A list of all the groups referencing this entity.'))
-      ->setTranslatable(FALSE)
-      ->setComputed(TRUE)
-      ->setCustomStorage(TRUE)
-      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
-      ->setClass(GroupGroupReferenceItemList::class)
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('form', [
-        'label' => 'hidden',
-        'region' => 'hidden',
-        'weight' => 50,
-      ])
-      ->setDisplayConfigurable('view', TRUE)
-      ->setDisplayOptions('view', [
-        'label' => 'hidden',
-        'region' => 'hidden',
-        'weight' => 50,
-      ]);
-  }
-
-  return $fields;
 }

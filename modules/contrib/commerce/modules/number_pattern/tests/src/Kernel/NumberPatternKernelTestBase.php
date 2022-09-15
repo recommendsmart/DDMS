@@ -22,7 +22,7 @@ abstract class NumberPatternKernelTestBase extends CommerceKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'entity_reference_revisions',
     'commerce_number_pattern_test',
     'commerce_number_pattern',

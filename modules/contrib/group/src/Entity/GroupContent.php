@@ -220,10 +220,7 @@ class GroupContent extends ContentEntityBase implements GroupContentInterface {
         // trying to save an entity that just got deleted and triggered the
         // deletion of its group content entities.
         // @todo Revisit when https://www.drupal.org/node/2754399 lands.
-        if ($entity = \Drupal::entityTypeManager()->getStorage($entity->getEntityTypeId())->loadUnchanged($entity->id())) {
-          // The entity is reloaded from storage, so it has not been deleted.
-          $entity->save();
-        }
+        $entity->save();
 
         // If a membership gets deleted, we need to reset the internal group
         // roles cache for the member in that group, but only if the user still
@@ -240,8 +237,19 @@ class GroupContent extends ContentEntityBase implements GroupContentInterface {
   /**
    * {@inheritdoc}
    */
-  public function getListCacheTagsToInvalidate() {
-    $tags = parent::getListCacheTagsToInvalidate();
+  protected function invalidateTagsOnSave($update) {
+    parent::invalidateTagsOnSave($update);
+    // Always invalidate our custom list cache tags, even for new entities.
+    if (!$update) {
+      Cache::invalidateTags($this->getCacheTagsToInvalidate());
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTagsToInvalidate() {
+    $tags = parent::getCacheTagsToInvalidate();
 
     $group_id = $this->get('gid')->target_id;
     $entity_id = $this->get('entity_id')->target_id;

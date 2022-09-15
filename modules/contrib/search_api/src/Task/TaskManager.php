@@ -107,14 +107,9 @@ class TaskManager implements TaskManagerInterface {
    *   An entity query for search tasks.
    */
   protected function getTasksQuery(array $conditions = []) {
-    $query = $this->getTaskStorage()->getQuery()->accessCheck(FALSE);
+    $query = $this->getTaskStorage()->getQuery();
     foreach ($conditions as $property => $values) {
-      if ($values === NULL) {
-        $query->notExists($property);
-      }
-      else {
-        $query->condition($property, $values, is_array($values) ? 'IN' : '=');
-      }
+      $query->condition($property, $values, is_array($values) ? 'IN' : '=');
     }
     $query->sort('id');
     return $query;
@@ -131,8 +126,6 @@ class TaskManager implements TaskManagerInterface {
    * {@inheritdoc}
    */
   public function addTask($type, ServerInterface $server = NULL, IndexInterface $index = NULL, $data = NULL) {
-    $server_id = $server ? $server->id() : NULL;
-    $index_id = $index ? $index->id() : NULL;
     if (isset($data)) {
       if ($data instanceof EntityInterface) {
         $data = [
@@ -143,20 +136,10 @@ class TaskManager implements TaskManagerInterface {
       $data = serialize($data);
     }
 
-    $result = $this->getTasksQuery([
-      'type' => $type,
-      'server_id' => $server_id,
-      'index_id' => $index_id,
-      'data' => $data,
-    ])->execute();
-    if ($result) {
-      return $this->getTaskStorage()->load(reset($result));
-    }
-
     $task = $this->getTaskStorage()->create([
       'type' => $type,
-      'server_id' => $server_id,
-      'index_id' => $index_id,
+      'server_id' => $server ? $server->id() : NULL,
+      'index_id' => $index ? $index->id() : NULL,
       'data' => $data,
     ]);
     $task->save();
@@ -209,7 +192,7 @@ class TaskManager implements TaskManagerInterface {
    */
   public function executeSpecificTask(TaskInterface $task) {
     $event = new TaskEvent($task);
-    $this->eventDispatcher->dispatch($event, 'search_api.task.' . $task->getType());
+    $this->eventDispatcher->dispatch('search_api.task.' . $task->getType(), $event);
     if (!$event->isPropagationStopped()) {
       $id = $task->id();
       $type = $task->getType();

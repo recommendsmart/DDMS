@@ -15,7 +15,7 @@
     attach: function (context) {
       Dropzone.autoDiscover = false;
 
-      $('.dropzone-enable', context).each(function () {
+      $('.dropzone-enable').each(function() {
         var selector = $(this);
         selector.addClass('dropzone');
 

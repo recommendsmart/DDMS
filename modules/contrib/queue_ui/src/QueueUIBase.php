@@ -3,7 +3,7 @@
 namespace Drupal\queue_ui;
 
 /**
- * Class QueueUIBase declaration.
+ * Class QueueUIBase
  *
  * @package Drupal\queue_ui
  */
@@ -12,46 +12,43 @@ abstract class QueueUIBase implements QueueUIInterface {
   /**
    * Retrieve the available operations for the implementing queue class.
    */
-  abstract public function getOperations();
+  public abstract function getOperations();
 
   /**
    * Inspect the queue items in a specified queue.
    *
-   * @param string $queueName
-   *   The name of the queue being inspected.
+   * @param string $queue_name
+   *  The name of the queue being inspected.
    */
-  abstract public function getItems($queueName);
+  public abstract function getItems($queue_name);
 
   /**
-   * Force the releasing of a queue.
-   *
-   * @param string $queueName
-   *   The name of the queue being inspected.
+   * @param $queue_name
    */
-  abstract public function releaseItems($queueName);
+  public abstract function releaseItems($queue_name);
 
   /**
    * View item data for a specified queue item.
    *
-   * @param int $item_id
-   *   The item id to be viewed.
+   * @param integer $item_id
+   *  The item id to be viewed.
    */
-  abstract public function loadItem($item_id);
+  public abstract function loadItem($item_id);
 
   /**
    * Force the releasing of a specified queue item.
    *
-   * @param int $item_id
-   *   The item id to be released.
+   * @param integer $item_id
+   *  The item id to be released.
    */
-  abstract public function releaseItem($item_id);
+  public abstract function releaseItem($item_id);
 
   /**
    * Force the deletion of a specified queue item.
    *
-   * @param int $item_id
-   *   The item id to be deleted.
+   * @param integer $item_id
+   *  The item id to be deleted.
    */
-  abstract public function deleteItem($item_id);
+  public abstract function deleteItem($item_id);
 
 }

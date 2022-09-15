@@ -112,6 +112,12 @@ class PrivateMessageInboxBlock extends BlockBase implements BlockPluginInterface
    */
   public function build() {
     if ($this->currentUser->isAuthenticated() && $this->currentUser->hasPermission('use private messaging system')) {
+      $block['#attached']['library'][] = 'private_message/inbox_block_script';
+      $style_disabled = $this->privateMessageConfig->get('remove_css');
+      if (!$style_disabled) {
+        $block['#attached']['library'][] = 'private_message/inbox_block_style';
+      }
+
       $config = $this->getConfiguration();
       $thread_info = $this->privateMessageService->getThreadsForUser($config['thread_count']);
       $total_thread = $this->privateMessageService->getCountThreadsForUser();
@@ -123,11 +129,6 @@ class PrivateMessageInboxBlock extends BlockBase implements BlockPluginInterface
           $block[$thread->id()] = $view_builder->view($thread, 'inbox');
         }
 
-        $block['#attached']['library'][] = 'private_message/inbox_block_script';
-        $style_disabled = $this->privateMessageConfig->get('remove_css');
-        if (!$style_disabled) {
-          $block['#attached']['library'][] = 'private_message/inbox_block_style';
-        }
         if (count($threads) && $thread_info['next_exists']) {
           $prev_url = Url::fromRoute('private_message.ajax_callback', ['op' => 'get_old_inbox_threads']);
           $prev_token = $this->csrfToken->get($prev_url->getInternalPath());
@@ -153,7 +154,7 @@ class PrivateMessageInboxBlock extends BlockBase implements BlockPluginInterface
       }
       else {
         $block['no_threads'] = [
-          '#prefix' => '<p>',
+          '#prefix' => '<p class="js-inbox-empty">',
           '#suffix' => '</p>',
           '#markup' => $this->t('You do not have any private messages'),
         ];

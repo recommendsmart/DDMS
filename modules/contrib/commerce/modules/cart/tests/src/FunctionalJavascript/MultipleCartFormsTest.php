@@ -18,7 +18,7 @@ class MultipleCartFormsTest extends CartWebDriverTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_cart_test',
     'commerce_cart_big_pipe',
   ];

@@ -33,7 +33,7 @@ class StateTransitionFormTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $user = $this->drupalCreateUser(['administer entity_test content', 'view test entity']);

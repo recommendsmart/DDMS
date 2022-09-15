@@ -2,7 +2,6 @@
 
 namespace Drupal\group\QueryAccess;
 
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Database\Query\SelectInterface;
@@ -238,10 +237,7 @@ class EntityQueryAlter implements ContainerInjectionInterface {
     $this->cacheableMetadata->addCacheContexts(['user.group_permissions']);
     $calculated_permissions = $this->permissionCalculator->calculatePermissions($this->currentUser);
 
-    // We only check unpublished vs published for "view" right now. If we ever
-    // start supporting other operations, we need to remove the "view" check.
-    $check_published = $operation === 'view' && $entity_type->entityClassImplements(EntityPublishedInterface::class);
-
+    $check_published = $entity_type->entityClassImplements(EntityPublishedInterface::class);
     $owner_key = $entity_type->getKey('owner');
     $published_key = $entity_type->getKey('published');
 
@@ -548,25 +544,11 @@ class EntityQueryAlter implements ContainerInjectionInterface {
    */
   protected function applyCacheability() {
     $request = $this->requestStack->getCurrentRequest();
-    if ($request->isMethodCacheable() && $this->renderer->hasRenderContext() && $this->hasCacheableMetadata()) {
+    if ($request->isMethodCacheable() && $this->renderer->hasRenderContext()) {
       $build = [];
       $this->cacheableMetadata->applyTo($build);
       $this->renderer->render($build);
     }
-  }
-
-  /**
-   * Check if the cacheable metadata is not empty.
-   *
-   * An empty cacheable metadata object has no context, tags, and is permanent.
-   *
-   * @return bool
-   *   TRUE if there is cacheability metadata, otherwise FALSE.
-   */
-  protected function hasCacheableMetadata() {
-    return $this->cacheableMetadata->getCacheMaxAge() !== Cache::PERMANENT
-      || count($this->cacheableMetadata->getCacheContexts()) > 0
-      || count($this->cacheableMetadata->getCacheTags()) > 0;
   }
 
 }

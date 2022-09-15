@@ -32,7 +32,7 @@ class DomHelperTraitTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     $this->document = Html::load('<outer><test foo="bar" namespace:foo="bar"><test bar="foo"></test></test></outer>');
     $this->node = $this->document->getElementsByTagName('body')->item(0)->firstChild->firstChild;
   }
@@ -129,13 +129,7 @@ class DomHelperTraitTest extends UnitTestCase {
    */
   public function testGetNodeAttributesAsArray() {
     $attributes = $this->getNodeAttributesAsArray($this->node);
-    $this->assertEquals(
-      [
-        'foo' => 'bar',
-        'namespace:foo' => 'bar',
-      ],
-      $attributes
-    );
+    $this->assertArrayEquals(['foo' => 'bar', 'namespace:foo' => 'bar'], $attributes);
 
     // Test more complex attributes with special characters.
     $string = "TEST: A <complex> 'encoded' \"JSON\" string";
@@ -144,13 +138,7 @@ class DomHelperTraitTest extends UnitTestCase {
     $document = Html::load($html);
     $node = $document->getElementsByTagName('body')->item(0)->firstChild;
     $attributes = $this->getNodeAttributesAsArray($node);
-    $this->assertEquals(
-      [
-        'data-json-string' => $string,
-        'data-json-object' => $object,
-      ],
-      $attributes
-    );
+    $this->assertArrayEquals(['data-json-string' => $string, 'data-json-object' => $object], $attributes);
   }
 
 }

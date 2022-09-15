@@ -18,7 +18,7 @@ class ZoneItemTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'address',
   ];
 
@@ -32,7 +32,7 @@ class ZoneItemTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $field_storage = FieldStorageConfig::create([

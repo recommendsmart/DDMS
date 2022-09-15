@@ -16,7 +16,7 @@ abstract class ProcessorTestBase extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'user',
     'node',
     'field',

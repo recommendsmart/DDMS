@@ -36,7 +36,6 @@ class ListPriceWidget extends WidgetBase {
       '#type' => 'commerce_price',
       '#title' => $element['#title'],
       '#available_currencies' => array_filter($this->getFieldSetting('available_currencies')),
-      '#allow_negative' => $this->getFieldSetting('allow_negative'),
       '#states' => [
         'visible' => [
           ':input[name="' . $checkbox_path . '"]' => ['checked' => TRUE],

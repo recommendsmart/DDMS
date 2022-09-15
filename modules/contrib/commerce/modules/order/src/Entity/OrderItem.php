@@ -283,7 +283,7 @@ class OrderItem extends CommerceContentEntityBase implements OrderItemInterface 
     if (!$this->get('data')->isEmpty()) {
       $data = $this->get('data')->first()->getValue();
     }
-    return $data[$key] ?? $default;
+    return isset($data[$key]) ? $data[$key] : $default;
   }
 
   /**
@@ -445,14 +445,14 @@ class OrderItem extends CommerceContentEntityBase implements OrderItemInterface 
       ->setLabel(t('Total price'))
       ->setDescription(t('The total price of the order item.'))
       ->setReadOnly(TRUE)
-      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('form', FALSE)
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['adjustments'] = BaseFieldDefinition::create('commerce_adjustment')
       ->setLabel(t('Adjustments'))
       ->setRequired(FALSE)
       ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
-      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayConfigurable('form', FALSE)
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['uses_legacy_adjustments'] = BaseFieldDefinition::create('boolean')

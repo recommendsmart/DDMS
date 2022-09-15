@@ -72,12 +72,12 @@ interface PaymentInterface extends ContentEntityInterface, EntityWithPaymentGate
   /**
    * Sets the payment remote ID.
    *
-   * @param string $remote_id
+   * @param string $remote_ID
    *   The payment remote ID.
    *
    * @return $this
    */
-  public function setRemoteId($remote_id);
+  public function setRemoteId($remote_ID);
 
   /**
    * Gets the payment remote state.

@@ -2,14 +2,14 @@
 
 namespace Drupal\group\Entity;
 
-use Drupal\Core\Entity\EditorialContentEntityBase;
-use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Entity\ContentEntityBase;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\EntityChangedTrait;
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\user\EntityOwnerTrait;
-use Drupal\user\StatusItem;
 use Drupal\user\UserInterface;
 
 /**
@@ -28,18 +28,16 @@ use Drupal\user\UserInterface;
  *   ),
  *   bundle_label = @Translation("Group type"),
  *   handlers = {
- *     "storage" = "Drupal\group\Entity\Storage\GroupStorage",
  *     "view_builder" = "Drupal\group\Entity\ViewBuilder\GroupViewBuilder",
  *     "views_data" = "Drupal\group\Entity\Views\GroupViewsData",
  *     "list_builder" = "Drupal\group\Entity\Controller\GroupListBuilder",
  *     "route_provider" = {
  *       "html" = "Drupal\group\Entity\Routing\GroupRouteProvider",
- *       "revision" = "\Drupal\entity\Routing\RevisionRouteProvider",
  *     },
  *     "form" = {
  *       "add" = "Drupal\group\Entity\Form\GroupForm",
  *       "edit" = "Drupal\group\Entity\Form\GroupForm",
- *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
+ *       "delete" = "Drupal\group\Entity\Form\GroupDeleteForm",
  *     },
  *     "access" = "Drupal\group\Entity\Access\GroupAccessControlHandler",
  *     "query_access" = "Drupal\group\Entity\Access\GroupQueryAccessHandler",
@@ -47,9 +45,6 @@ use Drupal\user\UserInterface;
  *   admin_permission = "administer group",
  *   base_table = "groups",
  *   data_table = "groups_field_data",
- *   revision_table = "groups_revision",
- *   revision_data_table = "groups_field_revision",
- *   show_revision_ui = TRUE,
  *   translatable = TRUE,
  *   entity_keys = {
  *     "id" = "id",
@@ -57,14 +52,7 @@ use Drupal\user\UserInterface;
  *     "owner" = "uid",
  *     "langcode" = "langcode",
  *     "bundle" = "type",
- *     "label" = "label",
- *     "published" = "status",
- *     "revision" = "revision_id",
- *   },
- *   revision_metadata_keys = {
- *     "revision_user" = "revision_user",
- *     "revision_created" = "revision_created",
- *     "revision_log_message" = "revision_log_message",
+ *     "label" = "label"
  *   },
  *   links = {
  *     "add-form" = "/group/add/{group_type}",
@@ -72,26 +60,22 @@ use Drupal\user\UserInterface;
  *     "canonical" = "/group/{group}",
  *     "collection" = "/admin/group",
  *     "edit-form" = "/group/{group}/edit",
- *     "delete-form" = "/group/{group}/delete",
- *     "version-history" = "/group/{group}/revisions",
- *     "revision" = "/group/{group}/revisions/{group_revision}/view",
- *     "revision-revert-form" = "/group/{group}/revisions/{group_revision}/revert",
- *     "revision-delete-form" = "/group/{group}/revisions/{group_revision}/delete",
+ *     "delete-form" = "/group/{group}/delete"
  *   },
  *   bundle_entity_type = "group_type",
  *   field_ui_base_route = "entity.group_type.edit_form",
  *   permission_granularity = "bundle"
  * )
  */
-class Group extends EditorialContentEntityBase implements GroupInterface {
+class Group extends ContentEntityBase implements GroupInterface {
 
+  use EntityChangedTrait;
   use EntityOwnerTrait;
 
   /**
    * Gets the group membership loader.
    *
    * @return \Drupal\group\GroupMembershipLoaderInterface
-   *   The group.membership_loader service.
    */
   protected function membershipLoader() {
     return \Drupal::service('group.membership_loader');
@@ -101,7 +85,6 @@ class Group extends EditorialContentEntityBase implements GroupInterface {
    * Gets the group permission checker.
    *
    * @return \Drupal\group\Access\GroupPermissionCheckerInterface
-   *   The group_permission.checker service.
    */
   protected function groupPermissionChecker() {
     return \Drupal::service('group_permission.checker');
@@ -111,7 +94,6 @@ class Group extends EditorialContentEntityBase implements GroupInterface {
    * Gets the group content storage.
    *
    * @return \Drupal\group\Entity\Storage\GroupContentStorageInterface
-   *   The group content storage.
    */
   protected function groupContentStorage() {
     return $this->entityTypeManager()->getStorage('group_content');
@@ -121,7 +103,6 @@ class Group extends EditorialContentEntityBase implements GroupInterface {
    * Gets the group role storage.
    *
    * @return \Drupal\group\Entity\Storage\GroupRoleStorageInterface
-   *   The group role storage.
    */
   protected function groupRoleStorage() {
     return $this->entityTypeManager()->getStorage('group_role');
@@ -230,19 +211,6 @@ class Group extends EditorialContentEntityBase implements GroupInterface {
     $fields = parent::baseFieldDefinitions($entity_type);
     $fields += static::ownerBaseFieldDefinitions($entity_type);
 
-    // @todo Remove the usage of StatusItem in
-    //   https://www.drupal.org/project/drupal/issues/2936864.
-    $fields['status']->getItemDefinition()->setClass(StatusItem::class);
-    $fields['status']
-      ->setDisplayOptions('form', [
-        'type' => 'boolean_checkbox',
-        'settings' => [
-          'display_label' => TRUE,
-        ],
-        'weight' => 120,
-      ])
-      ->setDisplayConfigurable('form', TRUE);
-
     $fields['label'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Title'))
       ->setRequired(TRUE)
@@ -258,15 +226,13 @@ class Group extends EditorialContentEntityBase implements GroupInterface {
         'weight' => -5,
       ])
       ->setDisplayConfigurable('view', TRUE)
-      ->setDisplayConfigurable('form', TRUE)
-      ->setRevisionable(TRUE);
+      ->setDisplayConfigurable('form', TRUE);
 
     $fields['uid']
       ->setLabel(t('Group creator'))
       ->setDescription(t('The username of the group creator.'))
       ->setDisplayConfigurable('view', TRUE)
-      ->setDisplayConfigurable('form', TRUE)
-      ->setRevisionable(TRUE);
+      ->setDisplayConfigurable('form', TRUE);
 
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Created on'))
@@ -277,8 +243,7 @@ class Group extends EditorialContentEntityBase implements GroupInterface {
         'region' => 'hidden',
         'weight' => 0,
       ])
-      ->setDisplayConfigurable('view', TRUE)
-      ->setRevisionable(TRUE);
+      ->setDisplayConfigurable('view', TRUE);
 
     $fields['changed'] = BaseFieldDefinition::create('changed')
       ->setLabel(t('Changed on'))
@@ -289,8 +254,7 @@ class Group extends EditorialContentEntityBase implements GroupInterface {
         'region' => 'hidden',
         'weight' => 0,
       ])
-      ->setDisplayConfigurable('view', TRUE)
-      ->setRevisionable(TRUE);
+      ->setDisplayConfigurable('view', TRUE);
 
     if (\Drupal::moduleHandler()->moduleExists('path')) {
       $fields['path'] = BaseFieldDefinition::create('path')
@@ -305,54 +269,6 @@ class Group extends EditorialContentEntityBase implements GroupInterface {
     }
 
     return $fields;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function urlRouteParameters($rel) {
-    $uri_route_parameters = parent::urlRouteParameters($rel);
-    if (in_array($rel, ['revision-revert-form', 'revision-delete-form'], TRUE)) {
-      $uri_route_parameters['group_revision'] = $this->getRevisionId();
-    }
-    return $uri_route_parameters;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function preSave(EntityStorageInterface $storage) {
-    parent::preSave($storage);
-
-    // Core needs to make sure this happens for all entities as this piece of
-    // code is currently copy-pasted between Node, Media, Block, etc.
-    // @todo Keep an eye on this from time to time and see if we can remove it.
-    //   See: https://www.drupal.org/project/drupal/issues/2869056.
-    if (!$this->getRevisionUser()) {
-      $this->setRevisionUserId($this->getOwnerId());
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function preSaveRevision(EntityStorageInterface $storage, \stdClass $record) {
-    parent::preSaveRevision($storage, $record);
-
-    // Core needs to make sure this happens for all entities as this piece of
-    // code is currently copy-pasted between Node, Media, Block, etc.
-    // @todo Keep an eye on this from time to time and see if we can remove it.
-    if (!$this->isNewRevision() && isset($this->original) && empty($record->revision_log_message)) {
-      // If we are updating an existing group without adding a new revision, we
-      // need to make sure $entity->revision_log is reset whenever it is empty.
-      // Therefore, this code allows us to avoid clobbering an existing log
-      // entry with an empty one.
-      $record->revision_log_message = $this->original->revision_log_message->value;
-    }
-
-    if ($this->isNewRevision() && empty($record->revision_created)) {
-      $record->revision_created = \Drupal::time()->getRequestTime();
-    }
   }
 
   /**

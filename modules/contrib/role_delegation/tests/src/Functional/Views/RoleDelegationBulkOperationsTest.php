@@ -16,7 +16,7 @@ class RoleDelegationBulkOperationsTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = ['action', 'user', 'role_delegation', 'views'];
+  public static $modules = ['action', 'user', 'role_delegation', 'views'];
 
   /**
    * {@inheritdoc}

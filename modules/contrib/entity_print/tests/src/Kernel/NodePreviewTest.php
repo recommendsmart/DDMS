@@ -24,7 +24,7 @@ class NodePreviewTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['system', 'user', 'entity_print', 'node'];
+  public static $modules = ['system', 'user', 'entity_print', 'node'];
 
   /**
    * {@inheritdoc}

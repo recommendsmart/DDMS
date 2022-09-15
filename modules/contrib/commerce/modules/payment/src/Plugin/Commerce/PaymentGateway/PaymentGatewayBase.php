@@ -220,9 +220,6 @@ abstract class PaymentGatewayBase extends PluginBase implements PaymentGatewayIn
    * {@inheritdoc}
    */
   public function getSupportedModes() {
-    // If modes are not explicitly set on the payment gateway plugin, supported
-    // modes will default to test and live in the payment gateway annotation.
-    // @see \Drupal\commerce_payment\Annotation\CommercePaymentGateway
     return $this->pluginDefinition['modes'];
   }
 
@@ -475,9 +472,19 @@ abstract class PaymentGatewayBase extends PluginBase implements PaymentGatewayIn
   }
 
   /**
-   * {@inheritDoc}
+   * Gets the remote customer ID for the given user.
+   *
+   * The remote customer ID is specific to a payment gateway instance
+   * in the configured mode. This allows the gateway to skip test customers
+   * after the gateway has been switched to live mode.
+   *
+   * @param \Drupal\user\UserInterface $account
+   *   The user account.
+   *
+   * @return string
+   *   The remote customer ID, or NULL if none found.
    */
-  public function getRemoteCustomerId(UserInterface $account) {
+  protected function getRemoteCustomerId(UserInterface $account) {
     $remote_id = NULL;
     if ($account->isAuthenticated()) {
       $provider = $this->parentEntity->id() . '|' . $this->getMode();

@@ -10,16 +10,13 @@ use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class ConfirmClearForm declaration.
- *
+ * Class ConfirmClearForm
  * @package Drupal\queue_ui\Form
  */
 class ConfirmClearForm extends ConfirmFormBase {
 
   /**
-   * The tempstore factory.
-   *
-   * @var \Drupal\Core\TempStore\PrivateTempStoreFactory
+   * @var PrivateTempStoreFactory
    */
   private $tempStoreFactory;
 
@@ -27,9 +24,7 @@ class ConfirmClearForm extends ConfirmFormBase {
    * ConfirmClearForm constructor.
    *
    * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $temp_store_factory
-   *   The tempstore factory.
    * @param \Drupal\Core\Messenger\Messenger $messenger
-   *   The messenger service.
    */
   public function __construct(PrivateTempStoreFactory $temp_store_factory, Messenger $messenger) {
     $this->tempStoreFactory = $temp_store_factory;
@@ -37,11 +32,7 @@ class ConfirmClearForm extends ConfirmFormBase {
   }
 
   /**
-   * {@inheritdoc}
-   *
    * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-   *   The current service container.
-   *
    * @return static
    */
   public static function create(ContainerInterface $container) {
@@ -114,5 +105,4 @@ class ConfirmClearForm extends ConfirmFormBase {
     $this->messenger->addMessage($this->formatPlural(count($queues), 'Queue deleted', '@count queues cleared'));
     $form_state->setRedirect('queue_ui.overview_form');
   }
-
 }

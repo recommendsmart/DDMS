@@ -20,10 +20,7 @@ class CartCacheContextTest extends UnitTestCase {
   public function testCartCacheContext() {
     $account = $this->createMock(AccountInterface::class);
     $cartProvider = $this->createMock(CartProviderInterface::class);
-    $cartProvider->expects($this->once())->method('getCartIds')->willReturn([
-      '23',
-      '34',
-    ]);
+    $cartProvider->expects($this->once())->method('getCartIds')->willReturn(['23', '34']);
     $cartProvider->expects($this->once())->method('getCarts')->willReturn([
       new TestCacheableDependency([], ['commerce_cart:23'], 0),
       new TestCacheableDependency([], ['commerce_cart:24'], 0),

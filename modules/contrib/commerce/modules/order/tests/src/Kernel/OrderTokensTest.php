@@ -16,7 +16,7 @@ class OrderTokensTest extends OrderKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'token',
   ];
 

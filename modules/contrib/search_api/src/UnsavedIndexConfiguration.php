@@ -4,6 +4,7 @@ namespace Drupal\search_api;
 
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -906,7 +907,7 @@ class UnsavedIndexConfiguration implements IndexInterface, UnsavedConfigurationI
    * {@inheritdoc}
    */
   public static function preCreate(EntityStorageInterface $storage, array &$values) {
-    Index::preCreate($storage, $values);
+    EntityInterface::preCreate($storage, $values);
   }
 
   /**
@@ -920,21 +921,21 @@ class UnsavedIndexConfiguration implements IndexInterface, UnsavedConfigurationI
    * {@inheritdoc}
    */
   public static function preDelete(EntityStorageInterface $storage, array $entities) {
-    Index::preDelete($storage, $entities);
+    EntityInterface::preDelete($storage, $entities);
   }
 
   /**
    * {@inheritdoc}
    */
   public static function postDelete(EntityStorageInterface $storage, array $entities) {
-    Index::postDelete($storage, $entities);
+    EntityInterface::postDelete($storage, $entities);
   }
 
   /**
    * {@inheritdoc}
    */
   public static function postLoad(EntityStorageInterface $storage, array &$entities) {
-    Index::postLoad($storage, $entities);
+    EntityInterface::postLoad($storage, $entities);
   }
 
   /**

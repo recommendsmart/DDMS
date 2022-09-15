@@ -16,7 +16,7 @@ class AjaxPriceElementTest extends CommerceWebDriverTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_price_test',
   ];
 

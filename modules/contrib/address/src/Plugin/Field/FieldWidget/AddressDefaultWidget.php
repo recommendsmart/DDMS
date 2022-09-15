@@ -105,13 +105,6 @@ class AddressDefaultWidget extends WidgetBase implements ContainerFactoryPluginI
     // edits (because the entity or interface language changed, for example).
     $value['langcode'] = $item->initializeLangcode();
 
-    // If cardinality is multiple then there is no need to set address field
-    // as required since $element handles this already.
-    $required = FALSE;
-    if ($this->fieldDefinition->getFieldStorageDefinition()->getCardinality() == 1) {
-      $required = $this->fieldDefinition->isRequired();
-    }
-
     $element += [
       '#type' => 'details',
       '#open' => TRUE,
@@ -119,7 +112,7 @@ class AddressDefaultWidget extends WidgetBase implements ContainerFactoryPluginI
     $element['address'] = [
       '#type' => 'address',
       '#default_value' => $value,
-      '#required' => $required,
+      '#required' => $this->fieldDefinition->isRequired(),
       '#available_countries' => $item->getAvailableCountries(),
       '#field_overrides' => $item->getFieldOverrides(),
     ];

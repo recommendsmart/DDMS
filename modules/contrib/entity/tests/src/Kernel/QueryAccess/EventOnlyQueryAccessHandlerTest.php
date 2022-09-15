@@ -17,7 +17,7 @@ class EventOnlyQueryAccessHandlerTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'entity',
     'entity_module_test',
     'node',
@@ -26,7 +26,7 @@ class EventOnlyQueryAccessHandlerTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $this->installEntitySchema('node');
 

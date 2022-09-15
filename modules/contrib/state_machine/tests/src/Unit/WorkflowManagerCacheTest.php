@@ -72,7 +72,7 @@ class WorkflowManagerCacheTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->container = $this->prophesize(ContainerInterface::class);

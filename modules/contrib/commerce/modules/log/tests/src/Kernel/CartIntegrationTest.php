@@ -48,7 +48,7 @@ class CartIntegrationTest extends CartKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_log',
   ];
 

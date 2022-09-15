@@ -8,7 +8,9 @@ use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 
 /**
- * Helper Service that loads all assignable roles for the given user.
+ * Class DelegatableRoles.
+ *
+ * @package Drupal\role_delegation
  */
 class DelegatableRoles implements DelegatableRolesInterface {
 
@@ -24,7 +26,7 @@ class DelegatableRoles implements DelegatableRolesInterface {
   /**
    * {@inheritdoc}
    */
-  public function getAssignableRoles(AccountInterface $account): array {
+  public function getAssignableRoles(AccountInterface $account) {
     $assignable_roles = [];
     foreach ($this->getAllRoles() as $role) {
       if ($account->hasPermission('assign all roles') || $account->hasPermission(sprintf('assign %s role', $role->id()))) {
@@ -37,7 +39,7 @@ class DelegatableRoles implements DelegatableRolesInterface {
   /**
    * {@inheritdoc}
    */
-  public function getAllRoles(): array {
+  public function getAllRoles() {
     $all_roles = Role::loadMultiple();
     unset($all_roles[RoleInterface::ANONYMOUS_ID], $all_roles[RoleInterface::AUTHENTICATED_ID]);
     return $all_roles;

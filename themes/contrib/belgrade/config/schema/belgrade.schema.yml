@@ -1,5 +1,0 @@
-# Schema for the theme setting configuration file of the Belgrade theme.
-
-belgrade.settings:
-  type: theme_settings
-  label: 'Belgrade settings'

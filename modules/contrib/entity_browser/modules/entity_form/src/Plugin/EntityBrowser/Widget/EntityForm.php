@@ -87,12 +87,12 @@ class EntityForm extends WidgetBase {
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return array_merge(parent::defaultConfiguration(), [
-      'submit_text' => $this->t('Save entity'),
+    return [
       'entity_type' => NULL,
       'bundle' => NULL,
       'form_mode' => 'default',
-    ]);
+      'submit_text' => $this->t('Save entity'),
+    ] + parent::defaultConfiguration();
   }
 
   /**

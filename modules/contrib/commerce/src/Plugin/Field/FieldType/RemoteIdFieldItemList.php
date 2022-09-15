@@ -7,7 +7,7 @@ use Drupal\Core\Field\FieldItemList;
 /**
  * Defines the 'commerce_remote_id' field item list class.
  */
-class RemoteIdFieldItemList extends FieldItemList implements RemoteIdFieldItemListInterface {
+class RemoteIdFieldItemList extends FieldItemList {
 
   /**
    * {@inheritdoc}

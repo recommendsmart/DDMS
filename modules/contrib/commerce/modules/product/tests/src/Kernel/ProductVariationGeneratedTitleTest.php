@@ -23,7 +23,7 @@ class ProductVariationGeneratedTitleTest extends CommerceKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'path',
     'commerce_product',
     'language',

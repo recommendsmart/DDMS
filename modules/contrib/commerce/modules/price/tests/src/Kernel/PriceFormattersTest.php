@@ -23,7 +23,7 @@ class PriceFormattersTest extends CommerceKernelTestBase {
    *
    * @todo should commerce_test provide a simplistic PurchasableEntity?
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_price_test',
     'commerce_product',
   ];

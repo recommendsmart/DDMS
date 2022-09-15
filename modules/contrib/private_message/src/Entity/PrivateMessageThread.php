@@ -22,7 +22,6 @@ use Drupal\Core\Session\AccountInterface;
  *     "access" = "Drupal\private_message\Entity\Access\PrivateMessageThreadAccessControlHandler",
  *     "form" = {
  *       "delete" = "Drupal\private_message\Form\PrivateMessageThreadDeleteForm",
- *       "clear_personal_history" = "Drupal\private_message\Form\PrivateMessageThreadClearPersonalHistoryForm",
  *     },
  *   },
  *   base_table = "private_message_threads",
@@ -93,12 +92,7 @@ class PrivateMessageThread extends ContentEntityBase implements PrivateMessageTh
    */
   public function addMessage(PrivateMessageInterface $privateMessage) {
     $this->get('private_messages')->appendItem($privateMessage->id());
-    // Allow other modules to react on a new message in thread.
-    // @todo: inject when entity dependency serialization core issues resolved.
-    \Drupal::moduleHandler()->invokeAll(
-      'private_message_new_message',
-      [$privateMessage, $this]
-    );
+
     return $this;
   }
 
@@ -224,35 +218,25 @@ class PrivateMessageThread extends ContentEntityBase implements PrivateMessageTh
   /**
    * {@inheritdoc}
    */
-  public function delete() {
-    $this->deleteReferencedEntities();
-    parent::delete();
-    $this->clearCacheTags();
-  }
+  public function delete(AccountInterface $account = NULL) {
+    if ($account) {
+      $this->updateLastDeleteTime($account);
+      $last_creation_timestamp = $this->getNewestMessageCreationTimestamp();
 
-  /**
-   * {@inheritDoc}
-   */
-  public function clearAccountHistory(AccountInterface $account = NULL) {
-    if (!$account) {
-      $account = \Drupal::currentUser();
+      $query = \Drupal::database()->select('pm_thread_history', 'pm_thread_history')
+        ->condition('thread_id', $this->id());
+      $query->addExpression('MIN(delete_timestamp)', 'min_deleted');
+      $min_deleted = $query->execute()->fetchField();
+      if ($min_deleted >= $last_creation_timestamp) {
+        $this->deleteReferencedEntities();
+        parent::delete();
+      }
     }
-    // Update thread deleted time for account.
-    $this->updateLastDeleteTime($account);
-
-    // Get timestamp when last message was created.
-    $last_creation_timestamp = $this->getNewestMessageCreationTimestamp();
-
-    // Query thread history table to get deleted timestamp.
-    $query = \Drupal::database()->select('pm_thread_history', 'pm_thread_history')
-      ->condition('thread_id', $this->id());
-    $query->addExpression('MIN(delete_timestamp)', 'min_deleted');
-    $min_deleted = $query->execute()->fetchField();
-
-    // If no messages have been created after every member has deleted thread.
-    if ($min_deleted >= $last_creation_timestamp) {
-      $this->delete();
+    else {
+      $this->deleteReferencedEntities();
+      parent::delete();
     }
+
     $this->clearCacheTags();
   }
 

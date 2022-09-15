@@ -365,9 +365,6 @@ class EntityForm extends FormBase implements EntityFormInterface {
         elseif ($route_match->getRawParameter($bundle_key)) {
           $values[$bundle_key] = $route_match->getParameter($bundle_key);
         }
-        elseif ($route_match->getParameter($bundle_key)) {
-          $values[$bundle_key] = $route_match->getParameter($bundle_key);
-        }
       }
 
       $entity = $this->entityTypeManager->getStorage($entity_type_id)->create($values);

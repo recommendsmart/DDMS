@@ -19,7 +19,7 @@ class ProductAttributeValueFilterTest extends ViewsKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'address',
     'commerce',
     'commerce_price',

@@ -16,7 +16,7 @@ class AddServerFormTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'search_api',
   ];
 

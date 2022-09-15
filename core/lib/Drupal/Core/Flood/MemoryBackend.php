@@ -2,7 +2,6 @@
 
 namespace Drupal\Core\Flood;
 
-use Drupal\Component\Datetime\TimeInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -18,13 +17,6 @@ class MemoryBackend implements FloodInterface {
   protected $requestStack;
 
   /**
-   * The time service.
-   *
-   * @var \Drupal\Component\Datetime\TimeInterface
-   */
-  protected $time;
-
-  /**
    * An array holding flood events, keyed by event name and identifier.
    */
   protected $events = [];
@@ -34,15 +26,9 @@ class MemoryBackend implements FloodInterface {
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack used to retrieve the current request.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time service.
    */
-  public function __construct(RequestStack $request_stack, TimeInterface $time = NULL) {
+  public function __construct(RequestStack $request_stack) {
     $this->requestStack = $request_stack;
-    if (!$time) {
-      @trigger_error('Calling MemoryBackend::__construct() without the $time argument is deprecated in drupal:9.4.0 and will be required before drupal:10.0.0. See https://www.drupal.org/node/3253739.', E_USER_DEPRECATED);
-    }
-    $this->time = $time ?? \Drupal::time();
   }
 
   /**
@@ -52,11 +38,10 @@ class MemoryBackend implements FloodInterface {
     if (!isset($identifier)) {
       $identifier = $this->requestStack->getCurrentRequest()->getClientIp();
     }
-    $time = $this->getCurrentMicroTime();
-    $this->events[$name][$identifier][] = [
-      'time' => $time,
-      'expire' => $time + $window,
-    ];
+    // We can't use REQUEST_TIME here, because that would not guarantee
+    // uniqueness.
+    $time = microtime(TRUE);
+    $this->events[$name][$identifier][] = ['expire' => $time + $window, 'time' => $time];
   }
 
   /**
@@ -79,13 +64,10 @@ class MemoryBackend implements FloodInterface {
     if (!isset($this->events[$name][$identifier])) {
       return $threshold > 0;
     }
-    $limit = $this->getCurrentMicroTime() - $window;
-    $number = count(array_filter(
-      $this->events[$name][$identifier],
-      function ($timestamp) use ($limit) {
-        return $timestamp['time'] > $limit;
-      }
-    ));
+    $limit = microtime(TRUE) - $window;
+    $number = count(array_filter($this->events[$name][$identifier], function ($entry) use ($limit) {
+      return $entry['time'] > $limit;
+    }));
     return ($number < $threshold);
   }
 
@@ -93,28 +75,14 @@ class MemoryBackend implements FloodInterface {
    * {@inheritdoc}
    */
   public function garbageCollection() {
-    $time = $this->getCurrentMicroTime();
     foreach ($this->events as $name => $identifiers) {
-      foreach (array_keys($identifiers) as $identifier) {
-        $this->events[$name][$identifier] = array_filter(
-          $this->events[$name][$identifier],
-          function (array $event) use ($time): bool {
-            // Keep events where expiration is after current time.
-            return $event['expire'] > $time;
-          }
-        );
+      foreach ($this->events[$name] as $identifier => $entries) {
+        // Remove expired entries.
+        $this->events[$name][$identifier] = array_filter($entries, function ($entry) {
+          return $entry['expire'] > microtime(TRUE);
+        });
       }
     }
-  }
-
-  /**
-   * Return current Unix timestamp with microseconds.
-   *
-   * @return float
-   *   The current time in seconds with microseconds.
-   */
-  protected function getCurrentMicroTime(): float {
-    return $this->time->getRequestMicroTime();
   }
 
 }

@@ -15,7 +15,7 @@ class ConfigRewriteTest extends KernelTestBase {
    *
    * @var array
    */
-  protected static $modules = ['system', 'user', 'config_rewrite', 'config_rewrite_test', 'config_rewrite_test_rewrite', 'language'];
+  public static $modules = ['system', 'user', 'config_rewrite', 'config_rewrite_test', 'config_rewrite_test_rewrite', 'language'];
 
   /**
    * The active configuration storage.
@@ -41,12 +41,13 @@ class ConfigRewriteTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->configRewriter = $this->container->get('config_rewrite.config_rewriter');
     $this->activeConfigStorage = $this->container->get('config.storage');
     $this->languageConfigFactoryOverride = $this->container->get('language.config_factory_override');
+    $this->installSchema('system', ['sequence']);
     $this->installEntitySchema('user_role');
     $this->installConfig(['language', 'config_rewrite_test']);
   }
@@ -66,8 +67,8 @@ class ConfigRewriteTest extends KernelTestBase {
 
     // Verify that the original configuration data exists.
     $data = $this->activeConfigStorage->read('user.role.test1');
-    $this->assertSame($data['label'], $expected_original_data['label']);
-    $this->assertSame($data['permissions'], $expected_original_data['permissions']);
+    $this->assertIdentical($data['label'], $expected_original_data['label']);
+    $this->assertIdentical($data['permissions'], $expected_original_data['permissions']);
 
     // Rewrite configuration.
     $this->configRewriter->rewriteModuleConfig('config_rewrite_test_rewrite');

@@ -18,7 +18,7 @@ class PaymentGatewayFormTest extends CommerceWebDriverTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_payment',
     'commerce_payment_example',
   ];

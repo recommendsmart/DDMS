@@ -103,7 +103,7 @@ abstract class LocalTaxTypeBase extends TaxTypeBase implements LocalTaxTypeInter
    */
   public function applies(OrderInterface $order) {
     $store = $order->getStore();
-    return $this->matchesRegistrations($store);
+    return $this->matchesAddress($store) || $this->matchesRegistrations($store);
   }
 
   /**
@@ -214,11 +214,8 @@ abstract class LocalTaxTypeBase extends TaxTypeBase implements LocalTaxTypeInter
    */
   protected function checkRegistrations(StoreInterface $store, TaxZone $zone) {
     foreach ($store->get('tax_registrations') as $field_item) {
-      $address = new Address($field_item->value);
-      foreach ($zone->getTerritories() as $territory) {
-        if ($territory->getCountryCode() === $address->getCountryCode()) {
-          return TRUE;
-        }
+      if ($zone->match(new Address($field_item->value))) {
+        return TRUE;
       }
     }
     return FALSE;
@@ -340,7 +337,7 @@ abstract class LocalTaxTypeBase extends TaxTypeBase implements LocalTaxTypeInter
       $zones = $this->buildZones();
       // Dispatch an event to allow altering the tax zones.
       $event = new BuildZonesEvent($zones, $this);
-      $this->eventDispatcher->dispatch($event, TaxEvents::BUILD_ZONES);
+      $this->eventDispatcher->dispatch(TaxEvents::BUILD_ZONES, $event);
       $this->zones = $event->getZones();
     }
 

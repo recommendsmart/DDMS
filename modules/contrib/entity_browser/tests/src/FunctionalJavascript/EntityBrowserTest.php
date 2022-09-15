@@ -175,7 +175,7 @@ class EntityBrowserTest extends EntityBrowserWebDriverTestBase {
     // $edit = [
     // 'files[upload][]' => $uri,
     // ];
-    // $this->submitForm($edit, 'Select files');.
+    // $this->drupalPostForm(NULL, $edit, 'Select files');.
     \Drupal::state()->set('eb_test_dummy_widget_access', FALSE);
     $this->drupalGet('entity-browser/iframe/test_entity_browser_file');
     $this->assertSession()->linkNotExists('dummy');

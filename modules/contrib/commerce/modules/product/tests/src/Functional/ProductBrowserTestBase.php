@@ -17,7 +17,7 @@ abstract class ProductBrowserTestBase extends CommerceBrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_product',
     'commerce_order',
     'field_ui',

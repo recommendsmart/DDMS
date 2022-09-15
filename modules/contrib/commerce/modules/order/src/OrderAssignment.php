@@ -45,7 +45,7 @@ class OrderAssignment implements OrderAssignmentInterface {
     // Notify other modules before the order is modified, so that
     // subscribers have access to the original data.
     $event = new OrderAssignEvent($order, $customer);
-    $this->eventDispatcher->dispatch($event, OrderEvents::ORDER_ASSIGN);
+    $this->eventDispatcher->dispatch(OrderEvents::ORDER_ASSIGN, $event);
 
     $order->setCustomer($customer);
     $order->setEmail($customer->getEmail());

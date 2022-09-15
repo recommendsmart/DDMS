@@ -2,7 +2,7 @@
 
 namespace Drupal\entity_browser\Events;
 
-use Drupal\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Base implementation of entity browser events.

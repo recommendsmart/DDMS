@@ -126,7 +126,7 @@ class Stopwords extends FieldsProcessorPluginBase {
    */
   protected function process(&$value) {
     $stopwords = $this->getStopWords();
-    if (empty($stopwords)) {
+    if (empty($stopwords) || !is_string($value)) {
       return;
     }
     $value = trim($value);

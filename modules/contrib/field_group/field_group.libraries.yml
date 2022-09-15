@@ -23,7 +23,7 @@ formatter.accordion:
   js:
     formatters/accordion/accordion.js: {}
   dependencies:
-    - jquery_ui_accordion/accordion
+    - core/jquery.ui.accordion
 
 formatter.html_element:
   js:

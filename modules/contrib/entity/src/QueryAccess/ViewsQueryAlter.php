@@ -4,6 +4,7 @@ namespace Drupal\entity\QueryAccess;
 
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Database\Query\Condition as SqlCondition;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -154,7 +155,7 @@ class ViewsQueryAlter implements ContainerInjectionInterface {
    *   The SQL conditions.
    */
   protected function mapConditions(ConditionGroup $conditions, Sql $query, array $base_table, array $field_storage_definitions, DefaultTableMapping $table_mapping) {
-    $sql_condition = $this->connection->condition($conditions->getConjunction());
+    $sql_condition = new SqlCondition($conditions->getConjunction());
     foreach ($conditions->getConditions() as $condition) {
       if ($condition instanceof ConditionGroup) {
         $nested_sql_conditions = $this->mapConditions($condition, $query, $base_table, $field_storage_definitions, $table_mapping);
@@ -220,7 +221,7 @@ class ViewsQueryAlter implements ContainerInjectionInterface {
           '=' => 'LIKE',
           '<>' => 'NOT LIKE',
         ];
-        if ($case_sensitive === FALSE && isset($operator_map[$operator])) {
+        if (!$case_sensitive && isset($operator_map[$operator])) {
           $operator = $operator_map[$operator];
           $value = $this->connection->escapeLike($value);
         }

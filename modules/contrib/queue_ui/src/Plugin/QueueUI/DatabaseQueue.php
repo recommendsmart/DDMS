@@ -9,7 +9,7 @@ use Drupal\queue_ui\QueueUIBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Defines the default Drupal Queue UI backend.
+ * Defines the default Drupal Queue UI backend
  *
  * @QueueUI(
  *   id = "database_queue",
@@ -20,27 +20,17 @@ class DatabaseQueue extends QueueUIBase implements ContainerFactoryPluginInterfa
   use StringTranslationTrait;
 
   /**
-   * Database.
-   *
    * @var \Drupal\Core\Database\Database
-   * It acts to encapsulate all control
    */
   private $database;
 
   /**
-   * {@inheritdoc}
-   *
    * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-   *   The current service container.
    * @param array $configuration
-   *   The configuration to use.
    * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
-   *   The plugin implementation definition.
    *
    * @return \Drupal\Core\Plugin\ContainerFactoryPluginInterface|\Drupal\queue_ui\Plugin\QueueUI\DatabaseQueue
-   *   Defines the default Drupal Queue UI backend
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
@@ -55,13 +45,9 @@ class DatabaseQueue extends QueueUIBase implements ContainerFactoryPluginInterfa
    * DatabaseQueue constructor.
    *
    * @param array $configuration
-   *   The configuration to use.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
+   * @param $plugin_id
+   * @param $plugin_definition
    * @param \Drupal\Core\Database\Connection $database
-   *   The database connection.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, Connection $database) {
     $this->database = $database;
@@ -71,8 +57,8 @@ class DatabaseQueue extends QueueUIBase implements ContainerFactoryPluginInterfa
    * SystemQueue implements all default QueueUI methods.
    *
    * @return array
-   *   An array of available QueueUI methods. Array key is system name of the
-   *   operation, array key value is the display name.
+   *  An array of available QueueUI methods. Array key is system name of the
+   *  operation, array key value is the display name.
    */
   public function getOperations() {
     return [
@@ -83,20 +69,16 @@ class DatabaseQueue extends QueueUIBase implements ContainerFactoryPluginInterfa
   }
 
   /**
-   * Inspect the queue items in a specified queue.
-   *
-   * @param string $queueName
-   *   The name of the queue being inspected.
+   * @param $queue_name
    *
    * @return mixed
-   *   Return call the execute method.
    */
-  public function getItems($queueName) {
+  public function getItems($queue_name) {
     $query = $this->database->select('queue', 'q');
     $query->addField('q', 'item_id');
     $query->addField('q', 'expire');
     $query->addField('q', 'created');
-    $query->condition('q.name', $queueName);
+    $query->condition('q.name', $queue_name);
     $query = $query->extend('Drupal\Core\Database\Query\PagerSelectExtender');
     $query = $query->limit(25);
 
@@ -104,20 +86,16 @@ class DatabaseQueue extends QueueUIBase implements ContainerFactoryPluginInterfa
   }
 
   /**
-   * Force the releasing of a queue.
-   *
-   * @param string $queueName
-   *   The name of the queue being inspected.
+   * @param $queue_name
    *
    * @return \Drupal\Core\Database\StatementInterface|int|null
-   *   return the value null
    */
-  public function releaseItems($queueName) {
+  public function releaseItems($queue_name) {
     return $this->database->update('queue')
       ->fields([
         'expire' => 0,
       ])
-      ->condition('name', $queueName, '=')
+      ->condition('name', $queue_name, '=')
       ->execute();
   }
 
@@ -125,27 +103,23 @@ class DatabaseQueue extends QueueUIBase implements ContainerFactoryPluginInterfa
    * Load a specified SystemQueue queue item from the database.
    *
    * @param int $item_id
-   *   The item id to load.
+   * The item id to load
    *
    * @return mixed
-   *   Result of the database query loading the queue item.
+   * Result of the database query loading the queue item.
    */
   public function loadItem($item_id) {
     // Load the specified queue item from the queue table.
     $query = $this->database->select('queue', 'q')
       ->fields('q', ['item_id', 'name', 'data', 'expire', 'created'])
       ->condition('q.item_id', $item_id)
-    // Item id should be unique.
-      ->range(0, 1);
+      ->range(0, 1); // item id should be unique
 
     return $query->execute()->fetchObject();
   }
 
   /**
-   * Force the releasing of a specified queue item.
-   *
    * @param int $item_id
-   *   The item id to be released.
    */
   public function releaseItem($item_id) {
     $this->database->update('queue')
@@ -155,10 +129,7 @@ class DatabaseQueue extends QueueUIBase implements ContainerFactoryPluginInterfa
   }
 
   /**
-   * Force the deletion of a specified queue item.
-   *
    * @param int $item_id
-   *   The item id to be deleted.
    */
   public function deleteItem($item_id) {
     $this->database->delete('queue')

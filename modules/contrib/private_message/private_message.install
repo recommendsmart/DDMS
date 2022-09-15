@@ -259,15 +259,3 @@ function private_message_update_8006(&$sandbox) {
     $entity_update_manager->uninstallFieldStorageDefinition($definition);
   }
 }
-
-/**
- * Enable notifications submodule.
- */
-function private_message_update_8007() {
-  $module = 'private_message_notify';
-  if (!\Drupal::moduleHandler()->moduleExists($module)) {
-    /** @var \Drupal\Core\Extension\ModuleInstallerInterface $installer */
-    $installer = \Drupal::service('module_installer');
-    $installer->install(['private_message_notify']);
-  }
-}

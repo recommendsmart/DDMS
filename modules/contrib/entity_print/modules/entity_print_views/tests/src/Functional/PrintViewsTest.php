@@ -17,7 +17,7 @@ class PrintViewsTest extends BrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'node',
     'user',
     'views',

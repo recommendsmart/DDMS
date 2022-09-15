@@ -22,14 +22,17 @@ process:
       plugin: extract
       index:
         - 2
-  # Skip if the variable name ends in 'screenshot'.
-  screenshot:
+  # Skip if the variable name is old.
+  outdated:
     -
       plugin: static_map
       source: '@element_name'
       bypass: true
       map:
         screenshot: false
+        files: false
+        logo: false
+        stylesheets: false
     -
       plugin: skip_on_empty
       method: row

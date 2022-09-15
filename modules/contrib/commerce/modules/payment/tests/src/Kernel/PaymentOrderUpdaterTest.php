@@ -60,7 +60,7 @@ class PaymentOrderUpdaterTest extends OrderKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_payment',
     'commerce_payment_example',
     'commerce_payment_test',

@@ -18,7 +18,7 @@ class PagerElementTest extends EntityBrowserWebDriverTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'entity_browser_test',
     'node',
     'field_ui',
@@ -29,7 +29,7 @@ class PagerElementTest extends EntityBrowserWebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->drupalCreateContentType(['type' => 'foo', 'name' => 'Foo']);

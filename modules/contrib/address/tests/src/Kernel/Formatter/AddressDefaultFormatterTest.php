@@ -15,7 +15,7 @@ class AddressDefaultFormatterTest extends FormatterTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     ConfigurableLanguage::createFromLangcode('zh-hant')->save();

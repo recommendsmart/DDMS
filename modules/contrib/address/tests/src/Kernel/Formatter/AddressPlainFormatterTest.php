@@ -21,7 +21,7 @@ class AddressPlainFormatterTest extends FormatterTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->createField('address', 'address_plain');

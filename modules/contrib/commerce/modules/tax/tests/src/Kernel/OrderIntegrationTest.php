@@ -28,7 +28,7 @@ class OrderIntegrationTest extends OrderKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_tax',
     'commerce_tax_test',
   ];
@@ -43,7 +43,6 @@ class OrderIntegrationTest extends OrderKernelTestBase {
     $user = $this->createUser(['mail' => $this->randomString() . '@example.com']);
 
     $this->store->set('prices_include_tax', TRUE);
-    $this->store->set('tax_registrations', ['US']);
     $this->store->save();
 
     // The default store is US-WI, so imagine that the US has VAT.

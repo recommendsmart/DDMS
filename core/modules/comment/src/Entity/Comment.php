@@ -193,14 +193,6 @@ class Comment extends ContentEntityBase implements CommentInterface {
     $comments = $comment_storage->loadMultiple($child_cids);
     $comment_storage->delete($comments);
 
-    // Always invalidate the cache tag for the commented entity.
-    /** @var \Drupal\comment\CommentInterface $entity */
-    foreach ($entities as $entity) {
-      if ($commented_entity = $entity->getCommentedEntity()) {
-        Cache::invalidateTags($commented_entity->getCacheTagsToInvalidate());
-      }
-    }
-
     foreach ($entities as $id => $entity) {
       \Drupal::service('comment.statistics')->update($entity);
     }
@@ -361,25 +353,21 @@ class Comment extends ContentEntityBase implements CommentInterface {
    * {@inheritdoc}
    */
   public function getCommentedEntity() {
-    if ($this->getCommentedEntityTypeId() && $this->entityTypeManager()->hasDefinition($this->getCommentedEntityTypeId()) && $entity_id = $this->getCommentedEntityId()) {
-      return $this->entityTypeManager()
-        ->getStorage($this->getCommentedEntityTypeId())
-        ->load($entity_id);
-    }
+    return $this->get('entity_id')->entity;
   }
 
   /**
    * {@inheritdoc}
    */
   public function getCommentedEntityId() {
-    return $this->getFieldValue('entity_id', 'target_id');
+    return $this->get('entity_id')->target_id;
   }
 
   /**
    * {@inheritdoc}
    */
   public function getCommentedEntityTypeId() {
-    return $this->getFieldValue('entity_type', 'value');
+    return $this->get('entity_type')->value;
   }
 
   /**
@@ -394,7 +382,7 @@ class Comment extends ContentEntityBase implements CommentInterface {
    * {@inheritdoc}
    */
   public function getFieldName() {
-    return $this->getFieldValue('field_name', 'value');
+    return $this->get('field_name')->value;
   }
 
   /**

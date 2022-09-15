@@ -56,7 +56,7 @@ class PrintBuilder implements PrintBuilderInterface {
     $renderer = $this->prepareRenderer($entities, $print_engine, $use_default_css);
 
     // Allow other modules to alter the generated Print object.
-    $this->dispatcher->dispatch(new PreSendPrintEvent($print_engine, $entities), PrintEvents::PRE_SEND);
+    $this->dispatcher->dispatch(PrintEvents::PRE_SEND, new PreSendPrintEvent($print_engine, $entities));
 
     // Calculate the filename.
     $filename = $renderer->getFilename($entities) . '.' . $print_engine->getExportType()->getFileExtension();
@@ -87,7 +87,7 @@ class PrintBuilder implements PrintBuilderInterface {
     $renderer = $this->prepareRenderer($entities, $print_engine, $use_default_css);
 
     // Allow other modules to alter the generated Print object.
-    $this->dispatcher->dispatch(new PreSendPrintEvent($print_engine, $entities), PrintEvents::PRE_SEND);
+    $this->dispatcher->dispatch(PrintEvents::PRE_SEND, new PreSendPrintEvent($print_engine, $entities));
 
     // If we didn't have a URI passed in the generate one.
     if (!$filename) {

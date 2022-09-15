@@ -23,8 +23,6 @@ class SearchApiBulkForm extends BulkForm {
 
   use SearchApiFieldTrait {
     preRender as traitPreRender;
-    defineOptions as ignoreDefineOptions;
-    buildOptionsForm as ignoreBuildOptionsForm;
   }
 
   /**

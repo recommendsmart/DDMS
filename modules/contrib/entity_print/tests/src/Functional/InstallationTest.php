@@ -54,13 +54,11 @@ class InstallationTest extends BrowserTestBase {
    * Uninstall the module using the UI.
    */
   protected function uninstallModules() {
-    $this->drupalGet('admin/modules/uninstall');
-    $this->submitForm([
+    $this->drupalPostForm('admin/modules/uninstall', [
       'uninstall[entity_print_views]' => TRUE,
     ], 'Uninstall');
     $this->getSession()->getPage()->pressButton('Uninstall');
-    $this->drupalGet('admin/modules/uninstall');
-    $this->submitForm([
+    $this->drupalPostForm('admin/modules/uninstall', [
       'uninstall[entity_print]' => TRUE,
     ], 'Uninstall');
     $this->getSession()->getPage()->pressButton('Uninstall');
@@ -70,8 +68,7 @@ class InstallationTest extends BrowserTestBase {
    * Install the modules using the UI.
    */
   protected function installModules() {
-    $this->drupalGet('admin/modules');
-    $this->submitForm([
+    $this->drupalPostForm('admin/modules', [
       'modules[entity_print][enable]' => TRUE,
       'modules[entity_print_views][enable]' => TRUE,
     ], 'Install');

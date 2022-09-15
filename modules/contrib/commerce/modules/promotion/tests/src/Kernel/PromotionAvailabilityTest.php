@@ -21,7 +21,7 @@ class PromotionAvailabilityTest extends OrderKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_promotion',
   ];
 
@@ -75,36 +75,6 @@ class PromotionAvailabilityTest extends OrderKernelTestBase {
       'stores' => [$this->store->id()],
       'usage_limit' => 2,
       'usage_limit_customer' => 0,
-      'start_date' => '2019-01-01T00:00:00',
-      'status' => TRUE,
-    ]);
-    $promotion->save();
-    $this->assertTrue($promotion->available($this->order));
-    $promotion->set('require_coupon', TRUE);
-    $this->assertFalse($promotion->available($this->order));
-    $promotion->set('require_coupon', FALSE);
-
-    $promotion->setEnabled(FALSE);
-    $this->assertFalse($promotion->available($this->order));
-    $promotion->setEnabled(TRUE);
-
-    $promotion->setOrderTypeIds(['test']);
-    $this->assertFalse($promotion->available($this->order));
-    $promotion->setOrderTypeIds(['default']);
-
-    $promotion->setStoreIds(['90']);
-    $this->assertFalse($promotion->available($this->order));
-    $promotion->setStoreIds([$this->store->id()]);
-  }
-
-  /**
-   * Test availability for promotions available in all stores.
-   */
-  public function testAvailabilityAllStores() {
-    $promotion = Promotion::create([
-      'order_types' => ['default'],
-      'stores' => [],
-      'usage_limit' => 2,
       'start_date' => '2019-01-01T00:00:00',
       'status' => TRUE,
     ]);

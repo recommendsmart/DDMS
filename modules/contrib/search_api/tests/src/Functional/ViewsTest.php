@@ -31,7 +31,7 @@ class ViewsTest extends SearchApiBrowserTestBase {
    *
    * @var string[]
    */
-  protected static $modules = [
+  public static $modules = [
     'block',
     'language',
     'search_api_test_views',

@@ -245,7 +245,7 @@ abstract class TaxTypeBase extends PluginBase implements TaxTypeInterface, Conta
     $customer_profile = $this->buildCustomerProfile($order);
     // Allow the customer profile to be altered, per order item.
     $event = new CustomerProfileEvent($customer_profile, $order_item);
-    $this->eventDispatcher->dispatch($event, TaxEvents::CUSTOMER_PROFILE);
+    $this->eventDispatcher->dispatch(TaxEvents::CUSTOMER_PROFILE, $event);
     $customer_profile = $event->getCustomerProfile();
 
     return $customer_profile;
@@ -268,8 +268,8 @@ abstract class TaxTypeBase extends PluginBase implements TaxTypeInterface, Conta
    *   The customer profile, or NULL if not available yet.
    */
   protected function buildCustomerProfile(OrderInterface $order) {
-    $order_uuid = $order->uuid();
-    if (!isset($this->profiles[$order_uuid])) {
+    $order_id = $order->id();
+    if (!isset($this->profiles[$order_id])) {
       $order_profiles = $order->collectProfiles();
       $address = NULL;
       foreach (['shipping', 'billing'] as $scope) {
@@ -296,7 +296,7 @@ abstract class TaxTypeBase extends PluginBase implements TaxTypeInterface, Conta
         $tax_number = $order_profiles['billing']->get('tax_number')->getValue();
       }
       $profile_storage = $this->entityTypeManager->getStorage('profile');
-      $this->profiles[$order_uuid] = $profile_storage->create([
+      $this->profiles[$order_id] = $profile_storage->create([
         'type' => 'customer',
         'uid' => 0,
         'address' => $address,
@@ -304,7 +304,7 @@ abstract class TaxTypeBase extends PluginBase implements TaxTypeInterface, Conta
       ]);
     }
 
-    return $this->profiles[$order_uuid];
+    return $this->profiles[$order_id];
   }
 
 }

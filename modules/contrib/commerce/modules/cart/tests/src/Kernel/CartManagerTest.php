@@ -42,7 +42,7 @@ class CartManagerTest extends CartKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'extra_order_item_field',
   ];
 

@@ -21,7 +21,7 @@ class EntityBrowserUpdateHookTest extends UpdatePathTestBase {
    */
   protected function setDatabaseDumpFiles() {
     $this->databaseDumpFiles = [
-      DRUPAL_ROOT . '/core/modules/system/tests/fixtures/update/drupal-9.3.0.bare.standard.php.gz',
+      DRUPAL_ROOT . '/core/modules/system/tests/fixtures/update/drupal-8.8.0.bare.standard.php.gz',
       __DIR__ . '/../../fixtures/update/entity_browser.update-hook-test.php',
     ];
   }
@@ -29,7 +29,7 @@ class EntityBrowserUpdateHookTest extends UpdatePathTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
     $entity_browser_type = $this->container
       ->get('entity_type.manager')
@@ -45,8 +45,8 @@ class EntityBrowserUpdateHookTest extends UpdatePathTestBase {
    */
   protected function doSelectionTest() {
     parent::doSelectionTest();
-    $this->assertSession()->responseContains('8001 - Updates submit text for existing Entity browsers.');
-    $this->assertSession()->responseContains('8002 - Migrates duplicated Views entity_browser_select fields.');
+    $this->assertSession()->responseContains('8001 -   Updates submit text for existing Entity browsers.');
+    $this->assertSession()->responseContains('8002 -   Migrates duplicated Views entity_browser_select fields.');
   }
 
   /**

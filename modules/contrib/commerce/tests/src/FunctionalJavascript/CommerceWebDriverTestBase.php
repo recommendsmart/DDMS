@@ -43,7 +43,7 @@ abstract class CommerceWebDriverTestBase extends WebDriverTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'system',
     'block',
     'field',

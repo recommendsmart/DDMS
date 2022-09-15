@@ -37,7 +37,7 @@ class UncacheableQueryAccessTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'entity',
     'entity_module_test',
     'user',
@@ -48,7 +48,7 @@ class UncacheableQueryAccessTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installEntitySchema('entity_test_enhanced_with_owner');

@@ -18,7 +18,7 @@ class LogTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'entity_test',
     'commerce_log',
     'commerce_log_test',

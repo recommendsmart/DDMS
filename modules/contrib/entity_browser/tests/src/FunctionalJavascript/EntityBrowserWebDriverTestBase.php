@@ -28,7 +28,7 @@ abstract class EntityBrowserWebDriverTestBase extends WebDriverTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'entity_browser_test',
     'contextual',
     'views',
@@ -56,7 +56,7 @@ abstract class EntityBrowserWebDriverTestBase extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     FieldStorageConfig::create([

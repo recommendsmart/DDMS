@@ -29,7 +29,7 @@ class DummyWidget extends WidgetBase {
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return array_merge(parent::defaultConfiguration(), ['text' => '']);
+    return ['text' => ''] + parent::defaultConfiguration();
   }
 
   /**

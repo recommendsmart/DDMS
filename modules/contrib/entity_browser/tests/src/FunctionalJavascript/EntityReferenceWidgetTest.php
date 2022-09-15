@@ -22,7 +22,7 @@ class EntityReferenceWidgetTest extends EntityBrowserWebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp(): void {
+  public function setUp() {
     parent::setUp();
 
     /** @var \Drupal\user\RoleInterface $role */
@@ -105,7 +105,7 @@ class EntityReferenceWidgetTest extends EntityBrowserWebDriverTestBase {
     $this->assertSession()->buttonExists('Save')->press();
 
     $this->assertSession()->pageTextContains('Article Referencing node 1 has been created.');
-    $nid = \Drupal::entityQuery('node')->accessCheck(TRUE)->condition('title', 'Referencing node 1')->execute();
+    $nid = \Drupal::entityQuery('node')->condition('title', 'Referencing node 1')->execute();
     $nid = reset($nid);
 
     // Assert correct translation appears.

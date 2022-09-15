@@ -23,14 +23,9 @@ class FormattedPrice extends StringData {
     assert($parent instanceof PriceItem);
     $formatted_price = NULL;
     if (!$parent->isEmpty()) {
-      try {
-        $price = $parent->toPrice();
-        $currency_formatter = \Drupal::service('commerce_price.currency_formatter');
-        $formatted_price = $currency_formatter->format($price->getNumber(), $price->getCurrencyCode());
-      }
-      catch (\InvalidArgumentException $exception) {
-
-      }
+      $price = $parent->toPrice();
+      $currency_formatter = \Drupal::service('commerce_price.currency_formatter');
+      $formatted_price = $currency_formatter->format($price->getNumber(), $price->getCurrencyCode());
     }
 
     return $formatted_price;

@@ -14,7 +14,7 @@ class AdjustmentTest extends OrderKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_order_test',
   ];
 

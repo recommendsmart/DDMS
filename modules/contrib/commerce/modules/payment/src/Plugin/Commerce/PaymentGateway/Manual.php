@@ -157,34 +157,28 @@ class Manual extends PaymentGatewayBase implements ManualPaymentGatewayInterface
    * {@inheritdoc}
    */
   public function buildPaymentOperations(PaymentInterface $payment) {
+    $payment_state = $payment->getState()->getId();
     $operations = [];
     $operations['receive'] = [
       'title' => $this->t('Receive'),
       'page_title' => $this->t('Receive payment'),
       'plugin_form' => 'receive-payment',
-      'access' => $payment->getState()->getId() === 'pending',
+      'access' => $payment_state == 'pending',
     ];
     $operations['void'] = [
       'title' => $this->t('Void'),
       'page_title' => $this->t('Void payment'),
       'plugin_form' => 'void-payment',
-      'access' => $this->canVoidPayment($payment),
+      'access' => $payment_state == 'pending',
     ];
     $operations['refund'] = [
       'title' => $this->t('Refund'),
       'page_title' => $this->t('Refund payment'),
       'plugin_form' => 'refund-payment',
-      'access' => $this->canRefundPayment($payment),
+      'access' => in_array($payment_state, ['completed', 'partially_refunded']),
     ];
 
     return $operations;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function canVoidPayment(PaymentInterface $payment) {
-    return $payment->getState()->getId() === 'pending';
   }
 
   /**

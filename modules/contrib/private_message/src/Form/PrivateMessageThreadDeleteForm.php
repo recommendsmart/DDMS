@@ -5,12 +5,10 @@ namespace Drupal\private_message\Form;
 use Drupal\Core\Entity\ContentEntityConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\private_message\Entity\PrivateMessageThreadInterface;
+use Drupal\user\Entity\User;
 
 /**
  * Form definition for the private message delete form.
- *
- * @method PrivateMessageThreadInterface getEntity()
  */
 class PrivateMessageThreadDeleteForm extends ContentEntityConfirmFormBase {
 
@@ -49,7 +47,8 @@ class PrivateMessageThreadDeleteForm extends ContentEntityConfirmFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     parent::submitForm($form, $form_state);
 
-    $this->getEntity()->delete();
+    $user = User::load($this->currentUser()->id());
+    $this->getEntity()->delete($user);
 
     $form_state->setRedirect('private_message.private_message_page');
   }

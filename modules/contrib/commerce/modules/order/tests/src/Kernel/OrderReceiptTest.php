@@ -54,7 +54,7 @@ class OrderReceiptTest extends OrderKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_payment',
     'language',
     'locale',

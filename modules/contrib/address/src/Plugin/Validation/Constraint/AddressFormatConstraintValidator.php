@@ -2,14 +2,12 @@
 
 namespace Drupal\address\Plugin\Validation\Constraint;
 
-use CommerceGuys\Addressing\AddressFormat\AddressField;
 use CommerceGuys\Addressing\AddressFormat\AddressFormat;
 use CommerceGuys\Addressing\Validator\Constraints\AddressFormatConstraintValidator as ExternalValidator;
 use Drupal\address\FieldHelper;
 use Drupal\address\LabelHelper;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Validator\Constraint;
 
 /**
  * Validates the address format constraint.
@@ -29,7 +27,7 @@ class AddressFormatConstraintValidator extends ExternalValidator implements Cont
   /**
    * {@inheritdoc}
    */
-  protected function addViolation(string $field, string $message, $invalid_value, AddressFormat $address_format) {
+  protected function addViolation($field, $message, $invalid_value, AddressFormat $address_format) {
     $labels = LabelHelper::getFieldLabels($address_format);
     $label = $labels[$field];
 

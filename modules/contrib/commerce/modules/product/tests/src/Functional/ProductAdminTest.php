@@ -34,7 +34,7 @@ class ProductAdminTest extends ProductBrowserTestBase {
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'file',
     'image',
   ];
@@ -87,9 +87,8 @@ class ProductAdminTest extends ProductBrowserTestBase {
     }
     $this->submitForm($edit, 'Save');
 
-    $result = \Drupal::entityTypeManager()->getStorage('commerce_product')->getQuery()
+    $result = \Drupal::entityQuery('commerce_product')
       ->condition("title", $edit['title[0][value]'])
-      ->accessCheck(FALSE)
       ->range(0, 1)
       ->execute();
     $product_id = reset($result);

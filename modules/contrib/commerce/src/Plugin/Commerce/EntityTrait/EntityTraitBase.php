@@ -28,7 +28,6 @@ abstract class EntityTraitBase extends PluginBase implements EntityTraitInterfac
    */
   public function buildFieldDefinitions() {
     // Entity traits are not required to provide fields.
-    return [];
   }
 
 }

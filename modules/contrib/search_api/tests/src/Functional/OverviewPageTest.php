@@ -18,7 +18,7 @@ class OverviewPageTest extends SearchApiBrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'block',
   ];
 

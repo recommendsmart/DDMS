@@ -46,7 +46,7 @@ class FieldValuesExtractionTest extends KernelTestBase {
    *
    * @var string[]
    */
-  protected static $modules = [
+  public static $modules = [
     'entity_test',
     'field',
     'search_api',

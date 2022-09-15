@@ -57,8 +57,10 @@ trait SearchApiHandlerTrait {
    *   query.
    */
   public function getQuery() {
-    $query = $this->query ?? $this->view->query ?? NULL;
-    return $query instanceof SearchApiQuery ? $query : NULL;
+    if (!(($this->query ?? NULL) instanceof SearchApiQuery)) {
+      return NULL;
+    }
+    return $this->query;
   }
 
 }

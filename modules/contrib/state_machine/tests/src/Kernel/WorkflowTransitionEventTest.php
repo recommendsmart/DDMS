@@ -15,7 +15,7 @@ class WorkflowTransitionEventTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'entity_test',
     'field',
     'user',
@@ -26,7 +26,7 @@ class WorkflowTransitionEventTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp(): void {
+  protected function setUp() {
     parent::setUp();
 
     $this->installEntitySchema('user');

@@ -49,7 +49,7 @@ class OrderIntegrationTest extends OrderKernelTestBase implements ServiceModifie
    *
    * @var array
    */
-  protected static $modules = [
+  public static $modules = [
     'commerce_log',
     'commerce_log_test',
   ];

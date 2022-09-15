@@ -35,7 +35,7 @@ class BackendTest extends BackendTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = [
+  public static $modules = [
     'search_api_db',
     'search_api_test_db',
   ];
@@ -125,7 +125,6 @@ class BackendTest extends BackendTestBase {
     $this->regressionTest2916534();
     $this->regressionTest2873023();
     $this->regressionTest3199355();
-    $this->regressionTest3225675();
   }
 
   /**
@@ -852,41 +851,6 @@ class BackendTest extends BackendTestBase {
   }
 
   /**
-   * Tests whether scoring is correct when multiple fields have the same boost.
-   *
-   * @see https://www.drupal.org/node/3225675
-   */
-  protected function regressionTest3225675() {
-    // Set match mode to "partial" and the same field boost for both "body" and
-    // "name".
-    $this->setServerMatchMode();
-    $index = $this->getIndex();
-    $index->getField('name')->setBoost(1.0);
-    $index->getField('body')->setBoost(1.0);
-    $index->save();
-    $this->indexItems($this->indexId);
-
-    // Item 2 has "test" in both name and body, item 3 has it only in body, so
-    // 2 should have a greater score. If the bug is present, both would have
-    // same score.
-    $results = $this->buildSearch('test', [], NULL, FALSE)
-      ->addCondition('id', [2, 3], 'IN')
-      ->sort('search_api_relevance', QueryInterface::SORT_DESC)
-      ->execute();
-
-    $resultItems = array_values($results->getResultItems());
-    $this->assertLessThan($resultItems[0]->getScore(), $resultItems[1]->getScore());
-
-    // Reset match mode and field boosts.
-    $this->setServerMatchMode('words');
-    $index = $this->getIndex();
-    $index->getField('name')->setBoost(5);
-    $index->getField('body')->setBoost(0.8);
-    $index->save();
-    $this->indexItems($this->indexId);
-  }
-
-  /**
    * {@inheritdoc}
    */
   protected function checkIndexWithoutFields() {
@@ -1014,7 +978,7 @@ class BackendTest extends BackendTestBase {
     \Drupal::moduleHandler()->alter('search_api_index_items', $index, $items);
     $event = new IndexingItemsEvent($index, $items);
     \Drupal::getContainer()->get('event_dispatcher')
-      ->dispatch($event, SearchApiEvents::INDEXING_ITEMS);
+      ->dispatch(SearchApiEvents::INDEXING_ITEMS, $event);
     foreach ($items as $item) {
       // This will cache the extracted fields so processors, etc., can retrieve
       // them directly.
