@@ -89,7 +89,9 @@
         "drupal/features": "^3.12",
         "drupal/features_permissions": "^1.0",
         "drupal/rules": "^3.0@alpha",
-        "drupal/comments_order": "^3.0"
+        "drupal/comments_order": "^3.0",
+        "drupal/gin": "^3.0@beta",
+        "drupal/gin_lb": "^1.0@beta"
     },
     "require-dev": {
         "drush/drush": "^10",

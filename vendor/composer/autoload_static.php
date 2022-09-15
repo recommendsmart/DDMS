@@ -171,6 +171,7 @@ class ComposerStaticInitc57549eb6c7c9f12f114a0a413c5516d
         array (
             'Drush\\Internal\\' => 15,
             'Drush\\' => 6,
+            'Drupal\\gin_lb_settings\\' => 23,
             'Drupal\\Driver\\' => 14,
             'Drupal\\Core\\' => 12,
             'Drupal\\Console\\Core\\' => 20,
@@ -519,6 +520,10 @@ class ComposerStaticInitc57549eb6c7c9f12f114a0a413c5516d
         'Drush\\' => 
         array (
             0 => __DIR__ . '/..' . '/drush/drush/src',
+        ),
+        'Drupal\\gin_lb_settings\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/modules/contrib/gin_lb/src',
         ),
         'Drupal\\Driver\\' => 
         array (

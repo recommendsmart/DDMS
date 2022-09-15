@@ -3,7 +3,7 @@
         'name' => 'opigno/opigno-composer',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '012a83c2ec29de09292186b5f02fc61bbce3bcfa',
+        'reference' => '3f623c93c2fb08bae387f0159952b3e48da0f167',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -1023,6 +1023,24 @@
             'replaced' => array(
                 0 => '9.3.21',
             ),
+        ),
+        'drupal/gin' => array(
+            'pretty_version' => '3.0.0-beta5',
+            'version' => '3.0.0.0-beta5',
+            'reference' => '8.x-3.0-beta5',
+            'type' => 'drupal-theme',
+            'install_path' => __DIR__ . '/../../themes/contrib/gin',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'drupal/gin_lb' => array(
+            'pretty_version' => '1.0.0-beta16',
+            'version' => '1.0.0.0-beta16',
+            'reference' => '1.0.0-beta16',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../modules/contrib/gin_lb',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'drupal/gin_toolbar' => array(
             'pretty_version' => '1.0.0-beta22',
@@ -2340,7 +2358,7 @@
         'opigno/opigno-composer' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '012a83c2ec29de09292186b5f02fc61bbce3bcfa',
+            'reference' => '3f623c93c2fb08bae387f0159952b3e48da0f167',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
