@@ -3,7 +3,7 @@
         'name' => 'goalgorilla/social_template',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '31044be984b96e6e019f0a01daf67fe53f379d85',
+        'reference' => '20a08e688d2bab2fc11a349e9e66cadb3183c673',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -3118,7 +3118,7 @@
         'goalgorilla/social_template' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '31044be984b96e6e019f0a01daf67fe53f379d85',
+            'reference' => '20a08e688d2bab2fc11a349e9e66cadb3183c673',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
