@@ -108,6 +108,11 @@ class Helpers
             $ret = preg_replace('/\?(.*)$/', "", $ret);
 
             $filepath = realpath($ret);
+
+            // Attempt to fix the local paths.
+            if ($is_local_path && !$filepath && !empty($base_path)) {
+              $filepath = urldecode($base_path . $ret);
+            }
             if ($filepath === false) {
                 return null;
             }

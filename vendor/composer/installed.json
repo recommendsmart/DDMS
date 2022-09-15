@@ -1835,6 +1835,11 @@
             },
             "time": "2022-06-21T21:14:57+00:00",
             "type": "library",
+            "extra": {
+                "patches_applied": {
+                    "#3295355-6 Absolute paths support": "https://www.drupal.org/files/issues/2022-07-14/3295355-6-dompdf-abs-paths.patch"
+                }
+            },
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
@@ -2533,6 +2538,7 @@
                 "shasum": "80e7e43975b1f3aa97b5127066216f36433b887f"
             },
             "require": {
+                "drupal/ckeditor": "*",
                 "drupal/core": "^8 || ^9"
             },
             "type": "drupal-module",
@@ -2544,6 +2550,9 @@
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
                     }
+                },
+                "patches_applied": {
+                    "Ckeditor_bgimage Opigno certificate background image": "https://www.drupal.org/files/issues/2021-09-10/ckeditor_bgimage-opigno_certificate-3107667-9.patch"
                 }
             },
             "installation-source": "dist",
@@ -3932,59 +3941,6 @@
             "install-path": "../../core"
         },
         {
-            "name": "drupal/core-composer-scaffold",
-            "version": "9.3.21",
-            "version_normalized": "9.3.21.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/drupal/core-composer-scaffold.git",
-                "reference": "a9dd9def8891e1c388719474720b57d3fe929a2f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core-composer-scaffold/zipball/a9dd9def8891e1c388719474720b57d3fe929a2f",
-                "reference": "a9dd9def8891e1c388719474720b57d3fe929a2f",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^1 || ^2",
-                "php": ">=7.3.0"
-            },
-            "conflict": {
-                "drupal-composer/drupal-scaffold": "*"
-            },
-            "require-dev": {
-                "composer/composer": "^1.8@stable"
-            },
-            "time": "2022-02-24T17:40:56+00:00",
-            "type": "composer-plugin",
-            "extra": {
-                "class": "Drupal\\Composer\\Plugin\\Scaffold\\Plugin",
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "Drupal\\Composer\\Plugin\\Scaffold\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "description": "A flexible Composer project scaffold builder.",
-            "homepage": "https://www.drupal.org/project/drupal",
-            "keywords": [
-                "drupal"
-            ],
-            "support": {
-                "source": "https://github.com/drupal/core-composer-scaffold/tree/9.3.21"
-            },
-            "install-path": "../drupal/core-composer-scaffold"
-        },
-        {
             "name": "drupal/core-recommended",
             "version": "9.3.21",
             "version_normalized": "9.3.21.0",
@@ -4975,6 +4931,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Improve performance of referencedEntities()": "https://www.drupal.org/files/issues/2022-07-25/entity_reference_revisions-improve-referenced-entities-performance-3281020-7.patch"
                 }
             },
             "installation-source": "dist",

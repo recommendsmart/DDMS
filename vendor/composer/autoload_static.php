@@ -176,7 +176,6 @@ class ComposerStaticInitc57549eb6c7c9f12f114a0a413c5516d
             'Drupal\\Console\\Core\\' => 20,
             'Drupal\\Console\\Composer\\Plugin\\' => 31,
             'Drupal\\Console\\' => 15,
-            'Drupal\\Composer\\Plugin\\Scaffold\\' => 32,
             'Drupal\\Component\\' => 17,
             'DrupalCodeGenerator\\' => 20,
             'Dompdf\\' => 7,
@@ -540,10 +539,6 @@ class ComposerStaticInitc57549eb6c7c9f12f114a0a413c5516d
         'Drupal\\Console\\' => 
         array (
             0 => __DIR__ . '/..' . '/drupal/console/src',
-        ),
-        'Drupal\\Composer\\Plugin\\Scaffold\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/drupal/core-composer-scaffold',
         ),
         'Drupal\\Component\\' => 
         array (

@@ -36,42 +36,74 @@
         canUndo: true,
         exec: function (editor) {
           // Set existing values for future updates.
-          let existingValues = {};
+          let instances = CKEDITOR.instances;
+          let firstInstanceKey = Object.keys(instances)[0];
+          let instance = instances[firstInstanceKey];
+          let editorBody = instance.getData();
+          let element = jQuery(editorBody);
+          let firstDiv = element[0];
+
+          let imageSrc = '';
+          let imageStyle = '';
+          let backgroundColor = '';
+          let backgroundPosition = '';
+          if (firstDiv && firstDiv.classList.contains('background-image') && firstDiv.firstChild.tagName !== undefined && firstDiv.firstChild.tagName === 'IMG') {
+            imageSrc = firstDiv.firstChild.getAttribute("src");
+            imageStyle = firstDiv.firstChild.getAttribute("style");
+
+            let style = firstDiv.getAttribute('style');
+            let matches = style.match(/background-color:((.|\n)*?);/);
+            if (matches) {
+              backgroundColor = matches[1];
+            }
+            matches = style.match(/text-align:((.|\n)*?);/);
+            if (matches) {
+              backgroundPosition = matches[1];
+            }
+          }
+
+          var existingValues = {
+            file: imageSrc,
+            style: imageStyle,
+            color: backgroundColor,
+            position: backgroundPosition
+          };
 
           // Prepare a save callback to be used upon saving the dialog.
           let saveCallback = function (returnValues) {
             editor.fire('saveSnapshot');
 
             /* config_image */
-            let image = returnValues.attributes.image;
-            let background_color = returnValues.background_color;
-            let width = '100%';
+            let image = returnValues.attributes.image ? returnValues.attributes.image : '';
+            let entity_uuid = returnValues.attributes.data_entity_uuid ? returnValues.attributes.data_entity_uuid : '';
+            let entity_type = returnValues.attributes.data_entity_type ? returnValues.attributes.data_entity_type : '';
+            let backgroundColor = returnValues.background_color;
+            let width = '';
             let height = '';
             let position = returnValues.background_aling;
-            if(returnValues.width !== '') {
-              width = returnValues.width + 'px';
+            if (returnValues.width !== '') {
+              width = returnValues.width;
             }
-            if(returnValues.height !== '') {
-              height = returnValues.height + 'px';
+            if (returnValues.height !== '') {
+              height = returnValues.height;
             }
             let content = editor.document.getBody().getHtml();
-            let matches = content.match(/<div style="(.*)">((.|\n)*?)<\/div>/);
+            let matches = content.match(/<div class="editor-content" style="padding:15px;">((.|\n)*?)<\/div>/);
+
             // styled div already exists
             if (matches) {
-              content = matches[2];
+              content = matches[1];
             }
 
-            let div = '<div style="';
-            div += 'background-image: url(' + image + ');';
-            div += 'background-color: ' + background_color + ';';
-            div += 'background-repeat: no-repeat;';
-            div += 'background-position: ' + position + ';';
-            div += 'padding:25px;';
-            div += 'background-size:' + width + ' ' + height + ';';
-            div += '">';
-            div += content;
-            div += '</div>';
-            editor.setData(div);
+            position = position.split(' ');
+
+            let backgroundImageDiv = '<div class="background-image" style="position:absolute;z-index:-1;width:100%;height:100%;text-align:' + position[0] + ';background-color:' + backgroundColor + ';">';
+            backgroundImageDiv += '<img data-entity-type="' + entity_type + '" data-entity-uuid="' + entity_uuid + '" src="' + image + '" style="width:' + width + ';height:' + height + ';">';
+            backgroundImageDiv += '</div>';
+
+            let contentDiv = '<div class="editor-content" style="padding:15px;">' + content + '</div>';
+
+            editor.setData(backgroundImageDiv + contentDiv);
 
             // Save snapshot for undo support.
             editor.fire('saveSnapshot');
@@ -92,7 +124,7 @@
       // Add buttons for file upload.
       if (editor.ui.addButton) {
         editor.ui.addButton('bgimage', {
-          label: 'bgimage',
+          label: 'Background image',
           command: 'bgimage',
           toolbar: 'insert',
           icon: this.path + 'icons/background.png'

@@ -89,7 +89,6 @@ return array(
     'Drupal\\Console\\Core\\' => array($vendorDir . '/drupal/console-core/src'),
     'Drupal\\Console\\Composer\\Plugin\\' => array($vendorDir . '/drupal/console-extend-plugin/src'),
     'Drupal\\Console\\' => array($vendorDir . '/drupal/console/src'),
-    'Drupal\\Composer\\Plugin\\Scaffold\\' => array($vendorDir . '/drupal/core-composer-scaffold'),
     'Drupal\\Component\\' => array($baseDir . '/core/lib/Drupal/Component'),
     'DrupalCodeGenerator\\' => array($vendorDir . '/chi-teck/drupal-code-generator/src'),
     'Dompdf\\' => array($vendorDir . '/dompdf/dompdf/src'),

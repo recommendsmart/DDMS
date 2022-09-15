@@ -82,23 +82,36 @@ class EditorFileDialog extends FormBase implements BaseFormIdInterface {
     $file_upload = $editor->getThirdPartySettings('ckeditor_bgimage');
     $max_filesize = min(Bytes::toInt($file_upload['max_size']), Environment::getUploadMaxSize());
 
-    $existing_file = isset($file_element['data-entity-uuid']) ? $this->loadEntityByUuid('file', $file_element['data-entity-uuid']) : NULL;
-    $fid = $existing_file ? $existing_file->id() : NULL;
+    $upload_directory = $file_upload['scheme'] . '://' . $file_upload['directory'];
 
-    $ext = (!empty($file_upload['extensions'])) ? [$file_upload['extensions']] : ['jpg',
-      'jpeg', 'png',
-    ];
+    if (!empty($file_element["file"])) {
+      $url = $file_element["file"];
+      $pos = strrpos($url, '/');
+      if ($pos !== FALSE) {
+        $filename = substr($url, $pos + 1);
+        $uri = $upload_directory . '/' . $filename;
+        $file = $this->fileStorage->loadByProperties(['uri' => $uri]);
+
+        if ($file) {
+          $file = array_shift($file);
+          $fid = $file->id();
+        }
+      }
+    }
+
+    $ext = (!empty($file_upload['extensions']))
+      ? [$file_upload['extensions']]
+      : ['jpg', 'jpeg', 'png'];
 
     $form['fid'] = [
       '#title' => $this->t('Background Image'),
       '#type' => 'managed_file',
-      '#upload_location' => $file_upload['scheme'] . '://' . $file_upload['directory'],
-      '#default_value' => $fid ? [$fid] : NULL,
+      '#upload_location' => $upload_directory,
+      '#default_value' => !empty($fid) ? [$fid] : NULL,
       '#upload_validators' => [
         'file_validate_extensions' => $ext,
         'file_validate_size' => [$max_filesize],
       ],
-      '#required' => TRUE,
       '#access' => TRUE,
     ];
 
@@ -107,37 +120,97 @@ class EditorFileDialog extends FormBase implements BaseFormIdInterface {
       '#type' => 'textfield',
       '#default_value' => isset($file_element['href']) ? $file_element['href'] : '',
       '#maxlength' => 2048,
-      '#required' => TRUE,
       '#access' => TRUE,
     ];
 
+    $width = '';
+    $height = '';
+    if (!empty($file_element["style"])) {
+      $size = explode(';', trim($file_element["style"]));
+      if (!empty($size[0])) {
+        $width = $size[0];
+        $width = str_replace('width:', '', $width);
+        $width_digits = preg_replace('/\D/', '', $width);
+        $units_width = str_replace($width_digits, '', $width);
+        $width = $width_digits;
+      }
+
+      if (!empty($size[1])) {
+        $height = $size[1];
+        $height = str_replace('height:', '', $height);
+        $height_digits = preg_replace('/\D/', '', $height);
+        $units_height = str_replace($height_digits, '', $height);
+        $height = $height_digits;
+      }
+    }
+
+    $color = !empty($file_element["color"]) ? trim($file_element["color"]) : '#ffffff';
     $form['background_color'] = [
       '#title' => $this->t('Background Color'),
       '#type' => 'color',
-      '#default_value' => '#ffffff',
+      '#default_value' => $color,
       '#description' => $this->t('Select a Color'),
       '#maxlength' => 10,
     ];
 
-    $form['width'] = [
-      '#type' => 'number',
+    $form['width_settings'] = [
+      '#type' => 'fieldset',
+      '#title' => t('Width settings'),
+    ];
+    $form['width_settings']['width'] = [
+      '#type' => 'textfield',
       '#title' => $this->t('Width'),
-      '#description' => $this->t('Set a value width in (px)'),
-      '#maxlength' => 4,
-      '#required' => FALSE,
+      '#description' => $this->t('Set width digital value and width units in the field below.'),
+      '#default_value' => $width,
+      '#attributes' => [
+        'type' => 'number',
+      ],
+      '#size' => 8,
+    ];
+    $form['width_settings']['units_width'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Width units'),
+      '#options' => [
+        '%' => '%',
+        'px' => 'px',
+        'em' => 'em',
+        'in' => 'in',
+      ],
+      '#default_value' => !empty($units_width) ? $units_width : '%',
     ];
 
-    $form['height'] = [
-      '#type' => 'number',
-      '#title' => $this->t('Heigth'),
-      '#description' => $this->t('Set a value height in (px)'),
-      '#maxlength' => 4,
-      '#required' => FALSE,
+    $form['height_settings'] = [
+      '#type' => 'fieldset',
+      '#title' => t('Height settings'),
     ];
+    $form['height_settings']['height'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Height'),
+      '#description' => $this->t('Set height digital value and height units in the field below.'),
+      '#default_value' => $height,
+      '#attributes' => [
+        'type' => 'number',
+      ],
+      '#size' => 8,
+    ];
+
+    $form['height_settings']['units_height'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Height units'),
+      '#options' => [
+        'px' => 'px',
+        'em' => 'em',
+        'in' => 'in',
+      ],
+      '#default_value' => !empty($units_height) ? $units_height : 'px',
+    ];
+
+    $position = !empty($file_element["position"]) ? $file_element["position"] : 'left';
 
     $form['background_aling'] = [
       '#type' => 'select',
-      '#title' => $this->t('Background Position'),
+      '#title' => $this->t('Image align'),
+      '#default_value' => $position,
       '#options' => [
         'left top' => $this->t('Left Top'),
         'left center' => $this->t('Left Center'),
@@ -148,6 +221,9 @@ class EditorFileDialog extends FormBase implements BaseFormIdInterface {
         'center top' => $this->t('Center Top'),
         'center center' => $this->t('Center Center'),
         'center bottom' => $this->t('Center Bottom'),
+        'left' => $this->t('Left'),
+        'center' => $this->t('Center'),
+        'right' => $this->t('Right'),
       ],
     ];
 
@@ -180,6 +256,31 @@ class EditorFileDialog extends FormBase implements BaseFormIdInterface {
   /**
    * {@inheritdoc}
    */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    $width_settings = $form_state->getValue('width_settings', '');
+    $height_settings = $form_state->getValue('height_settings', '');
+
+    $width = $width_settings['width'] == 0 ? '' : $width_settings['width'];
+    $height = $height_settings['height'] == 0 ? '' : $height_settings['height'];
+
+    if (!empty($width) && !is_numeric($width)) {
+      $form_state->setErrorByName('width', $this->t("Width field wrong format."));
+    }
+
+    if (!empty($height) && !is_numeric($height)) {
+      $form_state->setErrorByName('height', $this->t("Height field wrong format."));
+    }
+
+    $units_width = $width_settings['units_width'];
+    $units_height = $height_settings['units_height'];
+
+    $form_state->setValue('width', $width . $units_width);
+    $form_state->setValue('height', $height . $units_height);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
     $response = new AjaxResponse();
@@ -192,6 +293,8 @@ class EditorFileDialog extends FormBase implements BaseFormIdInterface {
       $file_url = file_create_url($file->getFileUri());
       $file_url = file_url_transform_relative($file_url);
       $form_state->setValue(['attributes', 'image'], $file_url);
+      $form_state->setValue(['attributes', 'data_entity_uuid'], $file->uuid());
+      $form_state->setValue(['attributes', 'data_entity_type'], 'file');
     }
 
     if ($form_state->getErrors()) {

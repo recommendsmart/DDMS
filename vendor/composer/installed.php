@@ -3,7 +3,7 @@
         'name' => 'opigno/opigno-composer',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '3bfd1a9c20212ca9b46aa92505c2d11dc4cc36ad',
+        'reference' => '012a83c2ec29de09292186b5f02fc61bbce3bcfa',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -681,15 +681,6 @@
             'replaced' => array(
                 0 => '9.3.21',
             ),
-        ),
-        'drupal/core-composer-scaffold' => array(
-            'pretty_version' => '9.3.21',
-            'version' => '9.3.21.0',
-            'reference' => 'a9dd9def8891e1c388719474720b57d3fe929a2f',
-            'type' => 'composer-plugin',
-            'install_path' => __DIR__ . '/../drupal/core-composer-scaffold',
-            'aliases' => array(),
-            'dev_requirement' => false,
         ),
         'drupal/core-datetime' => array(
             'dev_requirement' => false,
@@ -2349,7 +2340,7 @@
         'opigno/opigno-composer' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '3bfd1a9c20212ca9b46aa92505c2d11dc4cc36ad',
+            'reference' => '012a83c2ec29de09292186b5f02fc61bbce3bcfa',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -2490,8 +2481,8 @@
         'psr/container-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0',
-                1 => '^1.0',
+                0 => '^1.0',
+                1 => '1.0',
             ),
         ),
         'psr/event-dispatcher-implementation' => array(
