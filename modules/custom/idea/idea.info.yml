@@ -13,4 +13,3 @@ dependencies:
   - 'drupal:text'
   - 'drupal:user'
   - 'entity_reference_revisions:entity_reference_revisions'
-  - 'idea:idea'
