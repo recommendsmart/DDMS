@@ -3,7 +3,7 @@
         'name' => 'opigno/opigno-composer',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '3f623c93c2fb08bae387f0159952b3e48da0f167',
+        'reference' => '9f113577cc096cb68d54e0886cb4c47825b8ed96',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -251,9 +251,9 @@
             'dev_requirement' => false,
         ),
         'dompdf/dompdf' => array(
-            'pretty_version' => 'v2.0.0',
-            'version' => '2.0.0.0',
-            'reference' => '79573d8b8a141ec8a17312515de8740eed014fa9',
+            'pretty_version' => 'v2.0.1',
+            'version' => '2.0.1.0',
+            'reference' => 'c5310df0e22c758c85ea5288175fc6cd777bc085',
             'type' => 'library',
             'install_path' => __DIR__ . '/../dompdf/dompdf',
             'aliases' => array(),
@@ -590,9 +590,9 @@
             'dev_requirement' => false,
         ),
         'drupal/console' => array(
-            'pretty_version' => '1.9.8',
-            'version' => '1.9.8.0',
-            'reference' => 'd292c940c07d164e32bbe9525e909311ca65e8cb',
+            'pretty_version' => '1.9.9',
+            'version' => '1.9.9.0',
+            'reference' => '3756318780483910250e4ba78207cf960bde4545',
             'type' => 'library',
             'install_path' => __DIR__ . '/../drupal/console',
             'aliases' => array(),
@@ -863,8 +863,8 @@
             'dev_requirement' => false,
         ),
         'drupal/dropzonejs_eb_widget' => array(
-            'pretty_version' => '2.6.0',
-            'version' => '2.6.0.0',
+            'pretty_version' => '2.7.0',
+            'version' => '2.7.0.0',
             'reference' => NULL,
             'type' => 'metapackage',
             'install_path' => NULL,
@@ -1118,9 +1118,9 @@
             ),
         ),
         'drupal/inline_entity_form' => array(
-            'pretty_version' => '1.0.0-rc13',
-            'version' => '1.0.0.0-RC13',
-            'reference' => '8.x-1.0-rc13',
+            'pretty_version' => '1.0.0-rc14',
+            'version' => '1.0.0.0-RC14',
+            'reference' => '8.x-1.0-rc14',
             'type' => 'drupal-module',
             'install_path' => __DIR__ . '/../../modules/contrib/inline_entity_form',
             'aliases' => array(),
@@ -2358,7 +2358,7 @@
         'opigno/opigno-composer' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '3f623c93c2fb08bae387f0159952b3e48da0f167',
+            'reference' => '9f113577cc096cb68d54e0886cb4c47825b8ed96',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -2452,9 +2452,9 @@
             'dev_requirement' => false,
         ),
         'phenx/php-svg-lib' => array(
-            'pretty_version' => '0.4.1',
-            'version' => '0.4.1.0',
-            'reference' => '4498b5df7b08e8469f0f8279651ea5de9626ed02',
+            'pretty_version' => '0.5.0',
+            'version' => '0.5.0.0',
+            'reference' => '76876c6cf3080bcb6f249d7d59705108166a6685',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phenx/php-svg-lib',
             'aliases' => array(),
@@ -2486,6 +2486,12 @@
             'install_path' => __DIR__ . '/../psr/cache',
             'aliases' => array(),
             'dev_requirement' => false,
+        ),
+        'psr/cache-implementation' => array(
+            'dev_requirement' => true,
+            'provided' => array(
+                0 => '1.0|2.0',
+            ),
         ),
         'psr/container' => array(
             'pretty_version' => '1.1.1',
@@ -2553,6 +2559,12 @@
             'provided' => array(
                 0 => '1.0.0 || 2.0.0 || 3.0.0',
                 1 => '1.0|2.0',
+            ),
+        ),
+        'psr/simple-cache-implementation' => array(
+            'dev_requirement' => true,
+            'provided' => array(
+                0 => '1.0|2.0',
             ),
         ),
         'psy/psysh' => array(
@@ -2635,6 +2647,30 @@
             'install_path' => __DIR__ . '/../symfony-cmf/routing',
             'aliases' => array(),
             'dev_requirement' => false,
+        ),
+        'symfony/cache' => array(
+            'pretty_version' => 'v5.4.11',
+            'version' => '5.4.11.0',
+            'reference' => '5a0fff46df349f0db3fe242263451fddf5277362',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/cache',
+            'aliases' => array(),
+            'dev_requirement' => true,
+        ),
+        'symfony/cache-contracts' => array(
+            'pretty_version' => 'v2.5.2',
+            'version' => '2.5.2.0',
+            'reference' => '64be4a7acb83b6f2bf6de9a02cee6dad41277ebc',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/cache-contracts',
+            'aliases' => array(),
+            'dev_requirement' => true,
+        ),
+        'symfony/cache-implementation' => array(
+            'dev_requirement' => true,
+            'provided' => array(
+                0 => '1.0|2.0',
+            ),
         ),
         'symfony/config' => array(
             'pretty_version' => 'v4.4.44',
@@ -2731,6 +2767,15 @@
             'provided' => array(
                 0 => '1.1',
             ),
+        ),
+        'symfony/expression-language' => array(
+            'pretty_version' => 'v4.4.44',
+            'version' => '4.4.44.0',
+            'reference' => '13f0e1fd96066299eb39c87473446805fcf57c41',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/expression-language',
+            'aliases' => array(),
+            'dev_requirement' => true,
         ),
         'symfony/filesystem' => array(
             'pretty_version' => 'v4.4.42',
@@ -2968,6 +3013,15 @@
             'install_path' => __DIR__ . '/../symfony/var-dumper',
             'aliases' => array(),
             'dev_requirement' => false,
+        ),
+        'symfony/var-exporter' => array(
+            'pretty_version' => 'v5.4.10',
+            'version' => '5.4.10.0',
+            'reference' => '8fc03ee75eeece3d9be1ef47d26d79bea1afb340',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/var-exporter',
+            'aliases' => array(),
+            'dev_requirement' => true,
         ),
         'symfony/yaml' => array(
             'pretty_version' => 'v4.4.34',
