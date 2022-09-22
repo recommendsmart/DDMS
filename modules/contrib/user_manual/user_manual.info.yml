@@ -1,0 +1,13 @@
+name: 'User Manual'
+type: module
+description: 'A place to build a User Manual for your site.'
+core_version_requirement: ^9 || ^10
+dependencies:
+  - drupal:views
+  - drupal:toolbar
+  - entity:entity
+
+# Information added by Drupal.org packaging script on 2022-09-09
+version: '1.0.0'
+project: 'user_manual'
+datestamp: 1662757275

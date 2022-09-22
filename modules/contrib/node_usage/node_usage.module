@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @file
+ * Node Usage module file
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ *
+ * @return string[]|null
+ */
+function node_usage_help($route_name, RouteMatchInterface $route_match) {
+  if ($route_name == 'help.page.node_usage') {
+    $output = file_get_contents(\Drupal::service('extension.list.module')->getPath('node_usage') . '/README.md');
+    $output = '<pre>' . $output . '</pre>';
+
+    return [
+      '#type' => 'markup',
+      '#markup' => $output,
+    ];
+  }
+}
+
+
+
+

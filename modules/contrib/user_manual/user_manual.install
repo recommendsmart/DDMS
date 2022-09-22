@@ -1,0 +1,59 @@
+<?php
+
+/**
+ * @file
+ * Contains install and update functions for user_manual.
+ */
+
+use Drupal\taxonomy\Entity\Vocabulary;
+
+/**
+ * Implements hook_uninstall().
+ */
+function user_manual_uninstall() {
+  // Remove manual_topics taxonomy vocabulary.
+  if ($vocabulary = Vocabulary::load('manual_topics')) {
+    $vocabulary->delete();
+  }
+}
+
+/**
+ * Updates for v0.0.2.
+ *
+ * Update entity definitions and reimport default configuration for
+ * so views-based display gets added.
+ */
+function user_manual_update_9002() {
+  $config_factory = \Drupal::configFactory();
+  $entity_definition_update_manager = \Drupal::entityDefinitionUpdateManager();
+  $entity_type_manager = \Drupal::service('entity_type.manager');
+  $config_installer = \Drupal::service('config.installer');
+
+  // Delete config for field_related_manual.
+  $configs = [
+    'field.field.user_manual.user_manual.field_related_manual',
+    'field.storage.user_manual.field_related_manual',
+  ];
+  foreach ($configs as $config) {
+    $field_config = $config_factory->getEditable($config);
+    if ($field_config) {
+      $field_config->delete();
+    }
+  }
+
+  // Update entity definition of user_manual.
+  $sd_definition = $entity_type_manager->getDefinition('user_manual');
+  $entity_definition_update_manager->updateEntityType($sd_definition);
+
+  // Install default configuration for module.
+  $config_installer->installDefaultConfig('module', 'user_manual');
+}
+
+/**
+ * Install default module config.
+ */
+function user_manual_update_9003() {
+  // Install default configuration for module.
+  $config_installer = \Drupal::service('config.installer');
+  $config_installer->installDefaultConfig('module', 'user_manual');
+}

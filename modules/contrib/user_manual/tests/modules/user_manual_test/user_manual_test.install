@@ -1,0 +1,251 @@
+<?php
+
+/**
+ * @file
+ * Install file for user_manual_test.
+ */
+
+use Drupal\taxonomy\Entity\Term;
+use Drupal\user_manual\Entity\UserManual;
+use Drupal\user_manual\Entity\UserManualType;
+
+/**
+ * List of terms.
+ */
+function _user_manual_test_terms() {
+  return [
+    'd4f3dc13-b14e-4d80-9c5c-ea6c62b09455' => [
+      'name' => 'Topic 1',
+      'vid' => 'manual_topics',
+    ],
+    '4c572b96-c365-4894-a718-d03a2ff67068' => [
+      'name' => 'Topic 2',
+      'vid' => 'manual_topics',
+    ],
+    'f9cf57a8-28b9-446f-96e5-e7a1dc3808c6' => [
+      'name' => 'Topic 3',
+      'vid' => 'manual_topics',
+    ],
+    'fa966fcb-faa3-410c-a7b6-42951a81d5c4' => [
+      'name' => 'Topic 4',
+      'vid' => 'manual_topics',
+    ],
+  ];
+}
+
+/**
+ * List of user manual types.
+ */
+function _user_manual_test_user_manual_types() {
+  return ['UMT1', 'UMT2'];
+}
+
+/**
+ * List of user manual entries.
+ */
+function _user_manual_test_manual_entries($bundle_ids, $term_ids) {
+  return [
+    '1eccc3da-ddda-411c-a50a-a02b0030164a' => [
+      'name' => 'Entry 1',
+      'bundle' => $bundle_ids[0],
+      'field_manual_topics' => [$term_ids[0]],
+      'field_manual' => 'Entry 1 manual content',
+    ],
+    '7c343d39-a9dc-40f2-b871-16ad42f3b939' => [
+      'name' => 'Entry 2',
+      'bundle' => $bundle_ids[1],
+      'field_manual_topics' => ['target_id' => $term_ids[1]],
+      'field_manual' => 'Entry 2 manual content',
+    ],
+    '83af9e54-237a-4056-92eb-2122e2684748' => [
+      'name' => 'Entry 3',
+      'bundle' => $bundle_ids[0],
+      'field_manual_topics' => ['target_id' => $term_ids[2]],
+      'field_manual' => 'Entry 3 manual content',
+    ],
+    'e93dd179-7b4a-4418-8b9f-8ab320a7cc5c' => [
+      'name' => 'Entry 4',
+      'bundle' => $bundle_ids[1],
+      'field_manual_topics' => ['target_id' => $term_ids[3]],
+      'field_manual' => 'Entry 4 manual content',
+    ],
+    'b5f5e8ed-dbc7-4144-bd51-55d5ecd827fb' => [
+      'name' => 'Entry 5',
+      'bundle' => $bundle_ids[0],
+      'field_manual_topics' => [
+        ['target_id' => $term_ids[0]],
+        ['target_id' => $term_ids[1]],
+      ],
+      'field_manual' => 'Entry 5 manual content',
+    ],
+    '2e7d34db-eedc-421e-89db-488ef58676c9' => [
+      'name' => 'Entry 6',
+      'bundle' => $bundle_ids[1],
+      'field_manual_topics' => [
+        ['target_id' => $term_ids[2]],
+        ['target_id' => $term_ids[3]],
+      ],
+      'field_manual' => 'Entry 6 manual content',
+    ],
+    '33395e2a-1b89-444a-819c-abbe802f9ecb' => [
+      'name' => 'Entry 7',
+      'bundle' => $bundle_ids[0],
+      'field_manual_topics' => [
+        ['target_id' => $term_ids[0]],
+        ['target_id' => $term_ids[1]],
+        ['target_id' => $term_ids[2]],
+      ],
+      'field_manual' => 'Entry 7 manual content',
+    ],
+    '17b8c9a3-0a00-419d-9682-22f74dbc5e4f' => [
+      'name' => 'Entry 8',
+      'bundle' => $bundle_ids[1],
+      'field_manual_topics' => [
+        ['target_id' => $term_ids[1]],
+        ['target_id' => $term_ids[2]],
+        ['target_id' => $term_ids[3]],
+        ['target_id' => $term_ids[0]],
+      ],
+      'field_manual' => 'Entry 8 manual content',
+    ],
+    '492a8505-a9e4-4d74-a5db-ef68f55ed983' => [
+      'name' => 'Entry 9',
+      'bundle' => $bundle_ids[0],
+      'field_manual_topics' => [
+        ['target_id' => $term_ids[0]],
+        ['target_id' => $term_ids[1]],
+        ['target_id' => $term_ids[2]],
+        ['target_id' => $term_ids[3]],
+      ],
+      'field_manual' => 'Entry 9 manual content',
+    ],
+    '4eb76062-0730-4ed8-9e44-d97ef7e00a6d' => [
+      'name' => 'Entry 10',
+      'bundle' => $bundle_ids[1],
+      'field_manual_topics' => [
+        ['target_id' => $term_ids[1]],
+        ['target_id' => $term_ids[2]],
+      ],
+      'field_manual' => 'Entry 10 manual content',
+    ],
+
+  ];
+}
+
+/**
+ * Implements hook_install().
+ *
+ * Create taxonomy terms and user manual entries for testing.
+ */
+function user_manual_test_install() {
+  $bundles = _user_manual_test_user_manual_types();
+  $bundle_ids = [];
+  foreach ($bundles as $label) {
+    $bundle_ids[] = _user_manual_test_create_user_manual_type($label)->id();
+  }
+  $terms = _user_manual_test_terms();
+  $term_ids = [];
+  foreach ($terms as $uuid => $term_info) {
+    $loaded_terms[$uuid] = _user_manual_test_create_term($uuid, $term_info);
+    $term_ids[] = $loaded_terms[$uuid]->id();
+  }
+
+  $manual_entries = _user_manual_test_manual_entries($bundle_ids, $term_ids);
+
+  foreach ($manual_entries as $uuid => $manual_entry) {
+    _user_manual_test_create_manual_entry($uuid, $manual_entry);
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Remove terms and user manuals created in hook_install().
+ */
+function user_manual_test_uninstall() {
+  $bundles = _user_manual_test_user_manual_types();
+  foreach ($bundles as $label) {
+    if ($existing_type = UserManualType::load($label)) {
+      $existing_type->delete();
+    }
+  }
+
+  $terms = _user_manual_test_terms();
+  foreach ($terms as $uuid => $term) {
+    if ($existing_term = \Drupal::service('entity.repository')->loadEntityByUuid('taxonomy_term', $uuid)) {
+      $existing_term->delete();
+    }
+  }
+  $manual_entries = _user_manual_test_manual_entries(_user_manual_test_user_manual_types(), [1, 2, 3, 4]);
+  foreach ($manual_entries as $uuid => $manual_entry) {
+    if ($existing_entry = \Drupal::service('entity.repository')->loadEntityByUuid('user_manual', $uuid)) {
+      $existing_entry->delete();
+    }
+  }
+}
+
+/**
+ * Helper function for creating taxonomy terms.
+ *
+ * @param string $label
+ *   label for user manual type.
+ *
+ * @return UserManualType
+ *   Saved user manual type.
+ */
+function _user_manual_test_create_user_manual_type(string $label) {
+  $user_manual_type = UserManualType::create([
+    'id' => strtolower($label),
+    'label' => $label,
+  ]);
+  $user_manual_type->save();
+  user_manual_add_default_fields($user_manual_type->id());
+
+  return $user_manual_type;
+}
+
+/**
+ * Helper function for creating taxonomy terms.
+ *
+ * @param string $uuid
+ *   Uuid for manual entry.
+ * @param array $info
+ *   Array of field data.
+ *
+ * @return \Drupal\taxonomy\Entity\Term
+ *   Saved taxonomy term.
+ */
+function _user_manual_test_create_term(string $uuid, array $info) {
+
+  $info['uuid'] = $uuid;
+  if ($existing_term = \Drupal::service('entity.repository')->loadEntityByUuid('taxonomy_term', $uuid)) {
+    return $existing_term;
+  }
+
+  $term = Term::create($info);
+  $term->save();
+  return $term;
+}
+
+/**
+ * Helper function for creating User Manual entities.
+ *
+ * @param string $uuid
+ *   Uuid for manual entry.
+ * @param array $info
+ *   Array of field data.
+ *
+ * @return \Drupal\user_manual\Entity\UserManual
+ *   Saved user manual entry.
+ */
+function _user_manual_test_create_manual_entry($uuid, array $info) {
+
+  $info['uuid'] = $uuid;
+  if ($existing_term = \Drupal::service('entity.repository')->loadEntityByUuid('user_manual', $uuid)) {
+    return $existing_term;
+  }
+
+  $manual_entry = UserManual::create($info);
+  $manual_entry->save();
+  return $manual_entry;
+}

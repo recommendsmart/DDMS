@@ -1,0 +1,15 @@
+/**
+ * @file
+ * Styling for the user_manual module icons.
+ */
+
+/**
+ * Toolbar tab icon.
+ */
+.toolbar-bar .toolbar-icon-user-manual:before {
+  background-image: url(../icons/bebebe/information-circle.svg);
+}
+.toolbar-bar .toolbar-icon-user-manual:active:before,
+.toolbar-bar .toolbar-icon-user-manual.is-active:before {
+  background-image: url(../icons/ffffff/information-circle.svg);
+}

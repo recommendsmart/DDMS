@@ -1,0 +1,16 @@
+{
+  "name": "drupal/user_manual",
+  "type": "drupal-module",
+  "description": "Allows content to be added to help section as manual",
+  "homepage": "https://drupal.org/project/user_manual",
+  "support": {
+    "issues": "https://github.com/LastCallMedia/UserManual/issues",
+    "source": "https://github.com/LastCallMedia/UserManual"
+  },
+  "license": "GPL-2.0-or-later",
+  "minimum-stability": "dev",
+  "require": {
+    "drupal/core": "^9 || ^10",
+    "drupal/entity": "^1.2"
+  }
+}

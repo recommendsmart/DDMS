@@ -4733,6 +4733,71 @@
             "install-path": null
         },
         {
+            "name": "drupal/entity_clone",
+            "version": "1.0.0-beta7",
+            "version_normalized": "1.0.0.0-beta7",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/entity_clone.git",
+                "reference": "8.x-1.0-beta7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/entity_clone-8.x-1.0-beta7.zip",
+                "reference": "8.x-1.0-beta7",
+                "shasum": "964b72b21a7e219cf337743ed5c8850235197594"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "require-dev": {
+                "drupal/entity_browser": "2.x-dev",
+                "drupal/entity_usage": "2.x-dev",
+                "drupal/paragraphs": "^1.0",
+                "drupal/search_api": "~1.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.0-beta7",
+                    "datestamp": "1663573486",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "colan",
+                    "homepage": "https://www.drupal.org/user/58704"
+                },
+                {
+                    "name": "NickDickinsonWilde",
+                    "homepage": "https://www.drupal.org/user/3094661"
+                },
+                {
+                    "name": "Upchuk",
+                    "homepage": "https://www.drupal.org/user/1885838"
+                },
+                {
+                    "name": "vpeltot",
+                    "homepage": "https://www.drupal.org/user/1361586"
+                }
+            ],
+            "description": "Add a clone action for all entities.",
+            "homepage": "https://drupal.org/project/entity_clone",
+            "support": {
+                "source": "https://git.drupalcode.org/project/entity_clone"
+            },
+            "install-path": "../../modules/contrib/entity_clone"
+        },
+        {
             "name": "drupal/entity_embed",
             "version": "1.2.0",
             "version_normalized": "1.2.0.0",
@@ -5500,6 +5565,59 @@
                 "issues": "https://drupal.org/project/issues/group"
             },
             "install-path": "../../modules/contrib/group"
+        },
+        {
+            "name": "drupal/group_action",
+            "version": "1.1.0-rc1",
+            "version_normalized": "1.1.0.0-RC1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/group_action.git",
+                "reference": "1.1.0-rc1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/group_action-1.1.0-rc1.zip",
+                "reference": "1.1.0-rc1",
+                "shasum": "7a9711415a329785292148d3b19788ae7c4810b8"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10",
+                "drupal/group": "^1 || ^2@beta || ^3@beta"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.1.0-rc1",
+                    "datestamp": "1663686006",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "mxh",
+                    "homepage": "https://www.drupal.org/user/1124384"
+                },
+                {
+                    "name": "qichanghai",
+                    "homepage": "https://www.drupal.org/user/3092355"
+                }
+            ],
+            "description": "A Drupal module that provides actions for the Group module.",
+            "homepage": "https://www.drupal.org/project/group_action",
+            "support": {
+                "source": "https://drupal.org/project/group_action",
+                "issues": "https://drupal.org/project/issues/group_action"
+            },
+            "install-path": "../../modules/contrib/group_action"
         },
         {
             "name": "drupal/h5p",
@@ -6740,6 +6858,53 @@
                 "source": "https://git.drupalcode.org/project/mimemail"
             },
             "install-path": "../../modules/contrib/mimemail"
+        },
+        {
+            "name": "drupal/node_usage",
+            "version": "1.1.0",
+            "version_normalized": "1.1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/node_usage.git",
+                "reference": "8.x-1.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/node_usage-8.x-1.1.zip",
+                "reference": "8.x-1.1",
+                "shasum": "32d3a3a0da64ca56c906c54ecb46e19437a1587e"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.1",
+                    "datestamp": "1663704436",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "pglatz",
+                    "homepage": "https://www.drupal.org/user/109935"
+                }
+            ],
+            "description": "Node usage and distribution block/page to show how many nodes of each type there are.",
+            "homepage": "https://www.drupal.org/project/node_usage",
+            "support": {
+                "source": "https://git.drupalcode.org/project/node_usage"
+            },
+            "install-path": "../../modules/contrib/node_usage"
         },
         {
             "name": "drupal/opigno_alter_entity_autocomplete",
@@ -10295,6 +10460,55 @@
                 "source": "https://git.drupalcode.org/project/ultimate_cron"
             },
             "install-path": "../../modules/contrib/ultimate_cron"
+        },
+        {
+            "name": "drupal/user_manual",
+            "version": "1.0.0",
+            "version_normalized": "1.0.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/user_manual.git",
+                "reference": "1.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/user_manual-1.0.0.zip",
+                "reference": "1.0.0",
+                "shasum": "74b2bed67b20432045d02aa34c3860c3eee9bb69"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10",
+                "drupal/entity": "^1.2"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0",
+                    "datestamp": "1662757272",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "jlandfried",
+                    "homepage": "https://www.drupal.org/user/1636348"
+                }
+            ],
+            "description": "Allows content to be added to help section as manual",
+            "homepage": "https://drupal.org/project/user_manual",
+            "support": {
+                "source": "https://github.com/LastCallMedia/UserManual",
+                "issues": "https://github.com/LastCallMedia/UserManual/issues"
+            },
+            "install-path": "../../modules/contrib/user_manual"
         },
         {
             "name": "drupal/userprotect",

@@ -1,0 +1,11 @@
+user_manual.bundle_add:
+  route_name: entity.user_manual_type.add_form
+  title: 'Add user manual type'
+  appears_on:
+    - entity.user_manual_type.collection
+
+entity.user_manual.add_form:
+  route_name: entity.user_manual.add_form
+  title: 'Add User Manual entry'
+  appears_on:
+    - entity.user_manual_type.edit_form

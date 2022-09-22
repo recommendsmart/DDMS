@@ -1,0 +1,9 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - user_manual
+id: user_manual.teaser
+label: Teaser
+targetEntityType: user_manual
+cache: true

@@ -1,0 +1,7 @@
+node_usage.page:
+  path: '/admin/reports/node_usage'
+  defaults:
+    _controller: '\Drupal\node_usage\Controller\NodeUsageController::NodeUsagePage'
+    _title: 'Node usage and distribution'
+  requirements:
+    _permission: 'view site reports'

@@ -1,0 +1,56 @@
+{#
+/**
+ * @file user_manual.html.twig
+ * Default theme implementation to present User Manual data.
+ *
+ * This template is used when viewing User Manual pages.
+ *
+ *
+ * Available variables:
+ * - content: A list of content items. Use 'content' to print all content, or
+ * - attributes: HTML attributes for the container element.
+ *
+ * @see template_preprocess_user_manual()
+ *
+ * @ingroup themeable
+ */
+#}
+{{ attach_library("user_manual/user_manuals_list") }}
+
+<div{{ attributes.addClass('user_manual') }}>
+    {% if view_mode == 'full' %}
+      <div class="user-manual--full">
+        <div class="user-manual--content-wrap">
+          {% if content %}
+            <div class="user-manual--content">
+              <div class="card">
+                <div class="card__content-wrapper">
+                  <div class="field__label">Summary</div>
+                  {{ elements['#user_manual'].getSummary() }}
+                </div>
+              </div>
+              {{content|without('related_docs')}}
+            </div>
+          {% endif %}
+
+          {% if content.related_docs %}
+            <div class="user-manual--related">
+              <div class="card">
+                <div class="card__content-wrapper">
+                  <h2>{{ 'Related User Manual'|t }}</h2>
+                  <div>
+                    {{ content.related_docs }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% else %}
+        {% if content %}
+            {{content}}
+        {% endif %}
+    {% endif %}
+</div>
+

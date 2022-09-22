@@ -1,0 +1,74 @@
+/* User Manual Entity - full display */
+.user-manual--full {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1400px;
+}
+.user-manual--related {
+  margin-top: 3rem;
+}
+@media screen and (min-width: 60em) {
+  .user-manual--content-wrap {
+    display: grid;
+    grid-gap: 4rem;
+    grid-template-columns: repeat(12,minmax(0,1fr));
+  }
+  .user-manual--content {
+    grid-column-start: 1;
+    grid-column: span 7;
+  }
+  .user-manual--related {
+    margin-top: 0;
+    grid-column-start: 7;
+    grid-column: span 5;
+  }
+}
+
+/* Related Documents - on User Manual full display */
+.view-user-manuals.view-display-id-block_1 .item-list ul {
+  margin-left: 0;
+}
+.view-user-manuals.view-display-id-block_1 .item-list ul li {
+  margin-bottom: 1rem;
+}
+
+/* User Manual list*/
+.view-user-manuals.view-display-id-block_2 ul li {
+  margin-bottom: 1rem;
+}
+@media screen and (min-width: 38em) {
+  .view-user-manuals.view-display-id-block_2 ul {
+    list-style: none;
+    margin-left: 0;
+    display: grid;
+    grid-template-columns: repeat(4,minmax(0,1fr));
+    grid-gap: 2rem 4rem;
+  }
+  .view-user-manuals.view-display-id-block_2 li {
+    grid-column: span 2;
+  }
+}
+@media screen and (min-width: 60em) {
+  .view-user-manuals.view-display-id-block_2 li {
+    grid-column: span 1;
+  }
+}
+
+/* User Manual Landing page*/
+@media screen and (min-width: 38em) {
+  .view-user-manuals.view-display-id-page_1 .view-content ul {
+    list-style: none;
+    margin-left: 0;
+    display: grid;
+    grid-template-columns: repeat(4,minmax(0,1fr));
+    grid-gap: 2rem 4rem;
+  }
+  .view-user-manuals.view-display-id-page_1 .view-content li {
+    grid-column: span 2;
+  }
+}
+@media screen and (min-width: 60em) {
+  .view-user-manuals.view-display-id-page_1 .view-content li {
+    grid-column: span 1;
+  }
+}

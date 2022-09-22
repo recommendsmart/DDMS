@@ -1,0 +1,44 @@
+administer user_manual types:
+  title: 'Administer User Manual types'
+  description: 'View, edit and delete all user manuals types regardless of permission restrictions.'
+  restrict access: true
+
+administer user_manual:
+  title: 'Administer User Manual'
+  description: 'View, edit and delete all user manuals regardless of permission restrictions.'
+  restrict access: true
+
+view user_manual:
+  title: 'View User Manual'
+  description: 'View user manual entities page'
+
+create user_manual:
+  title: 'Create User Manual'
+  description: 'Create user manual entities'
+
+edit own user_manual:
+  title: 'Edit Own User Manual'
+  description: 'Edit own user manual entities'
+
+edit any user_manual:
+  title: 'Edit Any User Manual'
+  description: 'Edit any user manual entities'
+
+delete any user_manual:
+  title: 'Delete Any User Manual'
+  description: 'Delete any user manual entities'
+
+delete own user_manual:
+  title: 'Delete Own User Manual'
+  description: 'Delete any user manual entities'
+
+view all user_manual revisions:
+  title: 'View User Manual Revisions'
+  description: 'View revision history for all user manual entities'
+
+revert all user_manual revisions:
+  title: 'Revert User Manual Revisions'
+  description: 'Revert any user manual entities'
+
+permission_callbacks:
+  - Drupal\user_manual\UserManualPermissions::permissions

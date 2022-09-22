@@ -1,0 +1,4 @@
+services:
+  node_usage.table:
+    class: Drupal\node_usage\NodeUsageTable
+    arguments: ['@config.factory']

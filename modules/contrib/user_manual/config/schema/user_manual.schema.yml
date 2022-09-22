@@ -1,0 +1,15 @@
+# Schema for the configuration files of the User Manual module.
+
+user_manual.user_manual_type.*:
+  type: config_entity
+  label: 'User Manual type settings'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    description:
+      type: text
+      label: 'Description'

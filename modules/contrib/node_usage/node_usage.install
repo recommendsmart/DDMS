@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for Node Usage.
+ *
+ */
+
+use Drupal\Core\Entity\Entity\EntityFormDisplay;
+use Drupal\pathauto\Entity\PathautoPattern;
+
+
+/**
+ * Implements hook_install().
+ */
+function node_usage_install() {
+  \Drupal::messenger()->addStatus(t("The node usage module has been installed"));
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function node_usage_uninstall() {
+  \Drupal::messenger()->addStatus(t("The node usage module has been uninstalled"));
+}

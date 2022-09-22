@@ -1,0 +1,5 @@
+entity.user_manual_type.collection:
+  title: 'User Manual types'
+  parent: system.admin_structure
+  description: 'Manage user manual types.'
+  route_name: entity.user_manual_type.collection

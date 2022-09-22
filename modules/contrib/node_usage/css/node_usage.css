@@ -1,0 +1,6 @@
+#node-usage-table {
+  width: auto;
+}
+#node-usage-table td.c-count {
+  text-align: right;
+}

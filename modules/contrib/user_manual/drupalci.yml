@@ -1,0 +1,15 @@
+build:
+  assessment:
+    validate_codebase:
+      phplint:
+      csslint:
+      eslint:
+      phpcs:
+        sniff-all-files: true
+        halt-on-fail: false
+        coder-version: '^8.2@stable'
+    testing:
+        run_tests.standard:
+          types: 'Simpletest,PHPUnit-Unit,PHPUnit-Kernel,PHPUnit-Functional'
+          suppress-deprecations: true
+          halt-on-fail: false

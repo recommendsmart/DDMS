@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'User Manual Topics'
+vid: manual_topics
+description: 'Use topics to group user manuals entries into categories.'
+weight: 0

@@ -1,0 +1,12 @@
+name: 'User Manual Testing'
+type: module
+description: 'Support module for User Manual.'
+package: 'Testing'
+core_version_requirement: ^9 || ^10
+dependencies:
+  - 'user_manual:user_manual'
+
+# Information added by Drupal.org packaging script on 2022-09-09
+version: '1.0.0'
+project: 'user_manual'
+datestamp: 1662757275

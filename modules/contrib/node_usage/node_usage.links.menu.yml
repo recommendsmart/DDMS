@@ -1,0 +1,5 @@
+node_usage_page:
+  title: 'Node Usage'
+  route_name: node_usage.page
+  description: 'Node Usage page'
+  parent: 'system.admin_reports'

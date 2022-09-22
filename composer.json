@@ -91,7 +91,11 @@
         "drupal/rules": "^3.0@alpha",
         "drupal/comments_order": "^3.0",
         "drupal/gin": "^3.0@beta",
-        "drupal/gin_lb": "^1.0@beta"
+        "drupal/gin_lb": "^1.0@beta",
+        "drupal/node_usage": "^1.1",
+        "drupal/group_action": "^1.1@RC",
+        "drupal/entity_clone": "^1.0@beta",
+        "drupal/user_manual": "^1.0"
     },
     "require-dev": {
         "drush/drush": "^10",

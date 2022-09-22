@@ -1,0 +1,242 @@
+<?php
+
+/**
+ * @file
+ * User Manual module file.
+ */
+
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
+use Drupal\Core\Render\Element;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\user_manual\UserManualAccessControlHandler;
+use Drupal\views\Views;
+use Drupal\taxonomy\Entity\Term;
+
+/**
+ * Implements hook_theme().
+ */
+function user_manual_theme($existing, $type, $theme, $path) {
+  return [
+    'user_manual' => [
+      'render element' => 'elements',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_entity_type_build().
+ */
+function user_manual_user_manual_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($build['#view_mode'] !== 'full'
+    || !$entity->hasField('field_manual_topics')
+    || $entity->get('field_manual_topics')->isEmpty()
+    || !Views::getView('user_manuals')
+  ) {
+    return;
+  }
+
+  $topics = array_map(function ($topic) {
+    return $topic['target_id'];
+  }, $entity->get('field_manual_topics')->getValue());
+
+  if (!empty($topics)) {
+    $build['related_docs'] = [
+      '#type' => 'view',
+      '#name' => 'user_manuals',
+      '#display_id' => 'block_1',
+      '#embed' => TRUE,
+      '#arguments' => [implode('+', $topics), $entity->id()],
+    ];
+  }
+}
+
+/**
+ * Add useful variables for template.
+ */
+function user_manual_preprocess_user_manual(&$vars) {
+  $vars['view_mode'] = $vars['elements']['#view_mode'];
+  // Helpful $content variable for templates.
+  $vars += ['content' => []];
+  foreach (Element::children($vars['elements']) as $key) {
+    $vars['content'][$key] = $vars['elements'][$key];
+  }
+}
+
+/**
+ * Implements hook_toolbar().
+ */
+function user_manual_toolbar() {
+  $user = \Drupal::currentUser();
+
+  $items = [
+    'user_manual' => [
+      '#cache' => [
+        'contexts' => [
+          'user.roles',
+          'languages:language_content',
+        ],
+        'tags' => ['taxonomy_term_list:manual_topics'],
+      ],
+    ],
+  ];
+
+  $language_id = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $query = \Drupal::entityQuery('taxonomy_term');
+  $query->condition('vid', 'manual_topics');
+  $query->condition('langcode', $language_id);
+  $query->sort('weight')->sort('name');
+  $query->accessCheck(TRUE);
+  $tids = $query->execute();
+  $terms = Term::loadMultiple($tids);
+
+  $term_links = [
+    Link::fromTextAndUrl(t('Add User Manual entry'), Url::fromRoute('entity.user_manual.add_page', [], ['attributes' => ['title' => 'Add user manual']]))->toRenderable(),
+    Link::fromTextAndUrl(t('View User Manual'), Url::fromRoute('view.user_manuals.page_1', [], ['attributes' => ['title' => 'View user manual']]))->toRenderable(),
+  ];
+  foreach ($terms as $term) {
+    $term_name = \Drupal::service('entity.repository')->getTranslationFromContext($term)->getName();
+    $term_links[] = Link::createFromRoute($term_name, 'entity.user_manual.collection', ['field_manual_topics_target_id' => $term->id()]);
+  }
+
+  if ($user->hasPermission(UserManualAccessControlHandler::VIEW_USER_MANUAL_PERMISSION)) {
+    $items['user_manual'] += [
+      '#type' => 'toolbar_item',
+      'tab' => [
+        '#type' => 'link',
+        '#title' => t('User Manual'),
+        '#url' => Url::fromRoute('view.user_manuals.page_1'),
+        '#attributes' => [
+          'title' => t('User Manual'),
+          'class' => ['toolbar-icon', 'toolbar-icon-user-manual'],
+        ],
+      ],
+      'tray' => [
+        '#heading' => t('User Manual Links'),
+        'content' => [
+          '#theme' => 'item_list',
+          '#items' => $term_links,
+        ],
+      ],
+      '#weight' => -10,
+      '#attached' => [
+        'library' => [
+          'user_manual/user_manuals_icons',
+        ],
+      ],
+    ];
+  }
+
+  return $items;
+}
+
+/**
+ * Adds default fields to a custom user manual type.
+ *
+ * @param string $block_type_id
+ *   Id of the block type.
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function user_manual_add_default_fields($user_manual_type_id) {
+  // Add or remove the body field, as needed.
+
+  $fields = [
+    'field_manual' => [
+      'label' => 'Content',
+      'type' => 'text_textarea_with_summary',
+      'required' => TRUE,
+      'form_settings' => [],
+      'display_type' => 'text_default',
+      'display_label' => 'hidden',
+      'display_settings' => [],
+      'field_settings' => [
+        'display_summary' => TRUE,
+        'required_summary' => TRUE
+      ],
+      'teaser' => [
+        'display_label' => 'hidden',
+        'display_type' => 'text_summary_or_trimmed'
+      ]
+    ],
+    'field_manual_topics' => [
+      'label' => 'Topics',
+      'type' => 'options_select',
+      'required' => TRUE,
+      'form_settings' => [
+        'target_type' => 'taxonomy_term'
+      ],
+      'display_type' => 'entity_reference_label',
+      'display_label' => 'above',
+      'display_settings' => [
+        'link' => FALSE,
+      ],
+      'field_settings' => [
+        'handler' => 'default:taxonomy_term',
+        'handler_settings' => [
+          'target_bundles' => [
+            'manual_topics' => 'manual_topics',
+          ],
+        ],
+      ],
+    ]
+  ];
+
+  /** @var \Drupal\Core\Entity\EntityDisplayRepositoryInterface $display_repository */
+  $display_repository = \Drupal::service('entity_display.repository');
+
+  // Set name field display
+  $view_modes = \Drupal::service('entity_display.repository')->getViewModes('user_manual');
+  if (isset($view_modes['teaser'])) {
+    $display_repository->getViewDisplay('user_manual', $user_manual_type_id, 'teaser')
+      ->setComponent('name', [
+        'label' => 'hidden',
+        'settings' => [
+          'link_to_entity' => TRUE,
+        ],
+      ])
+      ->save();
+  }
+
+  foreach ($fields as $field_key => $field_data) {
+    $field = FieldConfig::loadByName('user_manual', $user_manual_type_id, $field_key);
+
+    if (empty($field)) {
+      $field = FieldConfig::create([
+        'field_storage' => FieldStorageConfig::loadByName('user_manual', $field_key),
+        'bundle' => $user_manual_type_id,
+        'label' => $field_data['label'],
+        'required' => $field_data['required'],
+        'settings' => $field_data['field_settings'],
+      ]);
+      $field->save();
+
+      // Assign widget settings for the default form mode.
+      $display_repository->getFormDisplay('user_manual', $user_manual_type_id)
+        ->setComponent($field_key, [
+          'type' => $field_data['type'],
+          'settings' => $field_data['form_settings']
+        ])->save();
+
+      // Assign display settings for default view mode.
+      $display_repository->getViewDisplay('user_manual', $user_manual_type_id)
+        ->setComponent($field_key, [
+          'label' => $field_data['display_label'],
+          'type' => $field_data['display_type'],
+          'settings' => $field_data['display_settings'],
+        ])->save();
+
+      if (isset($view_modes['teaser']) && isset($field_data['teaser'])) {
+        $display_repository->getViewDisplay('user_manual', $user_manual_type_id, 'teaser')
+          ->setComponent($field_key, [
+            'label' => $field_data['teaser']['display_label'],
+            'type' => $field_data['teaser']['display_type'],
+          ])
+          ->save();
+      }
+    }
+  }
+}
