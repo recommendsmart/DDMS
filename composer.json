@@ -96,7 +96,9 @@
         "drupal/group_action": "^1.1@RC",
         "drupal/entity_clone": "^1.0@beta",
         "drupal/user_manual": "^1.0",
-        "drupal/og": "^1.0@alpha"
+        "drupal/og": "^1.0@alpha",
+        "drupal/prepopulate": "^2.3",
+        "drupal/epp": "^1.2"
     },
     "require-dev": {
         "drush/drush": "^10",
