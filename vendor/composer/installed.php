@@ -3,7 +3,7 @@
         'name' => 'opigno/opigno-composer',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '2fd3f54632a072173b6c4a95a3a0cf9147331230',
+        'reference' => '88ad2b65fc04c29c1db9251a24ea7ef1e9b61cbc',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -1399,6 +1399,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'drupal/og' => array(
+            'pretty_version' => '1.0.0-alpha9',
+            'version' => '1.0.0.0-alpha9',
+            'reference' => '8.x-1.0-alpha9',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../modules/contrib/og',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'drupal/olivero' => array(
             'dev_requirement' => false,
             'replaced' => array(
@@ -2394,7 +2403,7 @@
         'opigno/opigno-composer' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '2fd3f54632a072173b6c4a95a3a0cf9147331230',
+            'reference' => '88ad2b65fc04c29c1db9251a24ea7ef1e9b61cbc',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
