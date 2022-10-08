@@ -1,0 +1,11 @@
+name: Referer To Entity Reference
+type: module
+description: 'Turns HTTP Referer field into an entity reference default value'
+core: 8.x
+core_version_requirement: ^8 || ^9
+package: 'Entity'
+
+# Information added by Drupal.org packaging script on 2020-09-04
+version: '8.x-1.0'
+project: 'referer_to_entity_reference'
+datestamp: 1599191609

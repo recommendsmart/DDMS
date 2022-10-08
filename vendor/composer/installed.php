@@ -3,7 +3,7 @@
         'name' => 'opigno/opigno-composer',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'c005c4e61256feb28e1202e7e5af959dddf5ed0e',
+        'reference' => '970a485a1e9571a911da172e4a695f30b7279fef',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -961,6 +961,15 @@
                 0 => '9.3.21',
             ),
         ),
+        'drupal/entity_reference_link' => array(
+            'pretty_version' => '1.0.0-beta2',
+            'version' => '1.0.0.0-beta2',
+            'reference' => '8.x-1.0-beta2',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../modules/contrib/entity_reference_link',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'drupal/entity_reference_revisions' => array(
             'pretty_version' => '1.9.0',
             'version' => '1.9.0.0',
@@ -1812,6 +1821,15 @@
                 0 => '9.3.21',
             ),
         ),
+        'drupal/referer_to_entity_reference' => array(
+            'pretty_version' => '1.0.0',
+            'version' => '1.0.0.0',
+            'reference' => '8.x-1.0',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../modules/contrib/referer_to_entity_reference',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'drupal/responsive_image' => array(
             'dev_requirement' => false,
             'replaced' => array(
@@ -2421,7 +2439,7 @@
         'opigno/opigno-composer' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'c005c4e61256feb28e1202e7e5af959dddf5ed0e',
+            'reference' => '970a485a1e9571a911da172e4a695f30b7279fef',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

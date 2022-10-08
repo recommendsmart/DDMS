@@ -98,7 +98,9 @@
         "drupal/user_manual": "^1.0",
         "drupal/og": "^1.0@alpha",
         "drupal/prepopulate": "^2.3",
-        "drupal/epp": "^1.2"
+        "drupal/epp": "^1.2",
+        "drupal/referer_to_entity_reference": "^1.0",
+        "drupal/entity_reference_link": "^1.0@beta"
     },
     "require-dev": {
         "drush/drush": "^10",

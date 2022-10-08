@@ -1,0 +1,11 @@
+name: 'Entity Reference Custom Link Formatter'
+type: module
+description: 'Format Entity Reference fields as links'
+core_version_requirement: ^8 || ^9
+package: 'Fields'
+dependencies:
+  - drupal:field
+# Information added by Drupal.org packaging script on 2020-05-05
+version: '8.x-1.0-beta2'
+project: 'entity_reference_link'
+datestamp: 1588680006

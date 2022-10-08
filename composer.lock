@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "10c0a91ff897a262e5ef5cb932050aad",
+    "content-hash": "d0e96f70a58ae04703dc8ff12d366262",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3526,6 +3526,50 @@
             ],
             "support": {
                 "source": "https://git.drupalcode.org/project/entity_print"
+            }
+        },
+        {
+            "name": "drupal/entity_reference_link",
+            "version": "1.0.0-beta2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/entity_reference_link.git",
+                "reference": "8.x-1.0-beta2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/entity_reference_link-8.x-1.0-beta2.zip",
+                "reference": "8.x-1.0-beta2",
+                "shasum": "c1c9243b510d8951eb5b8cf8c8ab9e843e21615b"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.0-beta2",
+                    "datestamp": "1588680004",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "laboratory.mike",
+                    "homepage": "https://www.drupal.org/user/131390"
+                }
+            ],
+            "description": "Format Entity Reference fields as links",
+            "homepage": "https://www.drupal.org/project/entity_reference_link",
+            "support": {
+                "source": "https://git.drupalcode.org/project/entity_reference_link"
             }
         },
         {
@@ -8011,6 +8055,50 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/queue_ui",
                 "issues": "https://www.drupal.org/project/issues/queue_ui"
+            }
+        },
+        {
+            "name": "drupal/referer_to_entity_reference",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/referer_to_entity_reference.git",
+                "reference": "8.x-1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/referer_to_entity_reference-8.x-1.0.zip",
+                "reference": "8.x-1.0",
+                "shasum": "37a4c40ca8539d169be7e6eb22080d8bb293d9f2"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.0",
+                    "datestamp": "1599191607",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "berenddeboer",
+                    "homepage": "https://www.drupal.org/user/143552"
+                }
+            ],
+            "description": "Turns HTTP Referer field into an entity reference default value",
+            "homepage": "https://www.drupal.org/project/referer_to_entity_reference",
+            "support": {
+                "source": "https://git.drupalcode.org/project/referer_to_entity_reference"
             }
         },
         {
@@ -17392,7 +17480,8 @@
         "drupal/gin_lb": 10,
         "drupal/group_action": 5,
         "drupal/entity_clone": 10,
-        "drupal/og": 15
+        "drupal/og": 15,
+        "drupal/entity_reference_link": 10
     },
     "prefer-stable": true,
     "prefer-lowest": false,
