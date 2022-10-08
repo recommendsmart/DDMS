@@ -68,9 +68,9 @@ class UserManualPermissions implements ContainerInjectionInterface {
     $args = ['%umt' => $user_manual_type->label()];
 
     return [
-      "create user_manual in $id" => ['title' => $this->t('%umt: Create user manual', $args)],
-      "delete user_manual in $id" => ['title' => $this->t('%umt: Delete user manual', $args)],
-      "edit user_manual in $id" => ['title' => $this->t('%umt: Edit user manual', $args)],
+      "create user_manual in $id" => ['title' => $this->t('%umt: Create User Manual entries', $args)],
+      "delete user_manual in $id" => ['title' => $this->t('%umt: Delete User Manual entries', $args)],
+      "edit user_manual in $id" => ['title' => $this->t('%umt: Edit User Manual entries', $args)],
     ];
   }
 

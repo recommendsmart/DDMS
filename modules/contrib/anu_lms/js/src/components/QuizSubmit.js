@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { Detector } from 'react-detect-offline';
 
 import { useTheme } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ButtonWrapper from '@anu/components/ButtonWrapper';
+import LessonGrid from '@anu/components/LessonGrid';
 
 const QuizSubmit = ({ onSubmit, isSubmitting, isQuiz, prevLesson }) => {
   const theme = useTheme();
@@ -17,7 +17,7 @@ const QuizSubmit = ({ onSubmit, isSubmitting, isQuiz, prevLesson }) => {
     <Detector
       polling={false}
       render={({ online }) => (
-        <Box mr={4}>
+        <LessonGrid ignorePaddings>
           <ButtonWrapper>
             {isQuiz && prevLesson && prevLesson.url && (
               <Button
@@ -38,6 +38,7 @@ const QuizSubmit = ({ onSubmit, isSubmitting, isQuiz, prevLesson }) => {
               onClick={onSubmit}
               disabled={!online || isSubmitting}
               style={{ marginTop: theme.spacing(2) }}
+              data-test={'anu-lms-quiz-submit'}
             >
               {isSubmitting && (
                 <CircularProgress size={20} style={{ marginRight: theme.spacing(2) }} />
@@ -58,7 +59,7 @@ const QuizSubmit = ({ onSubmit, isSubmitting, isQuiz, prevLesson }) => {
               </Typography>
             )}
           </ButtonWrapper>
-        </Box>
+        </LessonGrid>
       )}
     />
   );

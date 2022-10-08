@@ -8,6 +8,10 @@ module.exports = {
       import: path.resolve(__dirname, './src/bundles/courses.js'),
       dependOn: 'vendors',
     },
+    courses_landing: {
+      import: path.resolve(__dirname, './src/bundles/coursesLanding.js'),
+      dependOn: 'vendors',
+    },
     lesson: {
       import: path.resolve(__dirname, './src/bundles/lesson.js'),
       dependOn: 'vendors',

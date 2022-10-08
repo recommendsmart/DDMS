@@ -11,7 +11,6 @@ use Drupal\anu_lms\Event\CoursesPageDataGeneratedEvent;
 use Drupal\anu_lms\Normalizer;
 use Drupal\anu_lms\CoursesPage as CoursesPageService;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -33,13 +32,6 @@ class CoursesPage extends AnuLmsContentTypePluginBase implements ContainerFactor
    * @var \Drupal\taxonomy\TermStorageInterface
    */
   protected TermStorageInterface $taxonomyStorage;
-
-  /**
-   * The language manager.
-   *
-   * @var \Drupal\Core\Language\LanguageManagerInterface
-   */
-  protected LanguageManagerInterface $languageManager;
 
   /**
    * The event dispatcher.
@@ -85,7 +77,6 @@ class CoursesPage extends AnuLmsContentTypePluginBase implements ContainerFactor
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
-      $container->get('language_manager'),
       $container->get('event_dispatcher'),
       $container->get('anu_lms.normalizer'),
       $container->get('anu_lms.courses_page'),
@@ -105,8 +96,6 @@ class CoursesPage extends AnuLmsContentTypePluginBase implements ContainerFactor
    *   Plugin definition.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   The language manager.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
    *   The event dispatcher.
    * @param \Drupal\anu_lms\Normalizer $normalizer
@@ -118,10 +107,9 @@ class CoursesPage extends AnuLmsContentTypePluginBase implements ContainerFactor
    * @param \Drupal\anu_lms\CourseProgress $course_progress
    *   The Course progress handler.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, EventDispatcherInterface $dispatcher, Normalizer $normalizer, CoursesPageService $courses_page, Course $course, CourseProgress $course_progress) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, EventDispatcherInterface $dispatcher, Normalizer $normalizer, CoursesPageService $courses_page, Course $course, CourseProgress $course_progress) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->taxonomyStorage = $entity_type_manager->getStorage('taxonomy_term');
-    $this->languageManager = $language_manager;
     $this->dispatcher = $dispatcher;
     $this->normalizer = $normalizer;
     $this->coursesPage = $courses_page;
@@ -191,41 +179,12 @@ class CoursesPage extends AnuLmsContentTypePluginBase implements ContainerFactor
       $courses_page->bundle() => $this->normalizer->normalizeEntity($courses_page, ['max_depth' => 3]),
       'courses' => $normalized_courses,
       'courses_page_urls_by_course' => $this->coursesPage->getCoursesPageUrlsByCourse($courses),
-      'first_lesson_url_by_course' => $this->getFirstLessonUrlByCourse($courses),
+      'first_lesson_url_by_course' => $this->coursesPage->getFirstLessonUrlByCourse($courses),
     ];
 
     $event = new CoursesPageDataGeneratedEvent($pageData, $courses_page);
     $this->dispatcher->dispatch(CoursesPageDataGeneratedEvent::EVENT_NAME, $event);
     return $event->getPageData();
-  }
-
-  /**
-   * Returns URL of the first lesson for each course.
-   *
-   * @param array $courses
-   *   List of course nodes.
-   *
-   * @return array
-   *   URL of the first lesson for each course.
-   *
-   * @throws \Drupal\Core\Entity\EntityMalformedException
-   */
-  protected function getFirstLessonUrlByCourse(array $courses): array {
-    // Get first accessible Lesson URL.
-    $first_lesson_url_by_course = [];
-    $current_language = $this->languageManager->getCurrentLanguage();
-    foreach ($courses as $course) {
-      $lesson = $this->course->getFirstAccessibleLesson($course);
-      if (!empty($lesson)) {
-        $first_lesson_url_by_course[] = [
-          'course_id' => (int) $course->id(),
-          'first_lesson_url' => $lesson->toUrl('canonical', ['language' => $current_language])
-            ->toString(),
-        ];
-      }
-    }
-
-    return $first_lesson_url_by_course;
   }
 
 }

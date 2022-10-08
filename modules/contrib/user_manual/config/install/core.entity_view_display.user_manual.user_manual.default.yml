@@ -1,0 +1,38 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.user_manual.user_manual.field_manual
+    - field.field.user_manual.user_manual.field_manual_topics
+    - user_manual.user_manual_type.user_manual
+  module:
+    - text
+id: user_manual.user_manual.default
+targetEntityType: user_manual
+bundle: user_manual
+mode: default
+content:
+  field_manual:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: -3
+    region: content
+  field_manual_topics:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: -2
+    region: content
+  name:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: -4
+    region: content
+hidden: {  }

@@ -5,7 +5,7 @@
 	"license": "GPL-2.0-or-later",
 	"authors": [],
     "require": {
-        "drupal/core-recommended":              "~9.3.0",
+        "drupal/core-recommended":              "~9.3.0 || ~9.4.0",
         "dompdf/dompdf":                        "~2.0.0",
         "rusticisoftware/tincan":               "~1.1.1",
         "drupal/calendar":                      "^1.0@alpha",

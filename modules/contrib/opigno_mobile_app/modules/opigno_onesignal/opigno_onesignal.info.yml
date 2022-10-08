@@ -7,7 +7,7 @@ dependencies:
   - opigno_mobile_app:opigno_mobile_app
   - opigno_notification:opigno_notification
 
-# Information added by Drupal.org packaging script on 2022-04-01
-version: '3.0.2'
+# Information added by Drupal.org packaging script on 2022-09-30
+version: '3.0.3'
 project: 'opigno_mobile_app'
-datestamp: 1648805403
+datestamp: 1664529333

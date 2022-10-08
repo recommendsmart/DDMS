@@ -24,7 +24,7 @@ services:
   # Helper service for Courses Page content type.
   anu_lms.courses_page:
     class: Drupal\anu_lms\CoursesPage
-    arguments: [ '@entity_type.manager', '@cache.default']
+    arguments: [ '@entity_type.manager', '@cache.default', '@language_manager', '@anu_lms.course']
 
   # Helper service for Course content type.
   anu_lms.course:

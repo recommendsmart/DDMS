@@ -52,7 +52,7 @@ class UserManualForm extends ContentEntityForm {
       '#title' => $this->t('Publishing Information'),
       '#open' => TRUE,
       '#tree' => FALSE,
-      '#weight' => 100,
+      '#weight' => 11,
     ];
 
     if (isset($form['new_revision'])) {
@@ -91,13 +91,13 @@ class UserManualForm extends ContentEntityForm {
 
     switch ($status) {
       case SAVED_NEW:
-        $this->messenger()->addMessage($this->t('Created the %label User Manual.', [
+        $this->messenger()->addMessage($this->t('Created %label entry.', [
           '%label' => $entity->label(),
         ]));
         break;
 
       default:
-        $this->messenger()->addMessage($this->t('Saved the %label User Manual.', [
+        $this->messenger()->addMessage($this->t('Saved %label entry.', [
           '%label' => $entity->label(),
         ]));
     }

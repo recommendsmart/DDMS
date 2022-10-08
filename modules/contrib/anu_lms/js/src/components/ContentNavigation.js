@@ -163,7 +163,11 @@ const ContentNavigation = ({
               {noNextLesson &&
                 nextIsQuiz &&
                 renderButtonWithTooltip(
-                  <Button {...buttonProps} onClick={updateProgressAndRedirect}>
+                  <Button
+                    {...buttonProps}
+                    onClick={updateProgressAndRedirect}
+                    data-test="anu-lms-navigation-next"
+                  >
                     {renderButtonLabel(Drupal.t('Next', {}, { context: 'ANU LMS' }))}
                   </Button>
                 )}

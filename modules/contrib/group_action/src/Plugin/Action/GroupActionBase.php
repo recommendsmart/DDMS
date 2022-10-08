@@ -319,7 +319,7 @@ abstract class GroupActionBase extends ConfigurableActionBase implements Contain
             ->addCacheableDependency($group);
         }
         if (!$result->isAllowed() && $account->isAuthenticated()) {
-          $is_admin = !empty(array_filter($account->getRoles(TRUE), function ($rid) {
+          $is_admin = ((int) $account->id() === 1) || !empty(array_filter($account->getRoles(TRUE), function ($rid) {
             $role = Role::load($rid);
             return $role && $role->isAdmin();
           }));

@@ -107,6 +107,7 @@ const LessonNavigationSection = ({ module, lessons, currentLesson, quiz }) => {
       elevation={0}
       classes={{ root: classes.accordionRoot }}
       defaultExpanded={hasCurrentContent}
+      data-menu-module-name={module}
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
@@ -115,12 +116,23 @@ const LessonNavigationSection = ({ module, lessons, currentLesson, quiz }) => {
           content: classes.accordionSummaryContent,
           expandIcon: classes.accordionSummaryExpandIcon,
         }}
+        data-test={'anu-lms-navigation-section'}
       >
         <Typography variant="body1" className={classes.moduleTitle}>
           {module}
         </Typography>
-        {isRestricted && <LockIcon classes={{ root: classes.icon }} />}
-        {isCompleted && <CheckIcon classes={{ root: classes.icon }} />}
+        {isRestricted && (
+          <LockIcon
+            classes={{ root: classes.icon }}
+            data-test={'anu-lms-navigation-section-restricted'}
+          />
+        )}
+        {isCompleted && (
+          <CheckIcon
+            classes={{ root: classes.icon }}
+            data-test={'anu-lms-navigation-section-completed'}
+          />
+        )}
       </AccordionSummary>
 
       <AccordionDetails classes={{ root: classes.accordionDetailsRoot }}>

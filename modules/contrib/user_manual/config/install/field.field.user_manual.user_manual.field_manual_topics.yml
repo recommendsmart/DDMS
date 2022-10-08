@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user_manual.field_manual_topics
+    - taxonomy.vocabulary.manual_topics
+    - user_manual.user_manual_type.user_manual
+id: user_manual.user_manual.field_manual_topics
+field_name: field_manual_topics
+entity_type: user_manual
+bundle: user_manual
+label: Topics
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      manual_topics: manual_topics
+field_type: entity_reference

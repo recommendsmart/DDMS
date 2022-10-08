@@ -156,7 +156,9 @@ class CourseProgress {
    */
   public function getCompletedLessons(NodeInterface $course): array {
     return array_filter(
-      $this->course->getLessons($course),
+      array_map(function (NodeInterface $lesson) {
+        return $lesson->id();
+      }, $this->course->getLessons($course)),
       [$this->lesson, 'isCompleted']
     );
   }
@@ -172,7 +174,9 @@ class CourseProgress {
    */
   public function getCompletedQuizzes(NodeInterface $course) {
     return array_filter(
-      $this->course->getQuizzes($course),
+      array_map(function (NodeInterface $quiz) {
+        return $quiz->id();
+      }, $this->course->getQuizzes($course)),
       [$this->lesson, 'isCompleted']
     );
   }

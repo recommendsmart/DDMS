@@ -33,6 +33,7 @@ const defaultTheme = createTheme({
       100: '#fafafa',
       200: '#f6f7f8',
       300: '#cfd8dc',
+      350: '#a1a1a1',
       400: '#445963',
     },
     accent1: {
@@ -310,6 +311,9 @@ export const textStyle = (theme) => ({
 // outside of MUI components.
 const GlobalCss = withStyles({
   '@global': {
+    '#anu-application *': {
+      boxSizing: 'border-box',
+    },
     a: {
       color: theme.palette.primary.main,
       textDecoration: 'underline',
@@ -319,6 +323,9 @@ const GlobalCss = withStyles({
     },
     'strong.highlight': {
       background: '#FFFF00',
+    },
+    '[dir=rtl] #anu-application .MuiSvgIcon-root': {
+      transform: 'scaleX(-1)',
     },
   },
 })(() => null);

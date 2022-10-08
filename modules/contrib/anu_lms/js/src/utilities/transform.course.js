@@ -6,6 +6,8 @@ import {
   transformCourseCategory,
   courseCategoryPropTypes,
 } from '@anu/utilities/transform.courseCategory';
+import { transformCourseTopic, courseTopicPropTypes } from '@anu/utilities/transform.courseTopic';
+import { lessonPropTypes } from '@anu/utilities/transform.lesson';
 import { calculateProgressPercent, prepareCourseProgress } from '@anu/utilities/progress';
 
 /**
@@ -40,6 +42,7 @@ const transformCourse = (node, data) => {
   }
 
   const progress = prepareCourseProgress(node);
+
   const transform = {
     id: courseId,
     title: fields.getTextValue(node, 'title'),
@@ -49,6 +52,9 @@ const transformCourse = (node, data) => {
     categories: fields
       .getArrayValue(node, 'field_course_category')
       .map((term) => transformCourseCategory(term)),
+    topics: fields
+      .getArrayValue(node, 'field_course_topics')
+      .map((term) => transformCourseTopic(term)),
     labels: fields
       .getArrayValue(node, 'field_course_label')
       .map((term) => fields.getTextValue(term, 'name')),
@@ -71,6 +77,7 @@ const transformCourse = (node, data) => {
     locked: fields.getBooleanValue(node, 'locked'),
     audios: fields.getArrayValue(node, 'audios'),
     content_urls: fields.getArrayValue(node, 'content_urls'),
+    lessons_count: node.lessons_count,
   };
 
   // If progress is available, point first lesson URL to the first non-restricted lesson.
@@ -104,11 +111,11 @@ const coursePropTypes = PropTypes.shape({
     type: PropTypes.string.isRequired,
   }),
   categories: PropTypes.arrayOf(courseCategoryPropTypes),
+  topics: PropTypes.arrayOf(courseTopicPropTypes),
   content: PropTypes.arrayOf(
     PropTypes.shape({
       module: PropTypes.string,
-      // TODO: Use lesson's prop type.
-      lessons: PropTypes.arrayOf(PropTypes.shape({})),
+      lessons: PropTypes.arrayOf(lessonPropTypes),
     })
   ),
   labels: PropTypes.arrayOf(PropTypes.string),
@@ -118,6 +125,8 @@ const coursePropTypes = PropTypes.shape({
   progress_percent: PropTypes.number.isRequired,
   locked: PropTypes.bool,
   audios: PropTypes.arrayOf(PropTypes.string),
+  content_urls: PropTypes.arrayOf(PropTypes.string),
+  lessons_count: PropTypes.number,
 });
 
 export { transformCourse, coursePropTypes };

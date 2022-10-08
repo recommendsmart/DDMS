@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.course.field_course_label
     - field.field.node.course.field_course_linear_progress
     - field.field.node.course.field_course_module
+    - field.field.node.course.field_course_topics
     - field.field.node.course.field_weight
     - image.style.medium
     - node.type.course
@@ -24,22 +25,22 @@ bundle: course
 mode: default
 content:
   field_course_category:
-    weight: 3
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 3
     region: content
   field_course_description:
-    weight: 2
+    type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 2
     region: content
   field_course_finish_button:
-    weight: 7
+    type: link
     label: above
     settings:
       trim_length: 80
@@ -48,58 +49,66 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    type: link
+    weight: 7
     region: content
   field_course_image:
-    weight: 1
+    type: image
     label: above
     settings:
-      image_style: medium
       image_link: ''
+      image_style: medium
       image_loading:
         attribute: lazy
     third_party_settings: {  }
-    type: image
+    weight: 1
     region: content
   field_course_label:
-    weight: 4
+    type: entity_reference_label
     label: above
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 4
     region: content
   field_course_linear_progress:
-    weight: 6
+    type: boolean
     label: above
     settings:
       format: default
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    type: boolean
+    weight: 6
     region: content
   field_course_module:
     type: entity_reference_revisions_entity_view
-    weight: 5
     label: above
     settings:
       view_mode: default
       link: ''
     third_party_settings: {  }
+    weight: 5
+    region: content
+  field_course_topics:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 9
     region: content
   field_weight:
-    weight: 8
+    type: number_integer
     label: above
     settings:
       thousand_separator: ''
       prefix_suffix: true
     third_party_settings: {  }
-    type: number_integer
+    weight: 8
     region: content
   links:
-    weight: 0
-    region: content
     settings: {  }
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden: {  }

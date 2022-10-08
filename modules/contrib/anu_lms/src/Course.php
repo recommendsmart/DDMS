@@ -203,7 +203,7 @@ class Course {
    *   Course node object.
    *
    * @return int
-   *   Number of quizzes and lessons.
+   *   Number of lessons.
    */
   public function countLessons(NodeInterface $course): int {
     return count($this->getLessons($course));

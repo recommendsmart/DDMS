@@ -1,0 +1,39 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.user_manual.user_manual.field_manual
+    - field.field.user_manual.user_manual.field_manual_topics
+    - user_manual.user_manual_type.user_manual
+  module:
+    - text
+id: user_manual.user_manual.default
+targetEntityType: user_manual
+bundle: user_manual
+mode: default
+content:
+  field_manual:
+    type: text_textarea_with_summary
+    weight: 26
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
+  field_manual_topics:
+    type: options_select
+    weight: 27
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: -4
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden: {  }

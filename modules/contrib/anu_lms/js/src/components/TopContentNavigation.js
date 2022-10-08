@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     gap: theme.spacing(3),
-    paddingLeft: theme.spacing(2),
+    padding: theme.spacing(1.5, 0, 1.5, 2),
     [theme.breakpoints.up('sm')]: {
       paddingLeft: theme.spacing(3),
     },
@@ -45,10 +45,8 @@ const useStyles = makeStyles((theme) => ({
   },
   actionsSection: {
     display: 'flex',
-    justifyContent: 'end',
+    justifyContent: 'flex-end',
     flexBasis: 240,
-    marginBottom: theme.spacing(1.5),
-    marginTop: theme.spacing(1.5),
     [theme.breakpoints.up('md')]: {
       flexBasis: 360,
     },
@@ -57,11 +55,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   title: {
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    lineClamp: 1,
-    display: '-webkit-box',
-    '-webkit-box-orient': 'vertical',
+    padding: theme.spacing(1.5, 10, 1.5, 0),
+    [theme.breakpoints.up('lg')]: {
+      paddingRight: theme.spacing(15),
+    },
   },
   pageNumberSection: {
     fontWeight: theme.typography.fontWeightRegular,

@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 
 import Box from '@material-ui/core/Box';
 import Hidden from '@material-ui/core/Hidden';
-import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
 import LessonHeader from '@anu/pages/lesson/Header';
@@ -39,22 +37,13 @@ const useStyles = makeStyles((theme) => ({
     flexShrink: 0,
     flexGrow: 0,
   },
-  contentWrapper: {
-    flexGrow: 1,
-  },
   content: {
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
-    margin: '0 auto',
-    maxWidth: 800, // 90 chars as per readability guidelines.
-    [theme.breakpoints.up('md')]: {
-      paddingTop: 0,
-      paddingBottom: 0,
-    },
+    flexGrow: 1,
+    paddingBottom: theme.spacing(8),
   },
 }));
 
-const LessonPage = ({ lesson, quiz, course, width }) => {
+const LessonPage = ({ lesson, quiz, course }) => {
   const classes = useStyles();
 
   const courseSequence = ((course || {}).content || [])
@@ -95,7 +84,7 @@ const LessonPage = ({ lesson, quiz, course, width }) => {
             </Box>
           </Hidden>
 
-          <Box className={isWidthUp('md', width) ? classes.contentWrapper : ''}>
+          <Box className={classes.content}>
             {quiz && (
               <ContentQuiz
                 quiz={quiz}
@@ -124,8 +113,6 @@ LessonPage.propTypes = {
   lesson: lessonPropTypes,
   quiz: quizPropTypes,
   course: coursePropTypes,
-  // Coming from MUI withWidth() HOC.
-  width: PropTypes.string,
 };
 
-export default withWidth()(LessonPage);
+export default LessonPage;

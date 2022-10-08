@@ -97,6 +97,16 @@ const ManualTrigger = withStyles((theme) => ({
   startIcon: {
     margin: 0,
   },
+  sizeSmall: {
+    fontSize: '0.875rem',
+  },
+  iconSizeSmall: {
+    margin: '0 !important',
+    '& .MuiSvgIcon-root': {
+      width: 20,
+      height: 20,
+    },
+  },
 }))(Button);
 
 const AvailableOfflineMessage = withStyles((theme) => ({
@@ -104,10 +114,15 @@ const AvailableOfflineMessage = withStyles((theme) => ({
     color: theme.palette.success.main,
     padding: theme.spacing(1),
     gap: theme.spacing(1),
-    '& p': {
+    '& .MuiTypography-root': {
       color: theme.palette.success.main,
-      fontSize: '1rem',
       lineHeight: '1rem',
+    },
+    '& .MuiTypography-body1': {
+      fontSize: '1rem',
+    },
+    '& .MuiTypography-body2': {
+      fontSize: '0.875rem',
     },
     '& svg': {
       fontSize: '20px',
@@ -324,7 +339,7 @@ class DownloadCoursePopup extends React.Component {
 
   render() {
     const { loading, result, alertOpen, popupOpen, availableOffline } = this.state;
-    const { course, showButton } = this.props;
+    const { course, showButton, variant } = this.props;
 
     const courseHasAudio = course.audios.length !== 0;
     const offlineButtonLabel = courseHasAudio
@@ -347,6 +362,8 @@ class DownloadCoursePopup extends React.Component {
       severity = 'warning';
     }
 
+    const isCompact = variant === 'compact';
+
     return (
       <DownloadCourseWrapper>
         <Detector
@@ -354,8 +371,15 @@ class DownloadCoursePopup extends React.Component {
           render={({ online }) => (
             <>
               {online && showButton && !availableOffline && (
-                <ManualTrigger variant="text" onClick={this.showPopup} startIcon={<SyncIcon />}>
-                  {Drupal.t('Make course available offline', {}, { context: 'ANU LMS' })}
+                <ManualTrigger
+                  variant="text"
+                  onClick={this.showPopup}
+                  startIcon={<SyncIcon />}
+                  size={isCompact ? 'small' : 'medium'}
+                >
+                  {isCompact
+                    ? Drupal.t('Make available offline', {}, { context: 'ANU LMS' })
+                    : Drupal.t('Make course available offline', {}, { context: 'ANU LMS' })}
                 </ManualTrigger>
               )}
             </>
@@ -364,7 +388,9 @@ class DownloadCoursePopup extends React.Component {
         {showButton && availableOffline && (
           <AvailableOfflineMessage display="flex" alignItems="center">
             <CheckCircleIcon />
-            <Typography>{Drupal.t('Ready to use offline', {}, { context: 'ANU LMS' })}</Typography>
+            <Typography variant={isCompact ? 'body2' : 'body1'}>
+              {Drupal.t('Ready to be used offline', {}, { context: 'ANU LMS' })}
+            </Typography>
           </AvailableOfflineMessage>
         )}
 
@@ -439,12 +465,14 @@ DownloadCoursePopup.propTypes = {
   showButton: PropTypes.bool,
   course: coursePropTypes.isRequired,
   openPopupAutomatically: PropTypes.bool,
+  variant: PropTypes.string,
 };
 
 DownloadCoursePopup.defaultProps = {
   messagePosition: 'left',
   showButton: true,
   openPopupAutomatically: false,
+  variant: 'default',
 };
 
 export default DownloadCoursePopup;

@@ -86,17 +86,18 @@ const AudioPlayer = ({
   return (
     <Box className={classes.wrapper}>
       {showButton && (
-        <Box className={`${classes.button} ${isReady ? classes.buttonActive : ''}`}>
+        <Box
+          className={`${classes.button} ${isReady ? classes.buttonActive : ''}`}
+          {...(isReady && { onClick: handlePlayPause })}
+        >
           {!isReady && showLoading && <CircularProgress size={null} className={classes.loader} />}
           {showPauseButton && (
             <PauseIcon
-              onClick={handlePlayPause}
               className={`${classes.buttonIcon} ${isReady ? classes.buttonIconActive : ''}`}
             />
           )}
           {!showPauseButton && (
             <PlayIcon
-              onClick={handlePlayPause}
               className={`${classes.buttonIcon} ${isReady ? classes.buttonIconActive : ''}`}
               role="button"
             />

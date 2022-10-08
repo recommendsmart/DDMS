@@ -5,6 +5,8 @@
  * Functions to support search fuctionality in Anu LMS.
  */
 
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\node\Entity\Node;
@@ -41,7 +43,7 @@ function anu_lms_search_theme($existing, $type, $theme, $path) {
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
-function anu_lms_search_paragraph_update(\Drupal\Core\Entity\EntityInterface $entity) {
+function anu_lms_search_paragraph_update(EntityInterface $entity) {
   if ($entity->bundle() !== 'course_modules') {
     return;
   }
@@ -70,7 +72,7 @@ function anu_lms_search_paragraph_update(\Drupal\Core\Entity\EntityInterface $en
 /**
  * Implements hook_entity_bundle_field_info().
  */
-function anu_lms_search_entity_bundle_field_info(\Drupal\Core\Entity\EntityTypeInterface $entity_type, $bundle) {
+function anu_lms_search_entity_bundle_field_info(EntityTypeInterface $entity_type, $bundle) {
   $fields = [];
   // Add a field with module's title to the lesson content type for indexation.
   if ($entity_type->id() === 'node' && $bundle === 'module_lesson') {

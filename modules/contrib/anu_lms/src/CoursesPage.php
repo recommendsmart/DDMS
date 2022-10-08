@@ -8,9 +8,10 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 
 /**
- * Normalizer service for the given entity.
+ * Methods that operate with courses page nodes.
  */
 class CoursesPage {
 
@@ -36,17 +37,37 @@ class CoursesPage {
   protected CacheBackendInterface $cache;
 
   /**
+   * The language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected LanguageManagerInterface $languageManager;
+
+  /**
+   * The course page service.
+   *
+   * @var \Drupal\anu_lms\Course
+   */
+  protected Course $course;
+
+  /**
    * Constructs service.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache service.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   The language manager.
+   * @param \Drupal\anu_lms\Course $course
+   *   The Course service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, CacheBackendInterface $cache) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, CacheBackendInterface $cache, LanguageManagerInterface $language_manager, Course $course) {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->paragraphStorage = $entity_type_manager->getStorage('paragraph');
     $this->cache = $cache;
+    $this->languageManager = $language_manager;
+    $this->course = $course;
   }
 
   /**
@@ -88,7 +109,8 @@ class CoursesPage {
     }
 
     // Gathering course categories.
-    $category_ids = array_column($course->get('field_course_category')->getValue(), 'target_id');
+    $category_ids = array_column($course->get('field_course_category')
+      ->getValue(), 'target_id');
     if (empty($category_ids)) {
       return [];
     }
@@ -117,9 +139,11 @@ class CoursesPage {
       // site, so it should be OK).
       $courses_pages = $this->nodeStorage->loadByProperties(['type' => 'courses_page']);
       foreach ($courses_pages as $courses_page) {
-        $course_categories_paragraphs = $courses_page->get('field_courses_content')->referencedEntities();
+        $course_categories_paragraphs = $courses_page->get('field_courses_content')
+          ->referencedEntities();
         foreach ($course_categories_paragraphs as $course_categories_paragraph) {
-          $course_category_tid = $course_categories_paragraph->get('field_course_category')->getString();
+          $course_category_tid = $course_categories_paragraph->get('field_course_category')
+            ->getString();
           $courses_pages_mapping[$course_category_tid][] = $courses_page->id();
           $cacheable_metadata->addCacheableDependency($courses_page);
         }
@@ -155,8 +179,6 @@ class CoursesPage {
    *
    * @return array
    *   Course page URLs per course.
-   *
-   * @throws \Drupal\Core\Entity\EntityMalformedException
    */
   public function getCoursesPageUrlsByCourse(array $courses): array {
     $courses_page_urls_by_course = [];
@@ -173,6 +195,78 @@ class CoursesPage {
         $courses_page_urls[] = $courses_page_node->toUrl()->toString();
       }
 
+      $courses_page_urls_by_course[] = [
+        'course_id' => (int) $course->id(),
+        'courses_page_urls' => $courses_page_urls,
+      ];
+    }
+
+    return $courses_page_urls_by_course;
+  }
+
+  /**
+   * Returns URL of the first lesson for each course.
+   *
+   * @param array $courses
+   *   List of course nodes.
+   *
+   * @return array
+   *   URL of the first lesson for each course.
+   *
+   * @throws \Drupal\Core\Entity\EntityMalformedException
+   */
+  public function getFirstLessonUrlByCourse(array $courses): array {
+    // Get first accessible Lesson URL.
+    $first_lesson_url_by_course = [];
+    $current_language = $this->languageManager->getCurrentLanguage();
+    foreach ($courses as $course) {
+      $lesson = $this->course->getFirstAccessibleLesson($course);
+      if (!empty($lesson)) {
+        $first_lesson_url_by_course[] = [
+          'course_id' => (int) $course->id(),
+          'first_lesson_url' => $lesson->toUrl('canonical', ['language' => $current_language])
+            ->toString(),
+        ];
+      }
+    }
+
+    return $first_lesson_url_by_course;
+  }
+
+  /**
+   * Load list of URLs of courses page with filter for each course.
+   *
+   * Note that this is needed only for offline mode.
+   *
+   * @param array $courses
+   *   List of course nodes.
+   *
+   * @return array
+   *   Course page URLs per course.
+   */
+  public function getCoursesLandingPageUrlsByCourse(array $courses): array {
+    $courses_page_urls_by_course = [];
+
+    // Gets only not-null values.
+    $courses = array_filter($courses, function ($course) {
+      return !!$course;
+    });
+
+    // For old courses pages (`courses_page` content type) we have
+    // straightforward relations between course and courses page.
+    // For courses page with filters we don't have such relations,
+    // course may don't have category or topic at all but still be
+    // displayed on the courses page.
+    // So we just return all existing courses pages, in most cases it will be
+    // the only page. But we have to keep the format of the returned array
+    // for compatibility with old courses pages.
+    $courses_pages = $this->nodeStorage->loadByProperties(['type' => 'courses_landing_page']);
+    $courses_page_urls = [];
+    foreach ($courses_pages as $courses_page_node) {
+      $courses_page_urls[] = $courses_page_node->toUrl()->toString();
+    }
+
+    foreach ($courses as $course) {
       $courses_page_urls_by_course[] = [
         'course_id' => (int) $course->id(),
         'courses_page_urls' => $courses_page_urls,

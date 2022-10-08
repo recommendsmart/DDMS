@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user_manual.field_manual
+    - user_manual.user_manual_type.user_manual
+  module:
+    - text
+id: user_manual.user_manual.field_manual
+field_name: field_manual
+entity_type: user_manual
+bundle: user_manual
+label: Content
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: true
+field_type: text_with_summary

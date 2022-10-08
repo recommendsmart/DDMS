@@ -61,6 +61,7 @@ const ContentLesson = ({ lesson, nextLesson, prevLesson, course }) => {
     <>
       <HashRouter hashType="noslash">
         <Switch>
+          <Redirect from="/section-:id" to="/page-:id" />
           <Redirect exact from="/" to={`/page-${defaultSection}`} />
           <Redirect exact from="/back" to={backUrl} />
 
@@ -75,56 +76,54 @@ const ContentLesson = ({ lesson, nextLesson, prevLesson, course }) => {
 
             return (
               <Route path={`/page-${index + 1}`} key={index} exact>
-                <Box sx={{ pb: { md: 8 } }}>
-                  <ContentTopNavigation
+                <ContentTopNavigation
+                  sections={lesson.sections}
+                  currentLesson={lesson}
+                  nextLesson={nextLesson}
+                  prevLesson={prevLesson}
+                  currentIndex={index}
+                  isEnabled={enableNext[index] === quizCount}
+                  course={course}
+                  setCurrentPage={setCurrentPage}
+                  currentPage={currentPage}
+                />
+                <LessonGrid>
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    className={classes.lessonGrid}
+                  >
+                    <Hidden mdUp>
+                      <Typography variant="h4">{highlightText(lesson.title)}</Typography>
+                    </Hidden>
+
+                    {hasChecklist && (
+                      <LoadingIndicator isLoading={isChecklistLoading} label={checklistLabel} />
+                    )}
+                  </Box>
+                </LessonGrid>
+
+                <Box my={3}>
+                  <Paragraphs
+                    items={paragraphs}
+                    onQuestionComplete={() => handleQuestionCompletion(index)}
+                    checkListState={{
+                      isLoading: [isChecklistLoading, setChecklistLoading],
+                      label: [checklistLabel, setChecklistLabel],
+                    }}
+                  />
+
+                  <ContentNavigation
                     sections={lesson.sections}
                     currentLesson={lesson}
                     nextLesson={nextLesson}
                     prevLesson={prevLesson}
                     currentIndex={index}
                     isEnabled={enableNext[index] === quizCount}
-                    course={course}
-                    setCurrentPage={setCurrentPage}
-                    currentPage={currentPage}
+                    ignorePaddings={true}
+                    hideButtonsLabelsOnMobile={false}
                   />
-                  <LessonGrid>
-                    <Box
-                      display="flex"
-                      justifyContent="space-between"
-                      alignItems="center"
-                      className={classes.lessonGrid}
-                    >
-                      <Hidden mdUp>
-                        <Typography variant="h4">{highlightText(lesson.title)}</Typography>
-                      </Hidden>
-
-                      {hasChecklist && (
-                        <LoadingIndicator isLoading={isChecklistLoading} label={checklistLabel} />
-                      )}
-                    </Box>
-                  </LessonGrid>
-
-                  <Box my={3}>
-                    <Paragraphs
-                      items={paragraphs}
-                      onQuestionComplete={() => handleQuestionCompletion(index)}
-                      checkListState={{
-                        isLoading: [isChecklistLoading, setChecklistLoading],
-                        label: [checklistLabel, setChecklistLabel],
-                      }}
-                    />
-
-                    <ContentNavigation
-                      sections={lesson.sections}
-                      currentLesson={lesson}
-                      nextLesson={nextLesson}
-                      prevLesson={prevLesson}
-                      currentIndex={index}
-                      isEnabled={enableNext[index] === quizCount}
-                      ignorePaddings={true}
-                      hideButtonsLabelsOnMobile={false}
-                    />
-                  </Box>
                 </Box>
               </Route>
             );

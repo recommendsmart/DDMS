@@ -1,7 +1,7 @@
 langcode: en
 status: true
 dependencies: {  }
-name: 'Courses page'
+name: 'Courses page [DEPRECATED]'
 type: courses_page
 description: 'Content page that aggregates and displays courses.'
 help: ''

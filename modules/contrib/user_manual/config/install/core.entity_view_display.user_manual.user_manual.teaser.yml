@@ -1,0 +1,33 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.user_manual.teaser
+    - field.field.user_manual.user_manual.field_manual
+    - field.field.user_manual.user_manual.field_manual_topics
+    - user_manual.user_manual_type.user_manual
+  module:
+    - text
+id: user_manual.user_manual.teaser
+targetEntityType: user_manual
+bundle: user_manual
+mode: teaser
+content:
+  field_manual:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: -2
+    region: content
+  name:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: true
+    third_party_settings: {  }
+    weight: -3
+    region: content
+hidden:
+  field_manual_topics: true

@@ -50,7 +50,7 @@ const prepareCourseProgress = (node) => {
   const items = getLocalStorageProgress(30 * 24 * 60 * 60 * 1000);
   const key = courseProgressKey(courseId);
   let result = serverProgress;
-  if (items && items[key]) {
+  if (items && items[key] && result) {
     const clientProgress = JSON.parse(items[key]);
     for (const [lessonId, serverData] of Object.entries(serverProgress)) {
       result[lessonId] = serverData;

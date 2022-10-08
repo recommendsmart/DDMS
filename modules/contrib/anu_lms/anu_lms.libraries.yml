@@ -21,6 +21,14 @@ courses:
     - anu_lms/fonts
     - anu_lms/vendors
 
+# Page with list of courses.
+courses_landing:
+  js:
+    js/dist/courses_landing.min.js: { minified: true, weight: -15 }
+  dependencies:
+    - anu_lms/fonts
+    - anu_lms/vendors
+
 # Individual lesson page.
 lesson:
   js:

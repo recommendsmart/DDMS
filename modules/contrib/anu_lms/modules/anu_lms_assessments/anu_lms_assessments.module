@@ -8,6 +8,7 @@
 use Drupal\Core\Render\Element;
 use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Config\FileStorage;
 
 /**
  * Implements hook_views_data_alter().
@@ -69,5 +70,31 @@ function anu_lms_assessments_entity_form_display_alter(?EntityFormDisplayInterfa
     if ($quiz) {
       $form_display = $storage->load('paragraph.course_modules.quiz');
     }
+  }
+}
+
+/**
+ * Implements hook_install().
+ *
+ * If "anu_lms_permissions" was already installed then necessary import
+ * optional configs from that module. Optional configs from that module
+ * contains dependencies to "node.type.module_assessment".
+ */
+function anu_lms_assessments_install() {
+  $moduleHandler = \Drupal::service('module_handler');
+  if (!$moduleHandler->moduleExists('anu_lms_permissions')) {
+    return;
+  }
+
+  // It's "Organization: Group node (Quiz)".
+  $config_name = 'group.content_type.group_content_type_d342280e2d680';
+
+  $config_storage = \Drupal::service('config.storage');
+  if (!$config_storage->exists($config_name)) {
+    $config_path = Drupal::service('extension.path.resolver')
+      ->getPath('module', 'anu_lms_permissions') . '/config/optional';
+
+    $source = new FileStorage($config_path);
+    $config_storage->write($config_name, $source->read($config_name));
   }
 }

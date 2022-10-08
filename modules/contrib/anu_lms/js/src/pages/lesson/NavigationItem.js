@@ -115,14 +115,25 @@ const LessonNavigationItem = ({
         {isLastLesson && <Box className={classes.lastLessonBackground} />}
 
         <Grid item className={classes.iconWrapper}>
-          {isCompleted && <CheckIcon className={classes.check} />}
-          {!isCompleted && !isRestricted && <Box className={classes.circle} />}
-          {isRestricted && <LockIcon className={classes.circle} />}
+          {isCompleted && (
+            <CheckIcon className={classes.check} data-test={'anu-lms-navigation-item-completed'} />
+          )}
+          {!isCompleted && !isRestricted && (
+            <Box className={classes.circle} data-test={'anu-lms-navigation-item-not-completed'} />
+          )}
+          {isRestricted && (
+            <LockIcon className={classes.circle} data-test={'anu-lms-navigation-item-restricted'} />
+          )}
         </Grid>
       </Grid>
 
       <Grid item style={{ flexGrow: 1 }}>
-        <Typography variant="body2" component="a" {...linkProps}>
+        <Typography
+          variant="body2"
+          component="a"
+          {...linkProps}
+          data-menu-lesson-name={lesson.title}
+        >
           {lesson.title}
         </Typography>
       </Grid>

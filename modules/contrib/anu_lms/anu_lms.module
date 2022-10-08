@@ -203,3 +203,13 @@ function anu_lms_entity_insert(EntityInterface $entity) {
 
   $entity->save();
 }
+
+/**
+ * Implements template_preprocess_node_add_list().
+ *
+ * Hides link to create deprecated courses page node.
+ */
+function anu_lms_preprocess_node_add_list(&$variables) {
+  unset($variables['content']['courses_page']);
+  unset($variables['types']['courses_page']);
+}

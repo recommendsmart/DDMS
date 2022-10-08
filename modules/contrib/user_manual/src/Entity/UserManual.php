@@ -234,6 +234,19 @@ class UserManual extends EditorialContentEntityBase {
         'weight' => -3,
       ]);
 
+    if (\Drupal::moduleHandler()->moduleExists('path')) {
+      $fields['path'] = BaseFieldDefinition::create('path')
+        ->setCustomStorage(TRUE)
+        ->setLabel(t('URL alias'))
+        ->setTranslatable(TRUE)
+        ->setComputed(TRUE)
+        ->setDisplayOptions('form', [
+          'type' => 'path',
+          'weight' => 100,
+        ])
+        ->setDisplayConfigurable('form', TRUE);
+    }
+
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Created'))
       ->setDescription(t('The time that the entity was created.'));

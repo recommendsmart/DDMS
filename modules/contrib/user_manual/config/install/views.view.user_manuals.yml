@@ -739,7 +739,7 @@ display:
           exposed: true
           expose:
             operator_id: field_manual_topics_target_id_op
-            label: 'Filter By Topics'
+            label: 'Filter by topic'
             description: ''
             use_operator: false
             operator: field_manual_topics_target_id_op

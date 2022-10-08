@@ -4,7 +4,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased changes
+## [2.9.0]
+- #3312107: Highlighting should be applied for whole words.
+- Improved global styles: set box-sizing and reflecting icons for RTL languages.
+- Fixed package name in composer.json.
+- Added Topics - an additinal way for courses categorization.
+- Added new courses page with sidebar filtering.
+- Introduced new course card styles for the new courses page.
+- The "Old" courses page got deprecated and hidden from the "Add content" page.
+
+## [2.8.2]
+- The lesson title will be displayed without cutting, no matter how long it is.
+- Add redirect from "#section-X" to "#page-X" for lessons.
+- Fixed bottom spacing for quiz page and mobile layout.
+- Adjusted "Make available offline" button text when processed.
+- Fixed the problem "Unable to install Anu LMS Permissions due to unmet dependencies". That was happening in a case when "Anu LMS Assessments" module was disabled when a user tried to enable "Anu LMS Permissions" module.
+- Renamed "CoursesTest" to "DemoContentTest".
+- Added CoursesCreationTest.
+- Fixed a bug broken html output for lessons when highlighting was requested.
+- #3308215: Make bigger area for Play audio button.
+- #3308596: Cover courses pages with tests.
+- #3309362: Cover API endpoints for checklists & progress saving with automated tests.
+- Fixed a bug in implementation of "CourseProgress::getCompletedLessons" and "CourseProgress::getCompletedQuizzes" methods.
 
 ## [2.8.1]
 - Fixed spacing for the lesson sidebar and lesson mobile navigation.

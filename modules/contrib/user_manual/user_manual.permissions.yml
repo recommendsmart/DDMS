@@ -10,35 +10,35 @@ administer user_manual:
 
 view user_manual:
   title: 'View User Manual'
-  description: 'View user manual entities page'
+  description: 'View user manual entries page'
 
 create user_manual:
   title: 'Create User Manual'
-  description: 'Create user manual entities'
+  description: 'Create user manual entries'
 
 edit own user_manual:
   title: 'Edit Own User Manual'
-  description: 'Edit own user manual entities'
+  description: 'Edit own user manual entries'
 
 edit any user_manual:
   title: 'Edit Any User Manual'
-  description: 'Edit any user manual entities'
+  description: 'Edit any user manual entries'
 
 delete any user_manual:
   title: 'Delete Any User Manual'
-  description: 'Delete any user manual entities'
+  description: 'Delete any user manual entries'
 
 delete own user_manual:
   title: 'Delete Own User Manual'
-  description: 'Delete any user manual entities'
+  description: 'Delete any user manual entries'
 
 view all user_manual revisions:
   title: 'View User Manual Revisions'
-  description: 'View revision history for all user manual entities'
+  description: 'View revision history for all user manual entries'
 
 revert all user_manual revisions:
   title: 'Revert User Manual Revisions'
-  description: 'Revert any user manual entities'
+  description: 'Revert any user manual entries'
 
 permission_callbacks:
   - Drupal\user_manual\UserManualPermissions::permissions

@@ -15,7 +15,9 @@ if (searchKeywords) {
     // Separate string into array of keywords.
     .split(' ')
     // Filter out empty keywords.
-    .filter((item) => !!item.trim());
+    .filter((item) => !!item.trim())
+    // Remove duplicates.
+    .filter((item, i, arr) => arr.indexOf(item) === i);
 }
 
 /**
@@ -46,7 +48,12 @@ const getHighlightedText = (text, matchOnly = false) => {
   try {
     let matches = [];
     searchKeywords.forEach((keyword) => {
-      const searchRegexp = new RegExp(`(\\W|^)(${keyword})(\\W|$)`, 'gi');
+      // The regular expression matches only real text entries (not in tags
+      // attributes). The source: https://stackoverflow.com/a/39656464.
+      const searchRegexp = new RegExp(
+        `(<)(script[^>]*>[^<]*(?:<(?!\\/script>)[^<]*)*<\\/script>|\\/?\\b[^<>]+>|!(?:--\\s*(?:(?:\\[if\\s*!IE]>\\s*-->)?[^-]*(?:-(?!->)-*[^-]*)*)--|\\[CDATA[^\\]]*(?:](?!]>)[^\\]]*)*]])>)|\\b(${keyword})\\b`,
+        'gi'
+      );
 
       if (matchOnly) {
         const match = highlightedText.match(searchRegexp);
@@ -56,10 +63,9 @@ const getHighlightedText = (text, matchOnly = false) => {
       } else {
         // Replace only full words (this is exactly what search api db
         // searches).
-        highlightedText = highlightedText.replaceAll(
-          searchRegexp,
-          '$1<strong class="highlight">$2</strong>$3'
-        );
+        highlightedText = highlightedText.replaceAll(searchRegexp, (match, p1, p2, p3) => {
+          return p3 ? '<strong class="highlight">' + p3 + '</strong>' : match;
+        });
       }
     });
 

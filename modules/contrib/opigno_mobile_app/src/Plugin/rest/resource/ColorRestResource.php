@@ -24,7 +24,13 @@ class ColorRestResource extends ResourceBase {
    * @return \Drupal\rest\ResourceResponse
    */
   public function get() {
-    $default_palette = \Drupal::service('color.theme_decorator')->getPalette('aristotle', TRUE);
+    $theme_decorator = \Drupal::hasService('color.theme_decorator');
+    if ($theme_decorator) {
+      $default_palette = \Drupal::service('color.theme_decorator')->getPalette('aristotle', TRUE);
+    }
+    else {
+      $default_palette = color_get_palette('aristotle');
+    }
     $current_scheme = \Drupal::configFactory()->getEditable('color.theme.aristotle')->get('palette');
     $colors_set = $default_palette;
     if (!empty($current_scheme)) {

@@ -8,7 +8,7 @@ dependencies:
   - search_api:search_api
   - search_api:search_api_db
 
-# Information added by Drupal.org packaging script on 2022-09-07
-version: '2.8.1'
+# Information added by Drupal.org packaging script on 2022-09-28
+version: '2.9.0'
 project: 'anu_lms'
-datestamp: 1662558940
+datestamp: 1664352740

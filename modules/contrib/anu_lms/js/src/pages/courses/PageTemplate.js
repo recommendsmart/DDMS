@@ -32,7 +32,7 @@ const CoursesPageTemplate = ({ pageTitle, courses, categories, sections, filterV
 
           {/* Course categories filter */}
           {categories.length > 0 && (
-            <Box>
+            <Box data-test={'anu-lms-courses-category-filter'}>
               <CoursesCategoryFilter filterValue={filterValue} categories={categories} />
             </Box>
           )}
@@ -40,7 +40,7 @@ const CoursesPageTemplate = ({ pageTitle, courses, categories, sections, filterV
       </Box>
 
       {/* Courses sections */}
-      <Box className={classes.content} pt={[4, 6]} pb={[4, 6]}>
+      <Box className={classes.content} pt={[4, 6]} pb={[4, 6]} data-test={'anu-lms-courses-list'}>
         <Container>
           <CoursesSections sections={sections} courses={courses} />
         </Container>
