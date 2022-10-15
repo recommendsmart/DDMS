@@ -2,21 +2,21 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_comment
+    - field.storage.node.field_comments
     - node.type.idea
   module:
     - comment
     - comments_order
 third_party_settings:
   comments_order:
-    order: ASC
+    order: DESC
     children_natural_order: 1
     created_order: 0
-id: node.idea.field_comment
-field_name: field_comment
+id: node.idea.field_comments
+field_name: field_comments
 entity_type: node
 bundle: idea
-label: Comment
+label: Comments
 description: ''
 required: false
 translatable: false

@@ -2,15 +2,14 @@ langcode: en
 status: true
 dependencies:
   module:
-    - entity_reference_revisions
     - node
 id: node.field_challenge
 field_name: field_challenge
 entity_type: node
-type: entity_reference_revisions
+type: entity_reference
 settings:
   target_type: node
-module: entity_reference_revisions
+module: core
 locked: false
 cardinality: 1
 translatable: true

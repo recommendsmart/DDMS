@@ -1,15 +1,11 @@
-name: Idea
-description: 'Provides Idea content type and related configuration. '
+name: 'Idea'
 type: module
-core_version_requirement: '^8.9 || ^9'
+description: 'Provides main features/functionality for Idea content type.'
+
+core_version_requirement: ^8.8.0 || ^9.3
+package: 'Custom'
+
 dependencies:
-  - 'challenge:challenge'
-  - 'comments_order:comments_order'
-  - 'drupal:comment'
-  - 'drupal:field'
-  - 'drupal:menu_ui'
-  - 'drupal:node'
-  - 'drupal:path'
-  - 'drupal:text'
-  - 'drupal:user'
-  - 'entity_reference_revisions:entity_reference_revisions'
+- challenge:challenge
+- drupal:comments_order
+- drupal:node

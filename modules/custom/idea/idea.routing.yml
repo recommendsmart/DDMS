@@ -1,0 +1,6 @@
+idea.ideas_autocomplete:
+  path: '/idea/autocomplete'
+  defaults:
+    _controller: '\Drupal\idea\Controller\IdeasAutocompleteController::autocomplete'
+  requirements:
+    _permission: 'access content'
