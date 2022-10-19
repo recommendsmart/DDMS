@@ -3,26 +3,24 @@ status: true
 dependencies:
   config:
     - field.storage.node.field_challenge
-    - node.type.challenge
     - node.type.idea
+_core:
+  default_config_hash: nuibwXdeBHlYkIPCJitvS9__Rx5iB7qcaW8cjDPwhPE
 id: node.idea.field_challenge
 field_name: field_challenge
 entity_type: node
 bundle: idea
 label: Challenge
 description: ''
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:node'
+  handler: views
   handler_settings:
-    target_bundles:
-      challenge: challenge
-    sort:
-      field: _none
-      direction: ASC
-    auto_create: false
-    auto_create_bundle: ''
+    view:
+      view_name: list_of_challenges
+      display_name: challenges_entity_reference
+      arguments: {  }
 field_type: entity_reference

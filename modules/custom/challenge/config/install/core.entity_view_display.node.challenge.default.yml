@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.challenge.body
+    - node.type.challenge
+  module:
+    - text
+    - user
+id: node.challenge.default
+targetEntityType: node
+bundle: challenge
+mode: default
+content:
+  body:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden: {  }

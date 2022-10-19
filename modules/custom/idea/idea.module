@@ -1,0 +1,86 @@
+<?php
+
+/**
+ * @file
+ * Contains idea.module.
+ */
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_cron().
+ */
+function idea_cron() {
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+  // Node id.
+  $entity_query = $storage->getQuery();
+
+  $entities = $entity_query->condition('type', 'idea')
+    ->sort('changed', 'DESC')
+    ->range(0, 50)
+    ->execute();
+
+  $ideas = $storage->loadMultiple($entities);
+  /** @var \Drupal\node\NodeInterface $idea */
+  foreach ($ideas as $idea) {
+    $idea->save();
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function idea_form_node_idea_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Set default challenge based on query parameter.
+  if ($challenge_id = \Drupal::request()->get('challenge')) {
+    if (isset($form['field_challenge']['widget']['#options'][$challenge_id])) {
+      $form['field_challenge']['widget']['#default_value'] = $challenge_id;
+    }
+  }
+
+  $form['#attached']['library'][] = 'idea/autocomplete';
+
+  if (isset($form['title']['widget'][0]['value'])) {
+    $form['title']['widget'][0]['value']['#autocomplete_route_name'] = 'idea.ideas_autocomplete';
+  }
+}
+
+
+/**
+ * Implements hook_entity_access().
+ */
+function openideal_idea_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  if ($entity->getEntityTypeId() === 'comment') {
+    $commented_entity = $entity->getCommentedEntity();
+    if ($commented_entity->bundle() === 'idea' && $operation === 'update') {
+      return AccessResult::forbiddenIf(!$commented_entity->get('field_duplicate_of')->isEmpty());
+    }
+  }
+
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_create_access().
+ */
+function idea_comment_create_access(AccountInterface $account, array $context, $entity_bundle) {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if ($node instanceof NodeInterface && $node->bundle() === 'idea') {
+    return AccessResult::forbiddenIf(!$node->get('field_duplicate_of')->isEmpty());
+  }
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function idea_menu_local_tasks_alter(&$data, $route_name, RefinableCacheableDependencyInterface &$cacheability) {
+  if ($route_name !== 'entity.node.canonical') {
+    return;
+  }
+}
