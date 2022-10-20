@@ -53,30 +53,6 @@ function notesheet_form_node_notesheet_form_alter(&$form, FormStateInterface $fo
 
 
 /**
- * Implements hook_entity_access().
- */
-function notesheet_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
-  if ($entity->getEntityTypeId() === 'comment') {
-    $commented_entity = $entity->getCommentedEntity();
-    if ($commented_entity->bundle() === 'notesheet' && $operation === 'update') {
-      return AccessResult::forbiddenIf(!$commented_entity->get('field_duplicate_of')->isEmpty());
-    }
-  }
-
-}
-
-/**
- * Implements hook_ENTITY_TYPE_create_access().
- */
-function notesheet_comment_create_access(AccountInterface $account, array $context, $entity_bundle) {
-  /** @var \Drupal\node\NodeInterface $node */
-  $node = \Drupal::routeMatch()->getParameter('node');
-  if ($node instanceof NodeInterface && $node->bundle() === 'notesheet') {
-    return AccessResult::forbiddenIf(!$node->get('field_duplicate_of')->isEmpty());
-  }
-}
-
-/**
  * Implements hook_menu_local_tasks_alter().
  */
 function notesheet_menu_local_tasks_alter(&$data, $route_name, RefinableCacheableDependencyInterface &$cacheability) {
