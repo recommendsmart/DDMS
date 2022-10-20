@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_filecover
+    - node.type.notesheet
+_core:
+  default_config_hash: nuibwXdeBHlYkIPCJitvS9__Rx5iB7qcaW8cjDPwhPE
+id: node.notesheet.field_filecover
+field_name: field_filecover
+entity_type: node
+bundle: notesheet
+label: Filecover
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: list_of_filecovers
+      display_name: filecovers_entity_reference
+      arguments: {  }
+field_type: entity_reference

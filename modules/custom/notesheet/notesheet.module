@@ -1,0 +1,86 @@
+<?php
+
+/**
+ * @file
+ * Contains notesheet.module.
+ */
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_cron().
+ */
+function notesheet_cron() {
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+  // Node id.
+  $entity_query = $storage->getQuery();
+
+  $entities = $entity_query->condition('type', 'notesheet')
+    ->sort('changed', 'DESC')
+    ->range(0, 50)
+    ->execute();
+
+  $notesheets = $storage->loadMultiple($entities);
+  /** @var \Drupal\node\NodeInterface $notesheet */
+  foreach ($notesheets as $notesheet) {
+    $notesheet->save();
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function notesheet_form_node_notesheet_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Set default filecover based on query parameter.
+  if ($filecover_id = \Drupal::request()->get('filecover')) {
+    if (isset($form['field_filecover']['widget']['#options'][$filecover_id])) {
+      $form['field_filecover']['widget']['#default_value'] = $filecover_id;
+    }
+  }
+
+  $form['#attached']['library'][] = 'notesheet/autocomplete';
+
+  if (isset($form['title']['widget'][0]['value'])) {
+    $form['title']['widget'][0]['value']['#autocomplete_route_name'] = 'notesheet.notesheets_autocomplete';
+  }
+}
+
+
+/**
+ * Implements hook_entity_access().
+ */
+function notesheet_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  if ($entity->getEntityTypeId() === 'comment') {
+    $commented_entity = $entity->getCommentedEntity();
+    if ($commented_entity->bundle() === 'notesheet' && $operation === 'update') {
+      return AccessResult::forbiddenIf(!$commented_entity->get('field_duplicate_of')->isEmpty());
+    }
+  }
+
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_create_access().
+ */
+function notesheet_comment_create_access(AccountInterface $account, array $context, $entity_bundle) {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if ($node instanceof NodeInterface && $node->bundle() === 'notesheet') {
+    return AccessResult::forbiddenIf(!$node->get('field_duplicate_of')->isEmpty());
+  }
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function notesheet_menu_local_tasks_alter(&$data, $route_name, RefinableCacheableDependencyInterface &$cacheability) {
+  if ($route_name !== 'entity.node.canonical') {
+    return;
+  }
+}

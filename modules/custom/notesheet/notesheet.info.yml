@@ -1,0 +1,11 @@
+name: 'Notesheet'
+type: module
+description: 'Provides main features/functionality for Notesheet content type.'
+
+core_version_requirement: ^8.8.0 || ^9.3
+package: 'DKN'
+
+dependencies:
+- filecover:filecover
+- drupal:comments_order
+- drupal:node

@@ -1,0 +1,11 @@
+name: 'Filecover'
+type: module
+description: 'Provides main features/functionality for Filecover.'
+
+core_version_requirement: ^8.8.0 || ^9.3
+
+package: 'DKN'
+
+dependencies:
+- drupal:comments_order
+- drupal:node

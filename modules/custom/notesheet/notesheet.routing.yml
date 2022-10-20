@@ -1,0 +1,6 @@
+notesheet.notesheets_autocomplete:
+  path: '/notesheet/autocomplete'
+  defaults:
+    _controller: '\Drupal\notesheet\Controller\NotesheetsAutocompleteController::autocomplete'
+  requirements:
+    _permission: 'access content'
