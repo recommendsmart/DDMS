@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "52adf1046f07c6d1f79278184bd93001",
+    "content-hash": "fbe538b49e33e201cf231c09bb1df660",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2063,6 +2063,50 @@
             "homepage": "https://www.drupal.org/project/ai_provider_openai",
             "support": {
                 "source": "https://git.drupalcode.org/project/ai_provider_openai"
+            }
+        },
+        {
+            "name": "drupal/aspiration",
+            "version": "1.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/aspiration.git",
+                "reference": "1.1.4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/aspiration-1.1.4.zip",
+                "reference": "1.1.4",
+                "shasum": "fcede2f7126ab44416e2f119d7982f71344f7065"
+            },
+            "require": {
+                "drupal/core": "^10 || ^11"
+            },
+            "type": "drupal-theme",
+            "extra": {
+                "drupal": {
+                    "version": "1.1.4",
+                    "datestamp": "1771312073",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "sujan shrestha",
+                    "homepage": "https://www.drupal.org/user/3475737"
+                }
+            ],
+            "description": "<p><strong>Aspiration</strong> is a lightweight, mobile-optimized base theme for Drupal 10 and 11, developed by <a href=\"https://www.drupal.org/u/sujan-shrestha\" target=\"_blank\">Sujan Shrestha</a>. Built on Bootstrap, it offers a responsive, mobile-first layout with customizable regions, perfect for developers and users who are familiar with setting up themes and utilizing theme functionality to build modern, scalable websites.<br><a href=\"https://www.drupal.org/project/aspiration\" target=\"_blank\">Project Page</a></p>",
+            "homepage": "https://www.drupal.org/project/aspiration",
+            "support": {
+                "source": "https://git.drupalcode.org/project/aspiration"
             }
         },
         {

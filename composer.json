@@ -22,6 +22,7 @@
     "require": {
         "composer/installers": "^2.3",
         "drupal/admin_toolbar": "^3.6",
+        "drupal/aspiration": "^1.1",
         "drupal/auto_entitylabel": "3.4",
         "drupal/belgrade": "^3.0",
         "drupal/bootstrap": "^5.0",
