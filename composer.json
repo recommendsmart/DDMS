@@ -26,6 +26,7 @@
         "drupal/bootstrap": "^5.0",
         "drupal/bootstrap5": "^4.0",
         "drupal/bootstrap_barrio": "^5.5",
+        "drupal/commerce": "^3.3",
         "drupal/config_delete": "^2.0",
         "drupal/core-composer-scaffold": "^11.1.1",
         "drupal/core-project-message": "^11.1.1",
