@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fbe538b49e33e201cf231c09bb1df660",
+    "content-hash": "26753257f6460b8ec563e64439191892",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2066,50 +2066,6 @@
             }
         },
         {
-            "name": "drupal/aspiration",
-            "version": "1.1.4",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/aspiration.git",
-                "reference": "1.1.4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/aspiration-1.1.4.zip",
-                "reference": "1.1.4",
-                "shasum": "fcede2f7126ab44416e2f119d7982f71344f7065"
-            },
-            "require": {
-                "drupal/core": "^10 || ^11"
-            },
-            "type": "drupal-theme",
-            "extra": {
-                "drupal": {
-                    "version": "1.1.4",
-                    "datestamp": "1771312073",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "sujan shrestha",
-                    "homepage": "https://www.drupal.org/user/3475737"
-                }
-            ],
-            "description": "<p><strong>Aspiration</strong> is a lightweight, mobile-optimized base theme for Drupal 10 and 11, developed by <a href=\"https://www.drupal.org/u/sujan-shrestha\" target=\"_blank\">Sujan Shrestha</a>. Built on Bootstrap, it offers a responsive, mobile-first layout with customizable regions, perfect for developers and users who are familiar with setting up themes and utilizing theme functionality to build modern, scalable websites.<br><a href=\"https://www.drupal.org/project/aspiration\" target=\"_blank\">Project Page</a></p>",
-            "homepage": "https://www.drupal.org/project/aspiration",
-            "support": {
-                "source": "https://git.drupalcode.org/project/aspiration"
-            }
-        },
-        {
             "name": "drupal/auto_entitylabel",
             "version": "3.4.0",
             "source": {
@@ -2474,114 +2430,6 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/better_exposed_filters",
                 "issues": "https://www.drupal.org/project/issues/better_exposed_filters"
-            }
-        },
-        {
-            "name": "drupal/bootstrap",
-            "version": "5.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/bootstrap.git",
-                "reference": "5.0.2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/bootstrap-5.0.2.zip",
-                "reference": "5.0.2",
-                "shasum": "54628900176ea37a0fe6373e7c039a90b5c9ad3e"
-            },
-            "require": {
-                "drupal/core": "^10.3 || ^11.0",
-                "twbs/bootstrap": "^5.0.0"
-            },
-            "type": "drupal-theme",
-            "extra": {
-                "drupal": {
-                    "version": "5.0.2",
-                    "datestamp": "1749514442",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Alberto Siles",
-                    "homepage": "https://www.drupal.org/user/827704",
-                    "email": "alberto@siles.pe"
-                },
-                {
-                    "name": "joseph.olstad",
-                    "homepage": "https://www.drupal.org/user/1321830"
-                },
-                {
-                    "name": "shelane",
-                    "homepage": "https://www.drupal.org/user/2674989"
-                },
-                {
-                    "name": "wundo",
-                    "homepage": "https://www.drupal.org/user/25523"
-                }
-            ],
-            "description": "Bootstrap 5 base theme.",
-            "homepage": "https://www.drupal.org/project/bootstrap",
-            "support": {
-                "source": "https://git.drupalcode.org/project/bootstrap"
-            }
-        },
-        {
-            "name": "drupal/bootstrap5",
-            "version": "4.0.8",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/bootstrap5.git",
-                "reference": "4.0.8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/bootstrap5-4.0.8.zip",
-                "reference": "4.0.8",
-                "shasum": "1d7dc5c04ce262628c005671117888caa498453e"
-            },
-            "require": {
-                "drupal/core": "^10.1 || ^11.0"
-            },
-            "type": "drupal-theme",
-            "extra": {
-                "drupal": {
-                    "version": "4.0.8",
-                    "datestamp": "1770988520",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Vladimir Roudakov (vladimiraus)",
-                    "homepage": "https://www.drupal.org/u/vladimiraus",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "vladimiraus",
-                    "homepage": "https://www.drupal.org/user/673120"
-                }
-            ],
-            "description": "Master theme using Bootstrap 5: powerful front-end framework for faster and easier web development.",
-            "homepage": "https://www.drupal.org/project/bootstrap5",
-            "support": {
-                "source": "https://git.drupalcode.org/project/bootstrap5",
-                "issues": "https://www.drupal.org/project/issues/bootstrap5"
             }
         },
         {
