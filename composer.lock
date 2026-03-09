@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "26753257f6460b8ec563e64439191892",
+    "content-hash": "02bd109bbe13ef9b3017d5fd3b1c346f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5780,6 +5780,70 @@
             "support": {
                 "source": "https://git.drupal.org/project/friendlycaptcha.git",
                 "issues": "https://www.drupal.org/project/issues/friendlycaptcha"
+            }
+        },
+        {
+            "name": "drupal/front",
+            "version": "10.0.0-beta1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/front.git",
+                "reference": "10.0.0-beta1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/front-10.0.0-beta1.zip",
+                "reference": "10.0.0-beta1",
+                "shasum": "ef40352d094dc074de71cbe6d2cd048f822172d7"
+            },
+            "require": {
+                "drupal/core": "^10 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "10.0.0-beta1",
+                    "datestamp": "1746023928",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "anybody",
+                    "homepage": "https://www.drupal.org/user/291091"
+                },
+                {
+                    "name": "Dublin Drupaller",
+                    "homepage": "https://www.drupal.org/user/8625"
+                },
+                {
+                    "name": "estoyausente",
+                    "homepage": "https://www.drupal.org/user/1232954"
+                },
+                {
+                    "name": "grevil",
+                    "homepage": "https://www.drupal.org/user/3668491"
+                },
+                {
+                    "name": "oleksandr senenko",
+                    "homepage": "https://www.drupal.org/user/2641733"
+                },
+                {
+                    "name": "simon georges",
+                    "homepage": "https://www.drupal.org/user/172312"
+                }
+            ],
+            "description": "Allows role based custom front page configuration.",
+            "homepage": "http://drupal.org/project/front",
+            "support": {
+                "source": "https://git.drupalcode.org/project/front"
             }
         },
         {
@@ -16542,6 +16606,7 @@
     "stability-flags": {
         "drupal/crm": 10,
         "drupal/entitygroupfield": 5,
+        "drupal/front": 10,
         "drupal/gcontent_moderation": 10,
         "drupal/project_browser": 15,
         "drupal/pwa": 10,
@@ -16556,5 +16621,5 @@
     "platform-overrides": {
         "php": "8.3.14"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
