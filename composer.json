@@ -65,6 +65,7 @@
         "drupal/smart_date": "^4.2",
         "drupal/subgroup": "^3.1",
         "drupal/token": "^1.17",
+        "drupal/views_autocomplete_filters": "^2.0",
         "drupal/views_bulk_operations": "^4.4",
         "drupal/views_data_export": "^1.8",
         "drupal/webform": "@beta",
